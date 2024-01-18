@@ -25,12 +25,15 @@ body {
 
 
 .btn_1 {
+    width: 40%;
     background-color: black;
     border: none;
     outline: none;
     border: 1px solid rgb(7, 179, 7);
     color: rgb(7, 179, 7);
-    height: 40px;
+    min-height: 40px;
+    margin-top: 10px;
+    text-align: left;
 }
 
 .btn_1:hover {
