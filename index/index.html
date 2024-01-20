@@ -5,6 +5,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Hacker Stack - 在线渗透测试平台</title>
         <script src="./js/main.js"></script>
+        <script src="./js/md5.js"></script>
+        <script>
+            function to_system() {
+                if (login_ok())
+                {
+                    window.location.href='./system';
+                }
+                else {
+                    alert('请先登录!')
+                }
+            }
+        </script>
     </head>
     <body onload="load_index_text()">
         <div class="top">
@@ -12,19 +24,19 @@
             <a style="margin-left: 30px;">
 
             </a>
-            <button class="top_btn">首页</button>
-            <button class="top_btn">网安教程</button>
+            <button class="top_btn" onclick="window.location.href=''">首页</button>
+            <button class="top_btn" onclick="window.location.href='./document/'">网安教程</button>
             <button class="top_btn" id="login" onclick="window.location.href='./login.html'">登录</button>
         </div>
         <iframe style="position: absolute;width: 100%;height: 100%;top: 50px;border: none;" src="./bg.html"></iframe>
         <div align="left" style="font-style: italic;color: rgb(7, 179, 7);width: 100%;;position: absolute;  /* 顶部偏移为父元素高度的一半 */
         padding: 50px;border-radius: 15px;">
             <h1 style="color: rgb(7, 179, 7);">Hacker Stack渗透测试平台</h1>
-            <button class="btn_1">进入HackerStack渗透测试系统</button>
+            <button class="btn_1" onclick="to_system()">进入HackerStack渗透测试系统</button>
             <br />
-            <button class="btn_1">网安教程</button>     
+            <button class="btn_1" onclick="window.location.href='./document/'">网安教程</button>     
             <br />
-            <button class="btn_1">我的LinwinSoft账户</button>
+            <button class="btn_1" onclick="window.location.href='./user.html'">我的LinwinSoft账户</button>
         <p id="t"></p>
     </div>
     </body>

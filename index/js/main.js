@@ -32,22 +32,59 @@ n
     } , 100);
 }
 
+function login_ok() {
+    var json = JSON.parse(document.cookie);
+    var get_result = false;
+    console.log(json)
+    if (json.user != null && json.pwd != null)
+    {
+        try
+        {
+            var xhr = new XMLHttpRequest();
+            xhr.open(
+                "GET","http://154.9.253.147:8888/?Logon="+json.user+"?Passwd="+md5(json.pwd)+"?Command=list database",false)
+            xhr.onload = function (e) {
+                if (xhr.readyState === 4) {
+                    var message = (xhr.responseText)            
+                    if (message.indexOf("Passwd Or UserName Error!") == -1) {
+                        get_result = true;
+                    }
+                }else{
+                    alert(e.message);
+                }
+            };
+            xhr.onerror = function (e) {
+                console.error(xhr.statusText);
+            };
+        xhr.send(null);
+        } catch(a) {
+            console.log(a);
+        }
+    }else{
+        document.cookie = "{\"user\":\"\",\"pwd\":\"\"}";
+    }
+    return get_result;
+}
+
+
 function auto_login() {
-    var user = document.getElementById("user");
-    var pwd = document.getElementById("pwd");
-    var a = pwd.value;
-    var t = document.getElementById("wait");
-    t.style.display = "block"
     try{
+        var user = JSON.parse(document.cookie).pwd
+        var pwd = JSON.parse(document.cookie).pwd
         var xhr = new XMLHttpRequest();
-        xhr.open("GET","http://154.9.253.147:8888/?Logon="+user.value+"?Passwd="+md5(pwd.value)+"?Command=list database",true)
+        xhr.open("GET","http://154.9.253.147:8888/?Logon="+user+"?Passwd="+md5(pwd)+"?Command=list database",true)
         xhr.onload = function (e) {
         if (xhr.readyState === 4) {
             var message = (xhr.responseText)
             console.log(message)
             if (message.indexOf("Passwd Or UserName Error!") == -1) {
-                document.cookie = '{"user":"'+user.value+'","pwd":"'+pwd.value+'"}'
-                window.location.href = "/";
+                document.cookie = '{"user":"'+user+'","pwd":"'+pwd+'"}'
+
+                var login_btn = document.getElementById('login');
+                login_btn.innerText = '用户: '+user;
+                login_btn.onclick=function() {
+                    window.location.href='./user.html';
+                }
             }else{
                 alert(message)
             }
@@ -58,8 +95,9 @@ function auto_login() {
             console.error(xhr.statusText);
         };
         xhr.send(null);
-        } catch(a) {
-            console.log(a)
-        }
+    } catch(a) {
+        console.log(a)
+        document.cookie = '{"user":"","pwd":""}'
+    }
     return true
 }
