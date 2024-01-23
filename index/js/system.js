@@ -24,7 +24,7 @@ function social_attack(attack_type) {
                     if (get_message.readyState === 4) {
                         var r = get_message.responseText;
                         if (r.replace('\n','') != 'none') {
-                            showAlert(r , null)
+                            showAlert("<h2 style='color:red'>收到信息:</h2>"+r, null)
                         }
                     }
                 }
