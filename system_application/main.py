@@ -13,11 +13,15 @@ import mimetypes
 from urllib.parse import unquote
 
 
+import config_loader as config_loader
+
+
+
 app = Flask(__name__)
 CORS(app)
 
 url_list = {}
-remote: str = 'http://127.0.0.1:5555/'
+config: config_loader = None
 
 class user_sessen():
     username: str = ''
@@ -84,7 +88,7 @@ def get_resource(url):
 def attack(attack_type,user,pwd):
     md5_pwd = hashlib.md5(str(pwd).encode()).hexdigest()
 
-    r = requests.get("http://154.9.253.147:8888/?Logon="+user+"?Passwd="+md5_pwd+"?Command=list database")
+    r = requests.get(config.get('database_adress')+"/?Logon="+user+"?Passwd="+md5_pwd+"?Command=list database")
     if r.text != 'Passwd Or UserName Error!':
         n = get_random()
         
@@ -100,4 +104,5 @@ def attack(attack_type,user,pwd):
         return 'your message error'
 
 if __name__ == '__main__':
+    config = config_loader.HackerStack_Config()
     app.run(port=5555)
