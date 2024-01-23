@@ -1,4 +1,4 @@
-var remote = 'http://127.0.0.1:5555'
+
 
 function login() {
     var username = document.getElementById('username').value;
