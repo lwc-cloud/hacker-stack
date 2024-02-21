@@ -4,20 +4,24 @@ function login() {
     var user = document.getElementById("user");
     var pwd = document.getElementById("pwd");
 
-    var a = pwd.value;
-
     var t = document.getElementById("wait");
     t.style.display = "block"
-        try{
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET","http://154.9.253.147:8888/?Logon="+user.value+"?Passwd="+md5(pwd.value)+"?Command=list database",true)
-            xhr.onload = function (e) {
+    try{
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET","http://154.9.253.147:8888/?Logon="+user.value+"?Passwd="+md5(pwd.value)+"?Command=list database",true)
+        xhr.send();
+        xhr.onload = function (e) {
                 if (xhr.readyState === 4) {
                     var message = (xhr.responseText)
                     console.log(message)
                     if (message.indexOf("Passwd Or UserName Error!") == -1) {
-                        document.cookie = '{"user":"'+user.value+'","pwd":"'+pwd.value+'"}'
-                        window.location.href = "/";
+                        //console.log(user.value+" "+pwd.value)
+                        //console.log("{\"user\" : \""+user.value+"\" , \"pwd\" : \""+pwd.value+"\"}")
+                        document.cookie = "{\"user\" : \""+user.value+"\" , \"pwd\" : \""+pwd.value+"\"}"
+                        //console.log(document.cookie)
+                        setTimeout(function() {
+                            window.location.href = "/";
+                        } , 200)
                     }else{
                         alert(message)
                     }
@@ -28,7 +32,6 @@ function login() {
               xhr.onerror = function (e) {
                 console.error(xhr.statusText);
               };
-              xhr.send(null);
         } catch(a) {
             console.log(a)
         }

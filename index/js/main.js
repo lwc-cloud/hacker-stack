@@ -61,7 +61,7 @@ function login_ok() {
             console.log(a);
         }
     }else{
-        document.cookie = "{\"user\":\"\",\"pwd\":\"\"}";
+        //document.cookie = "{\"user\":\"\",\"pwd\":\"\"}";
     }
     return get_result;
 }
@@ -69,6 +69,7 @@ function login_ok() {
 
 function auto_login() {
     try{
+        console.log(document.cookie)
         var user = JSON.parse(document.cookie).pwd
         var pwd = JSON.parse(document.cookie).pwd
         var xhr = new XMLHttpRequest();
@@ -97,7 +98,7 @@ function auto_login() {
         xhr.send(null);
     } catch(a) {
         console.log(a)
-        document.cookie = '{"user":"","pwd":""}'
+        //document.cookie = '{"user":"","pwd":""}'
     }
     return true
 }
