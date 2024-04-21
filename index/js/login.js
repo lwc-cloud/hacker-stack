@@ -7,35 +7,26 @@ function login() {
     var t = document.getElementById("wait");
     t.style.display = "block"
     try{
+        var username =  user.value;
+        var password = pwd.value;
+        
         var xhr = new XMLHttpRequest();
-        xhr.open("GET","http://154.9.253.147:8888/?Logon="+user.value+"?Passwd="+md5(pwd.value)+"?Command=list database",true)
-        xhr.send();
-        xhr.onload = function (e) {
-                if (xhr.readyState === 4) {
-                    var message = (xhr.responseText)
-                    console.log(message)
-                    if (message.indexOf("Passwd Or UserName Error!") == -1) {
-                        //console.log(user.value+" "+pwd.value)
-                        //console.log("{\"user\" : \""+user.value+"\" , \"pwd\" : \""+pwd.value+"\"}")
-                        document.cookie = "{\"user\" : \""+user.value+"\" , \"pwd\" : \""+pwd.value+"\"}"
-                        //console.log(document.cookie)
-                        setTimeout(function() {
-                            window.location.href = "/";
-                        } , 200)
-                    }else{
-                        alert(message)
-                    }
-                }else{
-                    alert(e.message)
-                }
-              };
-              xhr.onerror = function (e) {
-                console.error(xhr.statusText);
-              };
-        } catch(a) {
-            console.log(a)
+        xhr.open("POST" , "http://154.201.85.154:11111/login",false);
+        xhr.send(username+"\n"+password);
+        
+        // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"login successful."}
+        var json_content = xhr.responseText;
+        var json = JSON.parse(json_content);
+        if (String(json.message).toLowerCase().includes("login successful.")) {
+            document.cookie = "{\"user\" : \""+username+"\" , \"pwd\" : \""+password+"\"}";
+            window.location.href = "/";
+            return true;
+        } else {
+            return false; 
         }
-        return true
+    } catch(e) {
+        alert ("登录错误: "+e);
+    }
 }
 function reg() {
     var user = document.getElementById("user");
@@ -55,30 +46,25 @@ function reg() {
 
     if (a == b) {
         try{
+            var username = user.value;
+            var password = pwd.value;
+            
             var xhr = new XMLHttpRequest();
-            xhr.open("GET","http://154.9.253.147:8888/?Logon=work?Passwd=c4d038b4bed09fdb1471ef51ec3a32cd?Command=sudo createUser "+user.value+" "+pwd.value,true)
-            xhr.onload = function (e) {
-                if (xhr.readyState === 4) {
-                    var message = (xhr.responseText)
-                    console.log(message)
-                    if (message.indexOf("Create Successful!") != -1) {
-                        document.cookie = '{"user":"'+user.value+'","pwd":"'+pwd.value+'"}'
-                    }else{
-                        alert(message)
-                    }
-                    window.location.href = "/";
-                }else{
-                    alert(e.message)
+            xhr.open("POST" , "http://154.201.85.154:11111/reg",true);
+            xhr.send(username+"\n"+password);
+            
+            xhr.onload = function() {
+                // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"create successful."}
+                var json_content = xhr.responseText;
+                alert(JSON.parse(json_content).message);
+                if (String(JSON.parse(json_content).message).toLowerCase().includes("create successful")) {
+                    document.cookie = "{\"user\" : \""+username+"\" , \"pwd\" : \""+password+"\"}";
                 }
-              };
-              xhr.onerror = function (e) {
-                console.error(xhr.statusText);
-              };
-              xhr.send(null);
-        } catch(a) {
-            console.log(a)
+            }
         }
-        return true
+        catch (e) {
+            alert("注册错误: "+e);
+        }
     }else{
         alert("确认密码和密码不一致")
         return false

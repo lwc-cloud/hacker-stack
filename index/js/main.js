@@ -32,73 +32,103 @@ n
     } , 100);
 }
 
+window.onload = function() {
+    load_index_text()
+    connect_to_db()
+}
+
+function connect_to_db () {
+    var db_c = document.getElementById('connect');
+    if (true) {
+        var text = `
+ 连接 Linwin MetaLite Server 数据库服务系统，将会存储你所有的用户测试数据以及你需要存储的内容.
+ 作为渗透测试数据库,请做好反渗透与渗透.
+    `;
+    var t_1 = document.getElementById('db_content');
+    var splitText_2 = text.split('');
+
+    var run = null;
+    var i = 0;
+    run = setInterval(function() {
+        i++
+        if (i + 1 == text.length) {
+            clearInterval(run);
+            return;
+        }
+        if (splitText_2[i] == "\n") {
+            t_1.innerHTML+= "<br />";
+        }else {
+            t_1.innerHTML+= "<a style='color:white'>"+splitText_2[i]+"</a>";
+        }
+    } , 100);
+    } else {
+    db_c.innerText = "未连接数据库";
+    }
+}
+
 function login_ok() {
     var json = JSON.parse(document.cookie);
     var get_result = false;
     console.log(json)
     if (json.user != null && json.pwd != null)
     {
-        try
-        {
-            var xhr = new XMLHttpRequest();
-            xhr.open(
-                "GET","http://154.9.253.147:8888/?Logon="+json.user+"?Passwd="+md5(json.pwd)+"?Command=list database",false)
-            xhr.onload = function (e) {
-                if (xhr.readyState === 4) {
-                    var message = (xhr.responseText)            
-                    if (message.indexOf("Passwd Or UserName Error!") == -1) {
-                        get_result = true;
-                    }
-                }else{
-                    alert(e.message);
-                }
-            };
-            xhr.onerror = function (e) {
-                console.error(xhr.statusText);
-            };
-        xhr.send(null);
-        } catch(a) {
-            console.log(a);
+        var json = JSON.parse(document.cookie);
+        var username =  json.user;
+        var password = json.pwd;
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST" , "http://154.201.85.154:11111/login",false);
+        xhr.send(username+"\n"+password);
+        
+        // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"login successful."}
+        var json_content = xhr.responseText;
+        var json = JSON.parse(json_content);
+        if (String(json.message).toLowerCase().includes("login successful.")) {
+            document.cookie = "{\"user\" : \""+username+"\" , \"pwd\" : \""+password+"\"}";
+            
+            var login_btn = document.getElementById('login');
+            login_btn.innerText = "登录: "+username;
+            login_btn.onclick = function() {
+                window.location.href = "./user.html";
+            }
+            return true;
+        } else {
+            return false; 
         }
     }else{
-        //document.cookie = "{\"user\":\"\",\"pwd\":\"\"}";
+        document.cookie = "{\"user\":\"\",\"pwd\":\"\"}";
     }
     return get_result;
 }
 
 
 function auto_login() {
-    try{
-        console.log(document.cookie)
-        var user = JSON.parse(document.cookie).pwd
-        var pwd = JSON.parse(document.cookie).pwd
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET","http://154.9.253.147:8888/?Logon="+user+"?Passwd="+md5(pwd)+"?Command=list database",true)
-        xhr.onload = function (e) {
-        if (xhr.readyState === 4) {
-            var message = (xhr.responseText)
-            console.log(message)
-            if (message.indexOf("Passwd Or UserName Error!") == -1) {
-                document.cookie = '{"user":"'+user+'","pwd":"'+pwd+'"}'
 
-                var login_btn = document.getElementById('login');
-                login_btn.innerText = '用户: '+user;
-                login_btn.onclick=function() {
-                    window.location.href='./user.html';
-                }
-            }else{
-                alert(message)
+    try{
+        var json = JSON.parse(document.cookie);
+        var username =  json.user;
+        var password = json.pwd;
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST" , "http://154.201.85.154:11111/login",false);
+        xhr.send(username+"\n"+password);
+        
+        // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"login successful."}
+        var json_content = xhr.responseText;
+        var json = JSON.parse(json_content);
+        if (String(json.message).toLowerCase().includes("login successful.")) {
+            document.cookie = "{\"user\" : \""+username+"\" , \"pwd\" : \""+password+"\"}";
+            
+            var login_btn = document.getElementById('login');
+            login_btn.innerText = "登录: "+username;
+            login_btn.onclick = function() {
+                window.location.href = "./user.html";
             }
-        }else{
-            alert(e.message)
-        } };
-        xhr.onerror = function (e) {
-            console.error(xhr.statusText);
-        };
-        xhr.send(null);
-    } catch(a) {
-        console.log(a)
-        //document.cookie = '{"user":"","pwd":""}'
+            return true;
+        } else {
+            return false; 
+        }
+    } catch(e) {
+        return false;
     }
-    return true
 }

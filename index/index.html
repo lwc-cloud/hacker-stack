@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8" />
         <link href="./css/index.css" rel="stylesheet" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Hacker Stack - 在线渗透测试平台</title>
@@ -18,9 +19,9 @@
             }
         </script>
     </head>
-    <body onload="load_index_text()">
+    <body>
         <div class="top">
-            <a style="color: rgb(7, 179, 7);font-style: italic;margin-left: 10px;font-size: 25px;top: 10px;">Hacker Stack</a>
+            <a style="color: white;font-style: italic;margin-left: 10px;font-size: 25px;top: 10px;">Hacker Stack</a>
             <a style="margin-left: 30px;">
 
             </a>
@@ -38,6 +39,14 @@
             <br />
             <button class="btn_1" onclick="window.location.href='./user.html'">我的LinwinSoft账户</button>
         <p id="t"></p>
+    </div>
+    <div style="position: absolute;margin: 0px;padding: 0px;right: 20px;width: 40%;bottom: 20px;top: 70px;background-color: rgba(31, 30, 30, 0.692);border: 1px solid green;">
+        <div style="padding: 0px;width: 100%;background-color: rgb(189, 60, 0);">
+            <p id="connect" style="color: white;">未连接数据库</p>
+        </div>
+        <div id="db_content" style="padding: 20px;">
+
+        </div>
     </div>
     </body>
 </html>
