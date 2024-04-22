@@ -42,3 +42,11 @@ body {
     background-color: rgb(7, 179, 7);
     color: black;
 }
+
+.command_box {
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0);
+    outline: none;
+    color: white;
+    border: 1px solid green;
+}
