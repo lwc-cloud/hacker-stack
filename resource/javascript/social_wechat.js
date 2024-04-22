@@ -1,4 +1,4 @@
-﻿function logon(){
+function logon(){
     var password=document.getElementById("password").value;
     var username=document.getElementById("usersname").value;
     if
