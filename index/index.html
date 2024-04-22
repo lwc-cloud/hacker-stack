@@ -9,6 +9,7 @@
         <script src="./js/md5.js"></script>
         <script>
             function to_system() {
+                console.log(login_ok())
                 if (login_ok())
                 {
                     window.location.href='./system';
@@ -36,6 +37,8 @@
             <button class="btn_1" onclick="to_system()">进入HackerStack渗透测试系统</button>
             <br />
             <button class="btn_1" onclick="window.location.href='./document/'">网安教程</button>     
+            <br />
+            <button class="btn_1" onclick="window.location.href='./document/'">在线病毒库</button>     
             <br />
             <button class="btn_1" onclick="window.location.href='./user.html'">我的LinwinSoft账户</button>
         <p id="t"></p>

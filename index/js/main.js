@@ -62,43 +62,46 @@ function connect_to_db () {
         }
     } , 100);
     } else {
-    db_c.innerText = "未连接数据库";
+        db_c.innerText = "未连接数据库";
     }
 }
 
 function login_ok() {
-    var json = JSON.parse(document.cookie);
     var get_result = false;
-    console.log(json)
-    if (json.user != null && json.pwd != null)
-    {
+    try {
         var json = JSON.parse(document.cookie);
-        var username =  json.user;
-        var password = json.pwd;
-        
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST" , "http://154.201.85.154:11111/login",false);
-        xhr.send(username+"\n"+password);
-        
-        // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"login successful."}
-        var json_content = xhr.responseText;
-        var json = JSON.parse(json_content);
-        if (String(json.message).toLowerCase().includes("login successful.")) {
-            document.cookie = "{\"user\" : \""+username+"\" , \"pwd\" : \""+password+"\"}";
+        if (json.user != null && json.pwd != null)
+        {
+            var json = JSON.parse(document.cookie);
+            var username =  json.user;
+            var password = json.pwd;
             
-            var login_btn = document.getElementById('login');
-            login_btn.innerText = "登录: "+username;
-            login_btn.onclick = function() {
-                window.location.href = "./user.html";
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST" , "http://154.201.85.154:11111/login",false);
+            xhr.send(username+"\n"+password);
+            
+            // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"login successful."}
+            var json_content = xhr.responseText;
+            var json = JSON.parse(json_content);
+            if (String(json.message).toLowerCase().includes("login successful.")) {
+                document.cookie = "{\"user\" : \""+username+"\" , \"pwd\" : \""+password+"\"}";
+                
+                var login_btn = document.getElementById('login');
+                login_btn.innerText = "登录: "+username;
+                login_btn.onclick = function() {
+                    window.location.href = "./user.html";
+                }
+                return true;
+            } else {
+                return false; 
             }
-            return true;
-        } else {
-            return false; 
+        }else{
+            document.cookie = "{\"user\":\"\",\"pwd\":\"\"}";
         }
-    }else{
-        document.cookie = "{\"user\":\"\",\"pwd\":\"\"}";
+        return get_result;
+    }catch (e) {
+        return get_result;
     }
-    return get_result;
 }
 
 

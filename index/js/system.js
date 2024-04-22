@@ -16,7 +16,7 @@ function social_attack(attack_type) {
     {
         if (xhr.readyState === 4) {
             var response = xhr.responseText;
-            showAlert('Please Visit URL: ' + remote + '/'+response , null)
+            showAlert("<h2 style='color:red'>收到信息:</h2>"+'请访问URL:<br/>' + remote + '/'+response , null)
 
             var run = setInterval(function() 
             {
@@ -32,7 +32,7 @@ function social_attack(attack_type) {
                         var r = get_message.responseText;
                         if (r.replace('\n','') != 'none')
                         {
-                            showAlert("<h2 style='color:red'>收到信息:</h2>"+r, null)
+                            showAlert("<h2 style='color:red'>收到信息:</h2><br />"+r, null)
                         }
                     }
                 }
