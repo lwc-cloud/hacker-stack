@@ -63,6 +63,32 @@ def get_message(attack_url,message):
     else:
         return 'your message error'
 
+@app.route('/update_virus/<filename>' , methods=['POST'])
+def update_virus(filename):
+    # 限制每个IP对制定api的访问.
+    client_ip = request.remote_addr
+    if client_ip in visit_request:
+        visit_request[client_ip] = visit_request[client_ip] + 1
+        if visit_request[client_ip] >= 6:
+            return 'Too many requests'
+    else:
+        visit_request[client_ip] = 1
+
+    if str(filename).strip().lower() == "index.html" or str(filename).strip().lower() == "index.htm":
+        return 'FILE NAME IS NULL: index.html or index.htm'
+
+    current_time = time.time()  # 获取当前时间戳
+    local_time = time.localtime(current_time)  # 将时间戳转换为本地时间
+    formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", local_time)  # 格式化时间
+
+    data = request.get_data()
+    if len(data) > 1024 * 1024 * 10:
+        return 'MAX UPDATE: 10MB.'
+
+    with open('virus/' + formatted_time+"-"+filename , "wb") as f:
+        f.write()
+    f.close()
+    return 'update ok.'
 
 @app.route('/<path:attack_url>')
 def attack_url(attack_url):
