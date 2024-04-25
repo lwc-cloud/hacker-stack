@@ -60,3 +60,39 @@ function web_clone() {
         }
     }
 }
+
+function downloadBlob(data, fileName) {
+    // 创建Blob对象
+    const blob = new Blob([data]);
+  
+    // 创建临时URL
+    const url = URL.createObjectURL(blob);
+  
+    // 创建a元素
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = fileName;
+  
+    // 将a元素添加到DOM中并模拟点击
+    document.body.appendChild(a);
+    a.click();
+  
+    // 移除a元素并撤销临时URL
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+function make_qrcode() {
+
+    var url = prompt('请输入需要生成二维码的URL: ')
+    if (url != null) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST' , remote+"/qr_code" , true);
+        xhr.send(url);
+        xhr.responseType = 'arraybuffer'; // 设置响应类型为arraybuffer
+        xhr.onload = function() {
+            downloadBlob(xhr.response, url+".png");
+        }
+    }
+}
