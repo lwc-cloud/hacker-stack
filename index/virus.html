@@ -2,6 +2,10 @@
 <html>
     <head>
         <meta charset="utf-8" />
+        <script src="./js/virus_show.js"></script>
+        <script src="./js/update_virus.js"></script>
+        <script src="./js/libui.js"></script>
+        <script src="./js/system.js"></script>
         <link href="./css/index.css" rel="stylesheet" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Hacker Stack - 在线渗透测试平台</title>
@@ -24,7 +28,7 @@
             <a style="margin-left: 30px;">
 
             </a>
-            <button class="top_btn" onclick="window.location.href=''">首页</button>
+            <button class="top_btn" onclick="window.location.href='/'">首页</button>
             <button class="top_btn" onclick="window.location.href='./document/'">网安教程</button>
             <button class="top_btn" id="login" onclick="window.location.href='./login.html'">登录</button>
         </div>
@@ -32,7 +36,7 @@
         <div align="center">
             <div align="center" style="left: 7%;font-style: italic;color: rgb(7, 179, 7);width: 80%;border: 1px solid green;top: 100px;bottom: 10px;background-color: rgba(31, 30, 30, 0.692);position: absolute;  /* 顶部偏移为父元素高度的一半 */
         padding: 50px;border-radius: 15px">
-            <div style="float: left;overflow-y: scroll;width: 45%;background-color: rgba(0, 0, 0, 0.39);border: 1px solid green;top: 10px;bottom: 10px;position: absolute;" id="virus_content">
+            <div id="virus_show" style="padding: 20px;float: left;overflow-y: scroll;width: 45%;background-color: rgba(0, 0, 0, 0.39);border: 1px solid green;top: 10px;bottom: 10px;position: absolute;" id="virus_content">
             
             </div>
             <div style="left: 52%;float: right;width: 45%;background-color: rgba(0, 0, 0, 0.39);border: 1px solid green;top: 10px;bottom: 10px;position: absolute;">
@@ -44,7 +48,8 @@
                 </p>
                 <br />
                 <a>上传病毒到病毒库</a>
-                <input type="file" id="file_chose" />
+                <input type="file" id="update_file" />
+                <button id="update">上传</button>
             </div>
         </div>
         </div>
