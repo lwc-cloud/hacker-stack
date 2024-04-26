@@ -132,6 +132,8 @@ function auto_login() {
             return false; 
         }
     } catch(e) {
+        document.cookie = '';
+        document.cookie = "{\"user\" : \"\" , \"pwd\" : \"\"}";
         return false;
     }
 }

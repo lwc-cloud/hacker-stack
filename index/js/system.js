@@ -6,6 +6,11 @@ function to_social() {
     i.src = "./socialEngine";
 }
 
+function to_web_virus() {
+    var i = document.getElementById('page');
+    i.src = "./web_virus";
+}
+
 function social_attack(attack_type) {
     var user = JSON.parse(document.cookie).user;
     var pwd = JSON.parse(document.cookie).pwd;
@@ -95,4 +100,8 @@ function make_qrcode() {
             downloadBlob(xhr.response, url+".png");
         }
     }
+}
+
+function create_web_virus() {
+    
 }

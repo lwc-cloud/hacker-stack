@@ -31,6 +31,7 @@ function login() {
 function reg() {
     var user = document.getElementById("user");
     var pwd = document.getElementById("pwd");
+    var check_code = document.getElementById("check");
     var retype = document.getElementById("retype");
 
     var a = pwd.value;
@@ -48,10 +49,11 @@ function reg() {
         try{
             var username = user.value;
             var password = pwd.value;
-            
+            var check = check_code.value;
+
             var xhr = new XMLHttpRequest();
             xhr.open("POST" , "http://154.201.85.154:11111/reg",true);
-            xhr.send(username+"\n"+password);
+            xhr.send(username+"\n"+password+"\n"+check);
             
             xhr.onload = function() {
                 // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"create successful."}
@@ -59,6 +61,7 @@ function reg() {
                 alert(JSON.parse(json_content).message);
                 if (String(JSON.parse(json_content).message).toLowerCase().includes("create successful")) {
                     document.cookie = "{\"user\" : \""+username+"\" , \"pwd\" : \""+password+"\"}";
+                    window.location.href = '/';
                 }
             }
         }
