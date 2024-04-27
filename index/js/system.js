@@ -11,6 +11,11 @@ function to_web_virus() {
     i.src = "./web_virus";
 }
 
+function to_attack_pwd() {
+    var i = document.getElementById('page');
+    i.src = "./passwd_attack";
+}
+
 function social_attack(attack_type) {
     var user = JSON.parse(document.cookie).user;
     var pwd = JSON.parse(document.cookie).pwd;
@@ -102,6 +107,25 @@ function make_qrcode() {
     }
 }
 
-function create_web_virus() {
-    
+function pwd_attack() {
+    var url = document.getElementById('url').value;
+    var body = document.getElementById('http_body').value;
+    var check = document.getElementById('check').innerText;
+
+    try 
+    {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST' , remote + '/pwd_attack' , true);
+        xhr.send(url + '\n' + check + '\n' + body);
+        xhr.onload = function()
+        {
+            var responseText = xhr.responseText;
+            if (responseText == 'ok') {
+                showAlert('程序正在后台')
+            }
+        }
+    }
+    catch (e) {
+        showAlert('错误: '+e , null)
+    }
 }
