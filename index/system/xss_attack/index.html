@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../../js/libui.js"></script>
+        <script src="../../js/system.js"></script>
+        <style>
+            button {
+    width: 100%;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.555);
+    border: 1px solid green;
+    color: green;
+    margin-top: 10px;
+    text-align: left;
+}
+    p {
+        color: green;
+    }
+    a {
+        color: green;
+    }
+
+button:hover {
+    background-color: green;
+    color:black;
+}
+        </style>
+    </head>
+    <body style="padding: 50px;" id="body">
+        <h2 style="color: green;">XSS攻击</h2>
+        <a>页面无效XSS: </a>
+        <a href="../../js/xss_attack_1.js" target="_blank">xss_attack_1</a>
+        <br />
+        <a>弹窗攻击XSS: </a>
+        <a href="../../js/xss_attack_2.js" target="_blank">xss_attack_2</a>
+        <p>
+            描述:<br />
+            使用该攻击，必须是使用者对一个网站有已知的XSS的漏洞才能发动攻击，这种攻击是嵌入对方页面的攻击，常见于论坛等网站。
+            <br />
+            可以直接引用本站的xss脚本.
+        </p>
+    </body>
+</html>

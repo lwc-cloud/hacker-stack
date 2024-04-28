@@ -232,3 +232,16 @@ function ip_location() {
         }      
     }
 }
+function to_xss_attack() {
+    var i = document.getElementById('page');
+    i.src = './xss_attack';
+}
+
+function download_file(path) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET' , path , true);
+    xhr.send();
+    xhr.onload = function() {
+        downloadBlob(xhr.response , path)
+    }
+}

@@ -1,9 +1,9 @@
 
 
 
-function update_to_server(contents , filename) {
+function update_to_server(contents , filename , check) {
     try{
-        var toPath = remote+"/update_virus/"+filename;
+        var toPath = remote+"/update_virus/"+filename+"/"+check;
 
         console.log(contents)
         var xhr = new XMLHttpRequest();
@@ -14,6 +14,10 @@ function update_to_server(contents , filename) {
         xhr.send(contents);
         console.log(xhr.responseText);
         showAlert("后台上传中 ... ..." , null)
+
+        xhr.onload = function() {
+            showAlert(xhr.responseText , null)
+        }
     }catch(e) {
         alert(e);
     }

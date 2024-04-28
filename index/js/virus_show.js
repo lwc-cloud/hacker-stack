@@ -65,6 +65,7 @@ window.onload = function() {
     document.getElementById('update_file').addEventListener('change', function(event) {  
         var file = event.target.files[0];  
         var reader = new FileReader();  
+        var check = document.getElementById('check').value;
 
         if (file != null) {
             reader.onload = function(event) {  
@@ -72,7 +73,7 @@ window.onload = function() {
                 var update = document.getElementById("update");
                 update.onclick = function()
                   {
-                      update_to_server(contents , file.name);
+                      update_to_server(contents , file.name , check);
                   }
               };  
         }
