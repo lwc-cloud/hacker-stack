@@ -154,8 +154,8 @@ def get_virus_list():
 
     return content
 
-@app.route('/update_virus/<filename>' , methods=['POST'])
-def update_virus(filename):
+@app.route('/update_virus/<filename>/<check>' , methods=['POST'])
+def update_virus(filename , check):
     # 限制每个IP对制定api的访问.
     client_ip = request.remote_addr
     if client_ip in visit_request:
@@ -167,6 +167,8 @@ def update_virus(filename):
 
     if str(filename).strip().lower() == "index.html" or str(filename).strip().lower() == "index.htm":
         return 'FILE NAME IS NULL: index.html or index.htm'
+    if (json.loads(requests.get('http://154.201.85.154:11111/check_ip_check/' + check).text.strip())['message'] != 'ok'):
+        return 'Check code error.'
 
     current_time = time.time()  # 获取当前时间戳
     local_time = time.localtime(current_time)  # 将时间戳转换为本地时间
@@ -319,6 +321,6 @@ if __name__ == '__main__':
     visit_request_thread = threading.Thread(target=visit_request_threading , name='visit_request')
     visit_request_thread.start()
 
-    app.run(port=int(config.get(
+    app.run(host='0.0.0.0',port=int(config.get(
         'server_port'
     )))
