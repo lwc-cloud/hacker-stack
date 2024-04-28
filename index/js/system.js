@@ -167,3 +167,68 @@ function cc_attack() {
         });
     }
 }
+
+function to_ip_location() {
+    var i = document.getElementById('page');
+    i.src = "./ip_location";
+}
+
+function ip_location() {
+    var ip = document.getElementById('ip').value;
+    var ip_info = document.getElementById('ip_info');
+    ip_info.innerHTML = '';
+
+    var lat = '';
+    var lon = '';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET' , remote+'/get_ip_location/'+ip , true);
+    xhr.send();
+    xhr.onload = function() {
+        var json = JSON.parse(xhr.responseText);
+        ip_info.innerHTML += '<p>IP: '+ip+'查询结果: </p>';
+        for (var key in json) {
+            /**
+             * 家人们谁懂啊，我发现这个api调用会把 香港和台湾列为国家.
+             * 所以说我要改一改
+             */
+            if (json.hasOwnProperty(key)) { 
+                var btn_1 = document.createElement('button');
+                var btn_2 = document.createElement('button');
+                btn_1.innerText = key;
+
+                btn_1.className = 'btn_key';
+                btn_2.className = 'btn_key';
+
+                if (key == 'country' && json[key] == 'Hong Kong') {
+                    json[key] = 'China';
+                }
+                if (key == 'country' && (json[key] == 'TaiWan' || json[key] == 'Tai Wan')) {
+                    json[key] = 'China'; 
+                }
+                if (key == 'lat') {
+                    lat = json[key];
+                    var key_name = 'lat (纬度)'
+                    btn_1.innerText = key_name;
+                    btn_2.innerText = json['lat'];
+                }
+                if (key == 'lon') {
+                    lon = json[key];
+                    var key_name = 'lon (经度)'
+                    btn_1.innerText = key_name;
+                    btn_2.innerText = json['lon'];
+                } else {
+                    console.log(1)
+                }
+                if (json[key] == '') {
+                    btn_2.innerText = '-';
+                } else {
+                    btn_2.innerText = json[key];
+                }
+                ip_info.appendChild(btn_1);
+                ip_info.appendChild(btn_2);
+                ip_info.innerHTML += '<br />';
+            }
+        }      
+    }
+}
