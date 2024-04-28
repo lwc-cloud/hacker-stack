@@ -48,6 +48,11 @@ def get_random() -> str:
     else:
         return random_string
 
+@app.route('/get_ip_location/<ip>' , methods=['POST' , 'GET'])
+def get_ip_location(ip):
+    r = requests.get('http://ip-api.com/json/'+ip)
+    return r.text
+
 @app.route('/pwd_attack' , methods=['POST'])
 def pwd_attack():
         data = request.get_data().decode('utf-8').split('\n')
