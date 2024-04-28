@@ -110,7 +110,7 @@ function make_qrcode() {
 function pwd_attack() {
     var url = document.getElementById('url').value;
     var body = document.getElementById('http_body').value;
-    var check = document.getElementById('check').innerText;
+    var check = document.getElementById('check').value;
 
     try 
     {
@@ -121,7 +121,7 @@ function pwd_attack() {
         {
             var responseText = xhr.responseText;
             if (responseText == 'ok') {
-                showAlert('程序正在后台')
+                showAlert('程序正在后台运行，破解的成功与否需要时间的检验，请耐心等候' , null)
             }
         }
     }
