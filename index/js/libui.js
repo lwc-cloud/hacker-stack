@@ -20,7 +20,7 @@ function showAlert(message, waitTime) {
     
     var closeButton = document.createElement('button');
     closeButton.style.position = 'absolute';
-    closeButton.style.top = '280px';
+    closeButton.style.bottom = '10px';
     closeButton.style.border = '1px solid green';
     closeButton.style.backgroundColor = 'transparent';
     closeButton.style.color = 'green';

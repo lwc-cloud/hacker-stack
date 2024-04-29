@@ -250,3 +250,41 @@ function download_file(path) {
         downloadBlob(xhr.response , path)
     }
 }
+
+function to_VirusInfoGetter() {
+    var i = document.getElementById('page');
+    i.src = './VirusInfoGetter'
+}
+
+function VirusInfoGetter() {
+    var user = JSON.parse(document.cookie).user;
+    var pwd = JSON.parse(document.cookie).pwd;
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET",remote+"/api/VirusInfoGetter/"+user+"/"+pwd,true);
+    xhr.send();
+    xhr.onload=function()
+    {
+        var response = xhr.responseText;
+        showAlert("<h2 style='color:red'>收到信息:</h2>"+'请访问URL:<br/>' + remote + '/'+response , null)
+
+        var run = setInterval(function() 
+        {
+            var get_message = new XMLHttpRequest();
+            get_message.open(
+                'GET',remote+"/run/"+response , true
+            );
+            get_message.send();
+            get_message.onload = function() 
+            {
+                if (get_message.readyState === 4) 
+                {
+                    var r = get_message.responseText;
+                    if (r.replace('\n','') != 'none')
+                    {
+                        showAlert("<h2 style='color:red'>收到信息:</h2><br />"+r.replaceAll('/n' , '<br />').replaceAll('//n' , '<br />   >'), null)
+                    }
+                }
+            }
+        } , 400); //使用短轮询，不是 websocket 用不起，而是短轮询更有性价比.
+    }
+}

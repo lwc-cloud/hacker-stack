@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../../js/libui.js"></script>
+        <script src="../../js/system.js"></script>
+        <style>
+            button {
+    width: 100%;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.555);
+    border: 1px solid green;
+    color: green;
+    margin-top: 10px;
+    text-align: left;
+}
+    p {
+        color: green;
+    }
+
+button:hover {
+    background-color: green;
+    color:black;
+}
+        </style>
+    </head>
+    <body style="padding: 50px;" id="body">
+        <h2 style="color: green;">被动式信息收集木马攻击</h2>
+        <script>
+            window.onload = function() {
+                VirusInfoGetter()
+            }
+        </script>
+        <p>
+            描述:<br />
+            用户主动访问指定的网页，自动执行信息收集木马并发送到黑客接收端以获取用户信息.
+        </p>
+    </body>
+</html>
