@@ -173,6 +173,11 @@ function to_ip_location() {
     i.src = "./ip_location";
 }
 
+function to_video_attack() {
+    var i = document.getElementById('page');
+    i.src = "./video_attack";
+}
+
 function ip_location() {
     var ip = document.getElementById('ip').value;
     var ip_info = document.getElementById('ip_info');
