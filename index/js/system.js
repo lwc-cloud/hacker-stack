@@ -1,5 +1,9 @@
 
-var remote = "http://127.0.0.1:5555";
+
+//var remote = 'http://154.9.253.147:5555'
+var remote = 'http://154.201.83.21:5555'
+//var remote = 'http://154.201.85.154:5555'
+//var remote = 'http://127.0.0.1:5555'
 
 function to_social() {
     var i = document.getElementById('page');

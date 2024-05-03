@@ -1,5 +1,10 @@
 // 154.9.253.147
 
+//var remote = 'http://154.9.253.147:11111'
+var remote = 'http://154.201.83.21:11111'
+//var remote = 'http://154.201.85.154:11111'
+//var remote = 'http://127.0.0.1:11111'
+
 function login() {
     var user = document.getElementById("user");
     var pwd = document.getElementById("pwd");
@@ -11,7 +16,7 @@ function login() {
         var password = pwd.value;
         
         var xhr = new XMLHttpRequest();
-        xhr.open("POST" , "http://154.201.85.154:11111/login",false);
+        xhr.open("POST" , remote+"/login",false);
         xhr.send(username+"\n"+password);
         
         // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"login successful."}
@@ -52,7 +57,7 @@ function reg() {
             var check = check_code.value;
 
             var xhr = new XMLHttpRequest();
-            xhr.open("POST" , "http://154.201.85.154:11111/reg",true);
+            xhr.open("POST" , remote+"/reg",true);
             xhr.send(username+"\n"+password+"\n"+check);
             
             xhr.onload = function() {

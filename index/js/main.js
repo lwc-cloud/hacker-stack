@@ -1,3 +1,9 @@
+
+//var remote = 'http://154.9.253.147:11111'
+var remote = 'http://154.201.83.21:11111'
+//var remote = 'http://154.201.85.154:11111'
+//var remote = 'http://127.0.0.1:11111'
+
 function load_index_text() {
 
     auto_login()
@@ -77,7 +83,7 @@ function login_ok() {
             var password = json.pwd;
             
             var xhr = new XMLHttpRequest();
-            xhr.open("POST" , "http://154.201.85.154:11111/login",false);
+            xhr.open("POST" , remote+"/login",false);
             xhr.send(username+"\n"+password);
             
             // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"login successful."}
@@ -113,7 +119,7 @@ function auto_login() {
         var password = json.pwd;
         
         var xhr = new XMLHttpRequest();
-        xhr.open("POST" , "http://154.201.85.154:11111/login",false);
+        xhr.open("POST" , remote+"/login",false);
         xhr.send(username+"\n"+password);
         
         // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"login successful."}
