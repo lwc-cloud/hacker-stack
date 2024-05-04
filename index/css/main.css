@@ -39,3 +39,8 @@ body {
     background-color: green;
     color: black;
 }
+
+img {
+    width: 90px;
+    height: 45px;
+}

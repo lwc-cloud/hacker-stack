@@ -1,7 +1,8 @@
 
 
+var remote = 'http://127.0.0.1:5555';
 //var remote = 'http://154.9.253.147:5555'
-var remote = 'http://154.201.83.21:5555'
+//var remote = 'http://154.201.83.21:5555'
 //var remote = 'http://154.201.85.154:5555'
 //var remote = 'http://127.0.0.1:5555'
 
@@ -290,5 +291,21 @@ function VirusInfoGetter() {
                 }
             }
         } , 400); //使用短轮询，不是 websocket 用不起，而是短轮询更有性价比.
+    }
+}
+
+function to_whois() {
+    var i = document.getElementById('page');
+    i.src = './whois'
+}
+
+function load_whois_info() {
+    var website = document.getElementById('website').value;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET' , remote+"/whois/"+website , true);
+    xhr.send();
+    xhr.onload = function() {
+        var text = xhr.responseText;
+        showAlert('收到信息:<br />' + text , null);        
     }
 }

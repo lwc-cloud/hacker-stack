@@ -30,7 +30,7 @@ function login() {
             return false; 
         }
     } catch(e) {
-        alert ("登录错误: "+e);
+        showAlert ("登录错误: "+e , null);
     }
 }
 function reg() {
@@ -43,7 +43,7 @@ function reg() {
     var b = retype.value;
 
     if (a.length < 8) {
-        alert("密码不得小于 8 位字符");
+        showAlert("密码不得小于 8 位字符" , null);
         return false;
     }
 
@@ -63,7 +63,7 @@ function reg() {
             xhr.onload = function() {
                 // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"create successful."}
                 var json_content = xhr.responseText;
-                alert(JSON.parse(json_content).message);
+                showAlert(JSON.parse(json_content).message , null);
                 if (String(JSON.parse(json_content).message).toLowerCase().includes("create successful")) {
                     document.cookie = "{\"user\" : \""+username+"\" , \"pwd\" : \""+password+"\"}";
                     window.location.href = '/';
@@ -71,10 +71,10 @@ function reg() {
             }
         }
         catch (e) {
-            alert("注册错误: "+e);
+            showAlert("注册错误: "+e , null);
         }
     }else{
-        alert("确认密码和密码不一致")
+        showAlert("确认密码和密码不一致" , null)
         return false
     }
 }

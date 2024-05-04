@@ -43,10 +43,9 @@ function showAlert(message, waitTime) {
     
     document.body.appendChild(div);
     
-    if (waitTime !== null) {
+    if (waitTime != null) {
         setTimeout(function() {
             document.body.removeChild(div);
         }, waitTime);
     }
-    
-    }
+}
