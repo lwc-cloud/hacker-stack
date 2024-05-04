@@ -15,6 +15,7 @@ import time
 from urllib.parse import unquote
 import qrcode
 import json
+import whois
 
 
 import config_loader as config_loader
@@ -53,6 +54,11 @@ def get_random() -> str:
 def get_ip_location(ip):
     r = requests.get('http://ip-api.com/json/'+ip)
     return r.text
+
+@app.route('/whois/<path:website>')
+def whois_show(website):
+    w = whois.whois(str(website))
+    return w
 
 @app.route('/pwd_attack' , methods=['POST'])
 def pwd_attack():
