@@ -25,8 +25,7 @@ import config_loader as config_loader
 app = Flask(__name__)
 CORS(app)
 
-
-user_server = 'http://154.201.85.154:11111'
+user_server = 'http://154.201.83.21:11111'
 url_list = {}
 config: config_loader = None
 visit_request = {}
@@ -187,10 +186,11 @@ def update_virus(filename , check):
             return 'Too many requests'
     else:
         visit_request[client_ip] = 1
-    message = json.loads(requests.get(user_server+'/check_ip_check/' + check).text.strip())['message']
+    message = str(json.loads(requests.get(user_server+'/check_ip_check/' + check).text.strip())['message'])
+    print(message)
     if str(filename).strip().lower() == "index.html" or str(filename).strip().lower() == "index.htm":
         return 'FILE NAME IS NULL: index.html or index.htm'
-    if message != 'ok':
+    if message.strip() != 'ok':
         return 'Check code error.'
 
     current_time = time.time()  # 获取当前时间戳
