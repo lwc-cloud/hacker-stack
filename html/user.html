@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link href="./css/index.css" rel="stylesheet" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Hacker Stack - 在线渗透测试平台</title>
+        <script>
+            function to_system() {
+                console.log(login_ok())
+                if (login_ok())
+                {
+                    window.location.href='./system';
+                }
+                else {
+                    alert('请先登录!')
+                }
+            }
+        </script>
+        <style>
+                .btn_key {
+    width: 45%;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.555);
+    border: 1px solid green;
+    color: green;
+    margin-left: 5px;
+    margin-top: 10px;
+    }
+        </style>
+    </head>
+    <body>
+        <div class="top">
+            <a style="color: white;font-style: italic;margin-left: 10px;font-size: 25px;top: 10px;">Hacker Stack</a>
+            <a style="margin-left: 30px;">
+
+            </a>
+            <button class="top_btn" onclick="window.location.href='/'">首页</button>
+            <button class="top_btn" onclick="window.location.href='./document/'">网安教程</button>
+            <button class="top_btn" id="login" onclick="window.location.href='./login.html'">登录</button>
+            <button class="top_btn" onclick="document.cookie='';window.location.href=''">退出登录</button>
+            <button class="top_btn" onclick="window.location.href='./agreement'">使用协议</button>
+        </div>
+        <iframe style="position: absolute;width: 100%;height: 100%;top: 50px;border: none;" src="./bg.html"></iframe>
+        <div align="left" style="font-style: italic;color: rgb(7, 179, 7);width: 100%;;position: absolute;  /* 顶部偏移为父元素高度的一半 */
+        padding: 50px;border-radius: 15px;" id="dom">
+            <h1 style="color: rgb(7, 179, 7);">LinwinSoft账户</h1>
+        <p id="t" style="display: none;"></p>
+        <br />
+    </div>
+    <script>
+function auto_login() {
+
+try{
+    var json = JSON.parse(document.cookie);
+    var username =  json.user;
+    var password = json.pwd;
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST" , "http://154.201.85.154:11111/login",false);
+    xhr.send(username+"\n"+password);
+    
+    // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"login successful."}
+    var json_content = xhr.responseText;
+    var json = JSON.parse(json_content);
+    if (String(json.message).toLowerCase().includes("login successful.")) {
+        document.cookie = "{\"user\" : \""+username+"\" , \"pwd\" : \""+password+"\"}";
+        
+        var login_btn = document.getElementById('login');
+        login_btn.innerText = "登录: "+username;
+        login_btn.onclick = function() {
+            window.location.href = "./user.html";
+        }
+        return true;
+    } else {
+        return false; 
+    }
+} catch(e) {
+    document.cookie = '';
+    document.cookie = "{\"user\" : \"\" , \"pwd\" : \"\"}";
+    return false;
+}
+}
+    auto_login()
+
+        var xhr = new XMLHttpRequest();
+        var json = JSON.parse(document.cookie);
+        xhr.open("GET" , "http://154.201.85.154:11111/user/"+json.user+"/"+json.pwd , false);
+        xhr.send();
+        var obj_json = JSON.parse(xhr.responseText);
+        var d = document.getElementById('dom')
+        for (var key in obj_json) {
+            var btn_1 = document.createElement('button');
+            var btn_2 = document.createElement('button');
+            btn_1.innerText = key;
+
+            btn_1.className = 'btn_key';
+            btn_2.className = 'btn_key';
+
+            btn_2.innerText = obj_json[key];
+            d.appendChild(btn_1)
+            d.appendChild(btn_2)
+        }
+    </script>
+    </body>
+</html>

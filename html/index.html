@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link href="./css/index.css" rel="stylesheet" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="一个在线的黑客渗透测试平台，提供社会工程学、cc攻击和各种信息木马操作的在线黑客入门平台。以教育意义为主，具有炫酷的界面与简单的操作，满足你的黑客梦">
+        <meta name="keywords" content="hacker,java,c++,python,Linux,黑客,木马,炫酷,在线渗透，渗透测试">
+        <meta name="search engines" content="All">
+        <meta name="application-name" content="Hacker Killer">
+        <meta name="author" content="王相卿">
+        <link href="./img/logo.png" rel="icon"/>
+        <title>Hacker Killer - 在线渗透测试平台</title>
+        <script src="./js/main.js"></script>
+        <script src="./js/libui.js"></script>
+        <script src="./js/md5.js"></script>
+        <script>
+            function to_system() {
+                console.log(login_ok())
+                if (login_ok())
+                {
+                    window.location.href='./system';
+                }
+                else {
+                    showAlert('请先登录!' , null)
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div class="top">
+            <a style="color: white;font-style: italic;margin-left: 10px;font-size: 25px;top: 10px;">Hacker Killer</a>
+            <a style="margin-left: 30px;">
+
+            </a>
+            <button class="top_btn" onclick="window.location.href=''">首页</button>
+            <button class="top_btn" onclick="window.location.href='./document/'">网安教程</button>
+            <button class="top_btn" id="login" onclick="window.location.href='./login.html'">登录</button>
+            <button class="top_btn" onclick="document.cookie='';window.location.href=''">退出登录</button>
+            <button class="top_btn" onclick="window.location.href='./agreement'">使用协议</button>
+        </div>
+        <iframe style="position: absolute;width: 100%;height: 100%;top: 50px;border: none;" src="./bg.html"></iframe>
+        <div align="left" style="font-style: italic;color: rgb(7, 179, 7);width: 100%;;position: absolute;  /* 顶部偏移为父元素高度的一半 */
+        padding: 50px;border-radius: 15px;">
+            <h1 style="color: rgb(7, 179, 7);">Hacker Killer渗透测试平台</h1>
+            <button class="btn_1" onclick="to_system()">进入HackerStack渗透测试系统</button>
+            <br />
+            <button class="btn_1" onclick="window.open('//gitee.com/LinWin-Cloud/hacker-stack/wikis/Hacker%20Stack:%20%E7%BD%91%E5%AE%89%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B?sort_id=9394741')">网安教程</button>     
+            <br />
+            <button class="btn_1" onclick="window.location.href='./virus.html'">在线病毒库</button>     
+            <br />
+            <button class="btn_1" onclick="window.location.href='./Web_Terminal'">Web控制台(装逼专用)</button>
+            <br />
+            <button class="btn_1" onclick="window.location.href='./attack_tools.html'">渗透测试工具下载</button>
+            <!--<button class="btn_1" onclick="window.location.href='./user.html'">我的LinwinSoft账户</button>-->
+        <p id="t"></p>
+    </div>
+    <div style="position: absolute;margin: 0px;padding: 0px;right: 20px;width: 40%;bottom: 20px;top: 70px;background-color: rgba(31, 30, 30, 0.692);border: 1px solid green;">
+        <div style="padding: 0px;width: 100%;background-color: rgb(189, 60, 0);">
+            <p id="connect" style="color: white;">未连接数据库 (未开放数据库功能)</p>
+        </div>
+        <div style="padding: 10px;">
+            <input class="command_box" placeholder="MetaLite数据库地址" />
+            <input class="command_box" placeholder="指令" />
+            <button>执行</button>
+        </div>
+        <div id="db_content" style="padding: 20px;">
+
+        </div>
+    </div>
+    <button style="position: absolute;top: 60px;left: 10px;" onclick="window.open('img/5602d880826fda0d7c93529b79dc3ec8.jpg')">为该项目捐款</button>
+    </body>
+</html>
