@@ -1,7 +1,7 @@
 
 
-//var remote = 'http://127.0.0.1:5555';
-var remote = 'http://stack.tiaha.cn:5555'
+var remote = 'http://127.0.0.1:5555';
+//var remote = 'http://stack.tiaha.cn:5555'
 
 function to_social() {
     var i = document.getElementById('page');
@@ -10,7 +10,7 @@ function to_social() {
 
 function to_web_virus() {
     var i = document.getElementById('page');
-    i.src = "./web_virus";
+    i.src = "./virus_attack";
 }
 
 function to_attack_pwd() {

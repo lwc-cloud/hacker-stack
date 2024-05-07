@@ -114,6 +114,8 @@
             var is_login = login_ok();
             if (is_login) {
                 window.location.href = './system/'
+            } else {
+              showAlert("请先登录" , null)
             }
         }
     </script>
