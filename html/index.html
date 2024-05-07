@@ -1,73 +1,165 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <link href="./css/index.css" rel="stylesheet" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="一个在线的黑客渗透测试平台，提供社会工程学、cc攻击和各种信息木马操作的在线黑客入门平台。以教育意义为主，具有炫酷的界面与简单的操作，满足你的黑客梦">
-        <meta name="keywords" content="hacker,java,c++,python,Linux,黑客,木马,炫酷,在线渗透，渗透测试">
-        <meta name="search engines" content="All">
-        <meta name="application-name" content="Hacker Killer">
-        <meta name="author" content="王相卿">
-        <link href="./img/logo.png" rel="icon"/>
-        <title>Hacker Killer - 在线渗透测试平台</title>
-        <script src="./js/main.js"></script>
-        <script src="./js/libui.js"></script>
-        <script src="./js/md5.js"></script>
-        <script>
-            function to_system() {
-                console.log(login_ok())
-                if (login_ok())
-                {
-                    window.location.href='./system';
-                }
-                else {
-                    showAlert('请先登录!' , null)
-                }
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="./js/libui.js"></script>
+<script src="./js/main.js"></script>
+<script src="./js/system.js"></script>
+<script src="./js/login.js"></script>
+<link href="./img/logo.png" rel="icon" />
+<meta name="description" content="Hacker Killer - 在线渗透测试与信安平台：在线信息安全渗透与装逼">
+<meta name="keywords" content="Linux,信息安全,装逼,渗透测试">
+<title>Hacker Killer - 在线渗透测试与信安平台</title>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #333;
+    color: #fff;
+  }
+
+  .header {
+    background: url('header-background.jpg') no-repeat center center;
+    background-size: cover;
+    text-align: center;
+    padding: 100px 0;
+  }
+
+  .header h1 {
+    font-size: 3em;
+    margin-bottom: 0;
+  }
+
+  .header p {
+    font-size: 1.5em;
+    margin-top: 10px;
+  }
+
+  .navbar {
+    background-color: #444;
+    overflow: hidden;
+  }
+
+  .navbar a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+
+  .navbar a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+
+  .main-content {
+    padding: 20px;
+  }
+
+  .footer {
+    background-color: #222;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+  }
+
+  /* 动画效果 */
+  .animated {
+    animation-duration: 2s;
+    animation-fill-mode: both;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .fadeIn {
+    animation-name: fadeIn;
+  }
+  .main-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* 居中子元素 */
+}
+
+.main-content .div-button {
+  display: inline-block;
+  width: 300px;
+  height: 200px;
+  margin: 10px;
+  padding: 20px;
+  background-color: #444444bb;
+  text-align: center;
+  border-radius: 15px; /* 可选，添加圆角 */
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.1); /* 可选，添加阴影 */
+  transition: transform 0.3s ease; /* 可选，添加鼠标悬停效果 */
+}
+
+.main-content .div-button:hover {
+  transform: translateY(-5px); /* 可选，鼠标悬停时向上移动 */
+}
+
+</style>
+</head>
+<body>
+    <script>
+        function to_system() {
+            var is_login = login_ok();
+            if (is_login) {
+                window.location.href = './system/'
             }
-        </script>
-    </head>
-    <body>
-        <div class="top">
-            <a style="color: white;font-style: italic;margin-left: 10px;font-size: 25px;top: 10px;">Hacker Killer</a>
-            <a style="margin-left: 30px;">
-
-            </a>
-            <button class="top_btn" onclick="window.location.href=''">首页</button>
-            <button class="top_btn" onclick="window.location.href='./document/'">网安教程</button>
-            <button class="top_btn" id="login" onclick="window.location.href='./login.html'">登录</button>
-            <button class="top_btn" onclick="document.cookie='';window.location.href=''">退出登录</button>
-            <button class="top_btn" onclick="window.location.href='./agreement'">使用协议</button>
+        }
+    </script>
+    <iframe src="./bg.html" style="width: 100%;height: 100%;position: absolute;bottom: 0;top: 0;border: none;"></iframe>
+<div style="position: absolute;width: 100%;">
+    <div class="header fadeIn">
+        <h1>Hacker Killer</h1>
+        <p>在线渗透测试与信安平台</p>
+      </div>
+      <div align="center">
+        <div id="t" style="max-width: 500px;height: 100px;"></div>
+      </div>
+      <div class="navbar" style="background-color: #222222af;" id="top">
+        <a href="">首页</a>
+        <a onclick="to_system()">渗透测试系统</a>
+        <a id="login" onclick="window.location.href='./login.html'">登录/注册</a>
+        <a href="https://gitee.com/LinWin-Cloud/hacker-stack/wiki">信安教程</a>
+        <a href="https://gitee.com/LinWin-Cloud/hacker-stack/wikis/LinwinSoft%20HackerStack%E8%BD%AF%E4%BB%B6%E4%BD%BF%E7%94%A8%E5%8D%8F%E8%AE%AE">平台协议</a>
+      </div>
+      
+      <div class="main-content" align="center">
+        <!-- 主要内容 -->
+        <br /><br />
+        <div align="center" class="div-button" onclick="to_system()">
+          <h3>进入渗透测试系统</h3>
+          <p>包括了多种在线渗透测试工具，<br />全部可视化操作，非常简单</p>
         </div>
-        <iframe style="position: absolute;width: 100%;height: 100%;top: 50px;border: none;" src="./bg.html"></iframe>
-        <div align="left" style="font-style: italic;color: rgb(7, 179, 7);width: 100%;;position: absolute;  /* 顶部偏移为父元素高度的一半 */
-        padding: 50px;border-radius: 15px;">
-            <h1 style="color: rgb(7, 179, 7);">Hacker Killer渗透测试平台</h1>
-            <button class="btn_1" onclick="to_system()">进入HackerStack渗透测试系统</button>
-            <br />
-            <button class="btn_1" onclick="window.open('//gitee.com/LinWin-Cloud/hacker-stack/wikis/Hacker%20Stack:%20%E7%BD%91%E5%AE%89%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B?sort_id=9394741')">网安教程</button>     
-            <br />
-            <button class="btn_1" onclick="window.location.href='./virus.html'">在线病毒库</button>     
-            <br />
-            <button class="btn_1" onclick="window.location.href='./Web_Terminal'">Web控制台(装逼专用)</button>
-            <br />
-            <button class="btn_1" onclick="window.location.href='./attack_tools.html'">渗透测试工具下载</button>
-            <!--<button class="btn_1" onclick="window.location.href='./user.html'">我的LinwinSoft账户</button>-->
-        <p id="t"></p>
-    </div>
-    <div style="position: absolute;margin: 0px;padding: 0px;right: 20px;width: 40%;bottom: 20px;top: 70px;background-color: rgba(31, 30, 30, 0.692);border: 1px solid green;">
-        <div style="padding: 0px;width: 100%;background-color: rgb(189, 60, 0);">
-            <p id="connect" style="color: white;">未连接数据库 (未开放数据库功能)</p>
-        </div>
-        <div style="padding: 10px;">
-            <input class="command_box" placeholder="MetaLite数据库地址" />
-            <input class="command_box" placeholder="指令" />
-            <button>执行</button>
-        </div>
-        <div id="db_content" style="padding: 20px;">
-
-        </div>
-    </div>
-    <button style="position: absolute;top: 60px;left: 10px;" onclick="window.open('img/5602d880826fda0d7c93529b79dc3ec8.jpg')">为该项目捐款</button>
-    </body>
+        <div align="center" class="div-button" onclick="window.location.href='./attack_tools.html'">
+            <h3>渗透测试工具下载</h3>
+            <p>提供面向Windows,<Br />Linux的各种渗透工具</p>
+          </div>
+          <div align="center" class="div-button" onclick="window.location.href='./img/5602d880826fda0d7c93529b79dc3ec8.jpg'">
+            <h3>捐助</h3>
+            <p>捐助我们团队，因为做一个这么<br />的产品并不容易，谢谢</p>
+          </div>
+          <div align="center" class="div-button" onclick="window.location.href='./Web_Terminal'">
+            <h3>装逼专用控制台</h3>
+            <p>Web Terminal，多年前的一个开源<br />项目，纯前端实现命令行效果</p>
+          </div>
+      
+        <br />
+        <br />
+      </div>
+</div>
+<div style="position: absolute;bottom: 0px;width: 100%;" class="footer" >
+    <p>&copy; 2023 Hacker Killer. All rights reserved.</p>
+  </div>
+</body>
 </html>
