@@ -6,7 +6,7 @@ function auto_login() {
         var password = json.pwd;
         
         var xhr = new XMLHttpRequest();
-        xhr.open("POST" , "http://154.201.85.154:11111/login",false);
+        xhr.open("POST" , "http://stack.tiaha.cn:11111/login",false);
         xhr.send(username+"\n"+password);
         
         // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"login successful."}
