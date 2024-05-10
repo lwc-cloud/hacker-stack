@@ -18,6 +18,7 @@ import json
 import whois
 
 
+import NmapScaner as NmapScaner
 import config_loader as config_loader
 
 
@@ -25,7 +26,7 @@ import config_loader as config_loader
 app = Flask(__name__)
 CORS(app)
 
-user_server = 'http://154.201.83.21:11111'
+user_server = 'http://stack.tiaha.cn:11111'
 url_list = {}
 config: config_loader = None
 visit_request = {}
@@ -53,6 +54,28 @@ def get_random() -> str:
 def get_ip_location(ip):
     r = requests.get('http://ip-api.com/json/'+ip)
     return r.text
+
+@app.route('/nmap/<check_code>/<path:host>')
+def nmap_scan(check_code , host):
+    # 限制每个IP对制定api的访问.
+    client_ip = request.remote_addr
+    if client_ip in visit_request:
+        visit_request[client_ip] = visit_request[client_ip] + 1
+        if visit_request[client_ip] > 2:
+            return 'Too many requests, Max: 2'
+    else:
+        visit_request[client_ip] = 1
+    
+    try:
+        if host == '127.0.0.1' or host == '0.0.0.0':
+            return 'NULL'
+        r = requests.post(user_server+'/check_ip_check/'+check_code)
+        if json.loads(r.text)['message'] == 'ok':
+            return NmapScaner.getNmap(str(host))
+        else:
+            return 'check code error.'
+    except:
+        return 'Nmap Error'
 
 @app.route('/whois/<path:website>')
 def whois_show(website):
