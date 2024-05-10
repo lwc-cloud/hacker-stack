@@ -1,7 +1,7 @@
 
 
-//var remote = 'http://127.0.0.1:5555';
-var remote = 'http://stack.tiaha.cn:5555'
+var remote = 'http://127.0.0.1:5555';
+//var remote = 'http://stack.tiaha.cn:5555'
 
 function to_social() {
     var i = document.getElementById('page');
@@ -304,5 +304,25 @@ function load_whois_info() {
     xhr.onload = function() {
         var text = xhr.responseText;
         showAlert('收到信息:<br />' + text , null);        
+    }
+}
+
+function to_Nmap() {
+    var i = document.getElementById('page');
+    i.src = './nmap'
+}
+
+function nmap_attack() {
+    var check_code = document.getElementById('check_code').value;
+    var host = document.getElementById('host').value;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET' , remote+'/nmap/'+check_code+"/"+host , true);
+    showAlert('Nmap扫描确实比较慢，请耐心等候扫描结果' , 3000)
+    xhr.send()
+    xhr.onload = function() {
+        var console = document.getElementById('console');
+        console.innerHTML = xhr.responseText.replaceAll('\n' , '<br />');
+        var img = document.getElementById('check_img')
+        img.src="http://stack.tiaha.cn:11111/get_check_code"
     }
 }
