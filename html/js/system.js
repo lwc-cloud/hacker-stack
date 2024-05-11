@@ -1,7 +1,7 @@
 
 
-var remote = 'http://127.0.0.1:5555';
-//var remote = 'http://stack.tiaha.cn:5555'
+//var remote = 'http://127.0.0.1:5555';
+var remote = 'http://stack.tiaha.cn:5555'
 
 function to_social() {
     var i = document.getElementById('page');
@@ -325,4 +325,9 @@ function nmap_attack() {
         var img = document.getElementById('check_img')
         img.src="http://stack.tiaha.cn:11111/get_check_code"
     }
+}
+
+function to_js_console() {
+    var i = document.getElementById('page');
+    i.src = './js_console'
 }

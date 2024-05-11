@@ -6,7 +6,7 @@ body {
 
 .card_1 {
     width: 15%;
-    height: 80dvh;
+    height: 90dvh;
     background-color: rgba(0, 0, 0, 0.397);
     border: 1px solid green;
     padding: 20px;
@@ -15,7 +15,7 @@ body {
     top: 20px;
 }
 .card_2 {
-    height: 80dvh;
+    height: 90dvh;
     background-color: rgba(0, 0, 0, 0.678);
     border: 1px solid green;
     padding: 20px;
@@ -27,7 +27,7 @@ body {
 }
 
 .card_3 {
-    height: 80dvh;
+    height: 90dvh;
     background-color: rgba(0, 0, 0, 0.678);
     border: 1px solid green;
     padding: 20px;

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../../js/libui.js"></script>
+        <script src="../../js/system.js"></script>
+        <style>
+            button {
+    width: 100%;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.555);
+    border: 1px solid green;
+    color: green;
+    margin-top: 10px;
+    text-align: left;
+}
+    p {
+        color: green;
+    }
+    a {
+        color: green;
+    }
+
+button:hover {
+    background-color: green;
+    color:black;
+}
+        </style>
+    </head>
+    <body style="padding: 50px;" id="body">
+        <h2 style="color: green;">Js控制台</h2>
+        <input id="js_code" placeholder="javascript代码" style="height: 30px;width: 100%;border: 1px solid green;background-color: black;outline: none;color: green;" />
+        <button onclick="var a=document.createElement('script');a.innerHTML=document.getElementById('js_code').value;document.head.appendChild(a)">执行</button>
+        <p>
+            描述:<br />
+            执行Javascript脚本
+        </p>
+    </body>
+</html>
