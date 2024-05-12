@@ -71,7 +71,7 @@ def nmap_scan(check_code , host):
             return 'NULL'
         r = requests.post(user_server+'/check_ip_check/'+check_code)
         if json.loads(r.text)['message'] == 'ok':
-            return NmapScaner.getNmap(str(host))
+            return NmapScaner.CommandNmap(host)
         else:
             return 'check code error.'
     except:
