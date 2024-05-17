@@ -2,9 +2,10 @@
   <style>
     body {
       margin: 0px;
+      color: blue;
     }
   </style>
-    <canvas id="ad"></canvas>
+        <canvas id="ad"></canvas>
     <script>
       var ad = document.getElementById("ad");
       var ctx = ad.getContext("2d");
@@ -19,7 +20,7 @@
       function draw() {
         ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; 
         ctx.fillRect(0, 0, ad.width, ad.height);
-        ctx.fillStyle = "#0F0";  
+        ctx.fillStyle = "#00FF00";  
         ctx.font = font_size + "px arial";
         for (var i = 0; i < drops.length; i++) {
           var text = chinese[Math.floor(Math.random() * chinese.length)];  
@@ -31,4 +32,5 @@
       }
       setInterval(draw, 70); 
     </script>
+     <div style="width: 100%;bottom: 0;top: 0;position: absolute;opacity: 0.6;;background-image: url(./img/green-back.jpg);background-repeat: no-repeat;background-size: cover;"></div>
 </div>

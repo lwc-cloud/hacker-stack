@@ -8,17 +8,17 @@
     width: 100%;
     height: 40px;
     background-color: rgba(0, 0, 0, 0.555);
-    border: 1px solid green;
-    color: green;
+    border: 1px solid #00FF00;
+    color: #00FF00;
     margin-top: 10px;
     text-align: left;
 }
     p {
-        color: green;
+        color: #00FF00;
     }
 
 button:hover {
-    background-color: green;
+    background-color: #00FF00;
     color:black;
 }
         </style>
@@ -30,13 +30,13 @@ button:hover {
         </script>
     </head>
     <body style="padding: 50px;" id="body">
-        <h2 style="color: green;">Nmap信息收集</h2>
-        <input id="host" placeholder="扫描的主机" style="width: 100%;height: 30px;background-color: black;border: 1px solid green;color: green;outline: none;" />
+        <h2 style="color: #00FF00;">Nmap信息收集</h2>
+        <input id="host" placeholder="扫描的主机" style="width: 100%;height: 30px;background-color: black;border: 1px solid #00FF00;color: #00FF00;outline: none;" />
         <br />
         <br />
         <div style="width: 320px;">
             <div style="float: left;">
-                <input id="check_code" placeholder="请输入验证码" style="width: 200px;height: 30px;background-color: black;border: 1px solid green;color: green;outline: none;"  />
+                <input id="check_code" placeholder="请输入验证码" style="width: 200px;height: 30px;background-color: black;border: 1px solid #00FF00;color: #00FF00;outline: none;"  />
             </div>
             <div style="float: right;">
                 <img id="check_img" style="width: 100px;height: 40px;" />
@@ -44,7 +44,7 @@ button:hover {
         </div>
         <br />
         <br />
-        <div style="overflow-y: scroll;width: 100%;height: 200px;border: 1px solid green;background-color: black;color: green;" id="console"></div>
+        <div style="overflow-y: scroll;width: 100%;height: 200px;border: 1px solid #00FF00;background-color: black;color: #00FF00;" id="console"></div>
         <button onclick="nmap_attack()">扫描</button>
         <p>
             描述:<br />

@@ -3,14 +3,49 @@
 //var remote = 'http://127.0.0.1:5555';
 var remote = 'http://stack.tiaha.cn:5555'
 
+function getTime() {
+    var date = new Date();
+    var time = '';
+    time += date.getDay()+"-";
+    time += date.getHours()+"-"
+    time += date.getMilliseconds()
+
+    return time
+}
+
+function print_log(log_info) {
+    log_info = "[ "+getTime()+" ] "+log_info;
+    var t = document.getElementById('log_console');
+    var text_1 = log_info
+    var splitText_1 = text_1.split('');
+
+    var run = null;
+    var i = 0;
+    run = setInterval(function() {
+        if (i + 1 == text_1.length) {
+            clearInterval(run);
+            return;
+        }
+        if (splitText_1[i] == "\n") {
+            t.innerHTML+= "<br />";
+        }else {
+            t.innerHTML+= splitText_1[i];
+        }
+        i++
+    } , 10);
+    t.innerHTML+= "<br />";
+}
+
 function to_social() {
     var i = document.getElementById('page');
     i.src = "./socialEngine";
+    print_log('Boot Social Engine Module.')
 }
 
 function to_web_virus() {
     var i = document.getElementById('page');
     i.src = "./virus_attack";
+    print_log('Boot Web Virus Module.')
 }
 
 function to_attack_pwd() {
@@ -173,11 +208,13 @@ function cc_attack() {
 function to_ip_location() {
     var i = document.getElementById('page');
     i.src = "./ip_location";
+    print_log('Boot IP Location Module.')
 }
 
 function to_video_attack() {
     var i = document.getElementById('page');
     i.src = "./video_attack";
+    print_log('Boot Video Attack Module.')
 }
 
 function ip_location() {
@@ -242,6 +279,7 @@ function ip_location() {
 function to_xss_attack() {
     var i = document.getElementById('page');
     i.src = './xss_attack';
+    print_log('Boot XSS Module.')
 }
 
 function download_file(path) {
@@ -256,6 +294,7 @@ function download_file(path) {
 function to_VirusInfoGetter() {
     var i = document.getElementById('page');
     i.src = './VirusInfoGetter'
+    print_log('Boot Virus Info Getter Module.')
 }
 
 function VirusInfoGetter() {
@@ -294,6 +333,7 @@ function VirusInfoGetter() {
 function to_whois() {
     var i = document.getElementById('page');
     i.src = './whois'
+    print_log('Boot Whois Module.')
 }
 
 function load_whois_info() {
@@ -310,6 +350,7 @@ function load_whois_info() {
 function to_Nmap() {
     var i = document.getElementById('page');
     i.src = './nmap'
+    print_log('Boot Nmap Module.')
 }
 
 function nmap_attack() {
@@ -330,4 +371,5 @@ function nmap_attack() {
 function to_js_console() {
     var i = document.getElementById('page');
     i.src = './js_console'
+    print_log('Boot Js Console Module.')
 }
