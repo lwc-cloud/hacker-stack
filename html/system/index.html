@@ -11,6 +11,11 @@
         <script src="../js/libui.js"></script>
     </head>
     <body style="height: 100%;">
+        <script>
+            window.onload=function() {
+                print_log("启动Hacker Stack渗透测试系统，请注意，这并不是一个装逼的界面，而是真实的渗透测试平台")
+            }
+        </script>
         <iframe src="../bg.html" style="border: none;width: 100%;height: 100%;position: absolute;"></iframe>
         <div style="padding: 30px;position: absolute;width: 100%;">
             <Div style="width: 100%;">
@@ -28,6 +33,7 @@
                     <button class="btn_2" onclick="to_video_attack()">摄像头网页木马(Beta)</button>
                     <button class="btn_2" onclick="to_VirusInfoGetter()">被动式信息收集木马</button>
                     <button class="btn_2" onclick="to_Nmap()">Nmap信息收集</button>
+                    <button class="btn_2" onclick="to_sqlmap()">SqlMap数据库注入</button>
                     <button class="btn_2" onclick="to_js_console()">Js控制台</button>
                 </span>
                 <iframe id="page" src="./default.html" class="card_2">

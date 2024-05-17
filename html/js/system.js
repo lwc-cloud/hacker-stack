@@ -373,3 +373,24 @@ function to_js_console() {
     i.src = './js_console'
     print_log('Boot Js Console Module.')
 }
+
+function to_sqlmap() {
+    var i = document.getElementById('page');
+    i.src = './sqlmap'
+    print_log('Boot SqlMap Attack Module.')
+}
+
+function sqlmap_attack() {
+    var check_code = document.getElementById('check_code').value;
+    var host = document.getElementById('host').value;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET' , remote+'/sqlmap/'+check_code+"/"+host , true);
+    showAlert('SqlMap扫描确实比较慢，请耐心等候扫描结果' , 3000)
+    xhr.send()
+    xhr.onload = function() {
+        var console = document.getElementById('console');
+        console.innerHTML = xhr.responseText.replaceAll('\n' , '<br />');
+        var img = document.getElementById('check_img')
+        img.src="http://stack.tiaha.cn:11111/get_check_code"
+    }
+}
