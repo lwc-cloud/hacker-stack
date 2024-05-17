@@ -56,8 +56,8 @@ def get_ip_location(ip):
     r = requests.get('http://ip-api.com/json/'+ip)
     return r.text
 
-@app.route('/sqlmap/<path:host>')
-def sqlmap_scan(host):
+@app.route('/sqlmap/<check>/<path:host>')
+def sqlmap_scan(check , host):
     # 限制每个IP对制定api的访问.
     client_ip = request.remote_addr
     if client_ip in visit_request:
@@ -66,7 +66,12 @@ def sqlmap_scan(host):
             return 'Too many requests, Max: 2'
     else:
         visit_request[client_ip] = 1
-    return SqlMapScaner.CommandSqlMap(host=host)
+
+    r = requests.post(user_server+'/check_ip_check/'+check)
+    if json.loads(r.text)['message'] == 'ok':
+        return SqlMapScaner.CommandSqlMap(host=host)
+    else:
+        return 'check code error.'
 
 @app.route('/nmap/<check_code>/<path:host>')
 def nmap_scan(check_code , host):
