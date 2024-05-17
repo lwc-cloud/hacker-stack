@@ -20,6 +20,7 @@ import whois
 
 import NmapScaner as NmapScaner
 import config_loader as config_loader
+import SqlMapScaner as SqlMapScaner
 
 
 
@@ -54,6 +55,18 @@ def get_random() -> str:
 def get_ip_location(ip):
     r = requests.get('http://ip-api.com/json/'+ip)
     return r.text
+
+@app.route('/sqlmap/<path:host>')
+def sqlmap_scan(host):
+    # 限制每个IP对制定api的访问.
+    client_ip = request.remote_addr
+    if client_ip in visit_request:
+        visit_request[client_ip] = visit_request[client_ip] + 1
+        if visit_request[client_ip] > 2:
+            return 'Too many requests, Max: 2'
+    else:
+        visit_request[client_ip] = 1
+    return SqlMapScaner.CommandSqlMap(host=host)
 
 @app.route('/nmap/<check_code>/<path:host>')
 def nmap_scan(check_code , host):
