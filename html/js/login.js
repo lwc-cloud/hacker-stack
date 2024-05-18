@@ -13,9 +13,9 @@ function login() {
         var password = pwd.value;
         
         var xhr = new XMLHttpRequest();
-        xhr.open("POST" , remote+"/login",false);
+        xhr.open("POST" , remote+"/login",true);
         xhr.send(username+"\n"+password);
-        
+        xhr.onload=function() {
         // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"login successful."}
         var json_content = xhr.responseText;
         var json = JSON.parse(json_content);
@@ -27,6 +27,7 @@ function login() {
             showAlert ("登录错误: 用户名或者密码错误" , 3000);
             t.style.display='none'
             return false; 
+        }
         }
     } catch(e) {
         showAlert ("登录错误: "+e , null);

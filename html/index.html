@@ -126,13 +126,11 @@
 </head>
 <body style="overflow-x: hidden;">
     <script>
+        function to_system_window() {
+          window.location.href='./system/'
+        }
         function to_system() {
-            var is_login = login_ok();
-            if (is_login) {
-                window.location.href = './system/'
-            } else {
-              showAlert("请先登录" , null)
-            }
+            login_ok(to_system_window , showAlert);
         }
     </script>
     <iframe src="./bg.html" style="width: 100%;height: 100%;position: absolute;bottom: 0px;top: 0px;border: none;"></iframe>

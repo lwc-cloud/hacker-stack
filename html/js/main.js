@@ -35,7 +35,7 @@ window.onload = function() {
     load_index_text()
 }
 
-function login_ok() {
+function login_ok(to_system , showAlert) {
     var get_result = false;
     try {
         var json = JSON.parse(document.cookie);
@@ -46,9 +46,10 @@ function login_ok() {
             var password = json.pwd;
             
             var xhr = new XMLHttpRequest();
-            xhr.open("POST" , remote+"/login",false);
+            xhr.open("POST" , remote+"/login",true);
             xhr.send(username+"\n"+password);
             
+            xhr.onload=function() {
             // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"login successful."}
             var json_content = xhr.responseText;
             var json = JSON.parse(json_content);
@@ -58,17 +59,22 @@ function login_ok() {
                 var login_btn = document.getElementById('login');
                 login_btn.innerText = "登录: "+username;
                 login_btn.onclick = function() {
-                    window.location.href = "./user.html";
+                        window.location.href = "./user.html";
+                    }
+                    to_system()
+                    return true;
+                } else {
+                    showAlert(("请先登录" , null))
+                    return false; 
                 }
-                return true;
-            } else {
-                return false; 
             }
         }else{
+            showAlert("请先登录" , null)
             document.cookie = "{\"user\":\"\",\"pwd\":\"\"}";
         }
         return get_result;
     }catch (e) {
+        showAlert("请先登录" , null)
         return get_result;
     }
 }
