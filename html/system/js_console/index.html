@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="../../js/libui.js"></script>
         <script src="../../js/system.js"></script>
         <style>
@@ -26,7 +28,7 @@ button:hover {
 }
         </style>
     </head>
-    <body style="padding: 50px;" id="body">
+    <body style="padding: 50px;background-color: black;" id="body">
         <h2 style="color: #00FF00;">Js控制台</h2>
         <input id="js_code" placeholder="javascript代码" style="height: 30px;width: 100%;border: 1px solid #00FF00;background-color: black;outline: none;color: #00FF00;" />
         <button onclick="var a=document.createElement('script');a.innerHTML=document.getElementById('js_code').value;document.head.appendChild(a)">执行</button>

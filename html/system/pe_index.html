@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HackerStack在线渗透测试平台</title>
+        <link href="../css/system.css" rel="stylesheet" />
+        <script src="../js/libui.js"></script>
+        <script src="../js/system.js"></script>
+        <script src="/resource/javascript/config.js"></script>
+        <script src="../js/pe_page_changer.js"></script>
+    </head>
+    <body style="padding: 20px;background-color: black;overflow: hidden;">
+        <iframe src="../bg.html" style="position: absolute;top: 0;bottom: 0;width: 100%;border: none;height: 100%;"></iframe>
+        <div align="center" style="overflow-y: scroll;position: absolute;width: calc(100% - 40px);top: 0;bottom: 0;">
+            <h3 style="color: red;font-weight: bold;border: 1px solid red;background-color: black;text-shadow: 0px 0px 10px white;">HackerStack渗透测试系统</h3>
+            <style>
+                .btn_2 {
+                    width: calc(50% - 5px);
+                    height: 80px;
+                    background-color: black;
+                    border: 1px solid #00FF00;
+                }
+                .btn_2:active {
+                    background-color: #00FF00;
+                    color: black;
+                }
+            </style>
+            <button class="btn_2" onclick="window.location.href='./socialEngine/'">社会工程学</button>
+            <button class="btn_2" onclick="window.location.href='./xss_attack/'">XSS脚本攻击</button>
+            <button class="btn_2" onclick="window.location.href='./virus_attack/'">浏览器控制木马攻击</button>
+            <button class="btn_2" onclick="window.location.href='./ip_location/'">IP定位</button>
+            <button class="btn_2" onclick="window.location.href='./whois/'">Whois查询</button>
+            <button class="btn_2" onclick="window.open('http://stack.tiaha.cn:60001/')">Google反向代理</button>
+            <button class="btn_2" onclick="make_qrcode()">二维码生成</button>
+            <button class="btn_2" onclick="window.open('//chatnio.net/')">ChatNIO人工智能</button>
+            <button class="btn_2" onclick="window.location.href='./cc_attack/'">CC攻击</button>
+            <button class="btn_2" onclick="window.location.href='./video_attack/'">摄像头网页木马(Beta)</button>
+            <button class="btn_2" onclick="window.location.href='./VirusInfoGetter/'">被动式信息收集木马</button>
+            <button class="btn_2" onclick="window.location.href='./nmap/'">Nmap信息收集</button>
+            <button class="btn_2" onclick="window.location.href='./sqlmap/'">SqlMap数据库注入</button>
+            <button class="btn_2" onclick="window.location.href='./js_console'">Js控制台</button>
+        </div>
+    </body>
+</html>

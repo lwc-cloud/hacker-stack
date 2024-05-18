@@ -5,14 +5,22 @@
         <title>Hacker Stack - 在线渗透测试平台</title>
         <script src="./js/md5.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="../css/system.css" rel="stylesheet" />
         <script src="/resource/javascript/config.js"></script>
+        <link href="../css/system.css" rel="stylesheet" />
         <script src="../js/system.js"></script>
         <script src="../js/libui.js"></script>
     </head>
     <body style="height: 100%;">
         <script>
             window.onload=function() {
+                function isMobileDevice() {
+                    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+                    // 正则表达式检查是否是移动端设备
+                    return /android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos/i.test(userAgent);
+                }
+                if (isMobileDevice()) {
+                    window.location.href = './pe_index.html'
+                }
                 print_log("启动Hacker Stack渗透测试系统，请注意，这并不是一个装逼的界面，而是真实的渗透测试平台")
             }
         </script>
