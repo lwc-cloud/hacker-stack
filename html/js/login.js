@@ -24,6 +24,8 @@ function login() {
             window.location.href = "/";
             return true;
         } else {
+            showAlert ("登录错误: 用户名或者密码错误" , 3000);
+            t.style.display='none'
             return false; 
         }
     } catch(e) {

@@ -1,12 +1,12 @@
 .panel{
     width: 300px;
     height: 500px;
-    background-color: black;
-    border: 1px solid green;
+    background-color: rgba(0, 0, 0, 0.199);
+    border: 1px solid #00FF00;
     box-shadow: 0px 0px 5px black;
-    margin-top: 150px;
+    margin-top: 100px;
     padding: 20px;
-    color: green;
+    color: #00FF00;
 }
 
 .in {
@@ -14,8 +14,8 @@
     height: 30px;
     background-color: black;
     border: none;
-    border: 1px solid green;
-    color: green;
+    border: 1px solid #00FF00;
+    color: #00FF00;
     outline: none;
     margin-top: 20px;
     ;
@@ -24,9 +24,18 @@
 .btn {
     width: 130px;
     height: 40px;
-    border: 1px solid green;
+    border: 1px solid #00FF00;
     background-color: black;
-    color: green;
+    color: #00FF00;
+}
+
+.btn:hover {
+    background-color: #00FF00;
+    color: black;
+}
+.btn:active {
+    background-color: #00FF00;
+    color: black;
 }
 
 body {
@@ -36,7 +45,7 @@ body {
 }
 
 .btn:hover {
-    background-color: green;
+    background-color: #00FF00;
     color: black;
 }
 
