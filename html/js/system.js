@@ -1,7 +1,7 @@
 
 
 //var remote = 'http://127.0.0.1:5555';
-var remote = 'http://stack.tiaha.cn:5555'
+var remote = 'http://api.hackerstack.top'
 
 function getTime() {
     var date = new Date();

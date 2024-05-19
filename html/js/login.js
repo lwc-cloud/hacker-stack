@@ -1,6 +1,6 @@
 // 154.9.253.147
 //var remote = 'http://127.0.0.1:11111/'
-var remote = 'http://stack.tiaha.cn:11111'
+var remote = 'http://user.hackerstack.top'
 
 function login() {
     var user = document.getElementById("user");

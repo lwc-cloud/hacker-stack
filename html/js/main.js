@@ -1,8 +1,5 @@
 
-//var remote = 'http://154.9.253.147:11111'
-var remote = 'http://154.201.83.21:11111'
-//var remote = 'http://154.201.85.154:11111'
-//var remote = 'http://127.0.0.1:11111'
+var remote = 'http://user.hackerstack.top'
 
 function load_index_text() {
 
