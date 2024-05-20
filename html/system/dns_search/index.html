@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="../../js/libui.js"></script>
+        <script src="../../js/system.js"></script>
+        <style>
+            button {
+    width: 100%;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.555);
+    border: 1px solid #00FF00;
+    color: #00FF00;
+    margin-top: 10px;
+    text-align: left;
+}
+.btn_key {
+    width: 45%;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.555);
+    border: 1px solid #00FF00;
+    color: #00FF00;
+    margin-left: 5px;
+    margin-top: 10px;
+    }
+    p {
+        color: #00FF00;
+    }
+
+button:hover {
+    background-color: #00FF00;
+    color:black;
+}
+        </style>
+    </head>
+    <body style="background-color: black;padding: 50px;" id="body">
+        <h2 style="color: #00FF00;">网站DNS查询(绕防火墙专用)</h2>
+        <input id="host" placeholder="扫描的主机" style="width: 100%;height: 30px;background-color: black;border: 1px solid #00FF00;color: #00FF00;outline: none;" />
+        <br />
+        <br />
+        <br />
+        <div style="overflow-y: scroll;width: 100%;height: 400px;resize:vertical;border: 1px solid #00FF00;background-color: black;color: #00FF00;" id="console"></div>
+        <button onclick="dns_search()">查询</button>
+        <p>
+            描述:<br />
+            由于很多网站挂了CDN或者防火墙导致无法获取真实的IP地址，而通过DNS查询可能可以获取域名对应的真实IP
+        </p>
+    </body>
+</html>
