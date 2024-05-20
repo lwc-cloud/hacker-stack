@@ -21,13 +21,14 @@ import whois
 import NmapScaner as NmapScaner
 import config_loader as config_loader
 import SqlMapScaner as SqlMapScaner
+import dns_searcher as dns_searcher
 
 
 
 app = Flask(__name__)
 CORS(app)
 
-user_server = 'http://stack.tiaha.cn:11111'
+user_server = 'http://user.hackerstack.top'
 url_list = {}
 config: config_loader = None
 visit_request = {}
@@ -55,6 +56,10 @@ def get_random() -> str:
 def get_ip_location(ip):
     r = requests.get('http://ip-api.com/json/'+ip)
     return r.text
+
+@app.route('/dns_search/<path:website>')
+def dns_search(website):
+    return dns_searcher.get_dns(website)
 
 @app.route('/sqlmap/<check>/<path:host>')
 def sqlmap_scan(check , host):
