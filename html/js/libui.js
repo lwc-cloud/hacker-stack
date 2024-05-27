@@ -17,6 +17,7 @@ function showAlert(message, waitTime) {
     div.style.height = '300px'
     div.style.border='1px solid green'
     div.innerHTML = message;
+    div.style.overflowX = 'hidden'
     
     var closeButton = document.createElement('button');
     closeButton.style.position = 'absolute';
@@ -25,7 +26,7 @@ function showAlert(message, waitTime) {
     closeButton.style.backgroundColor = 'transparent';
     closeButton.style.color = 'green';
     closeButton.style.width='80px';
-    closeButton.style.left='530px'
+    closeButton.style.right = '10px'
     closeButton.innerText = "关闭";
     closeButton.onclick = function() {
         document.body.removeChild(div);
