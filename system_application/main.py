@@ -16,6 +16,10 @@ from urllib.parse import unquote
 import qrcode
 import json
 import whois
+import markdown
+from zhipuai import ZhipuAI
+from flask_sse import sse
+
 
 
 import NmapScaner as NmapScaner
@@ -33,6 +37,10 @@ url_list = {}
 config: config_loader = None
 visit_request = {}
 ip_proxy = {}
+client = ZhipuAI(api_key="b8487357fcb60284daa628fd8746d8b1.0wahvm5rmBqfFJzq") # 请填写您自己的APIKey
+
+
+
 
 class user_sessen():
     username: str = ''
@@ -51,6 +59,23 @@ def get_random() -> str:
         return get_random()
     else:
         return random_string
+
+@app.route('/ai_chat/<path:message>')
+def ai_chat(message):
+    # 限制每个IP对制定api的访问.
+    client_ip = request.remote_addr
+    if client_ip in visit_request:
+        visit_request[client_ip] = visit_request[client_ip] + 1
+        if visit_request[client_ip] > 2:
+            return 'Too many requests, Max: 10'
+    else:
+        visit_request[client_ip] = 1
+    response = client.chat.completions.create(
+    model="glm-4",  # 填写需要调用的模型名称
+    messages=[
+        {"role": "user", "content": message},
+    ],)
+    return markdown.markdown(str(response.choices[0].message.content))
 
 @app.route('/get_ip_location/<ip>' , methods=['POST' , 'GET'])
 def get_ip_location(ip):
