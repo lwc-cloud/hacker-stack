@@ -18,6 +18,37 @@ function to_ai_chat() {
     i.src = './ai_chat'
 }
 
+function to_subdomain() {
+    var i = document.getElementById('page');
+    i.src = './subdomain'
+}
+
+function subdomain_get() {
+    var domain = document.getElementById('domain').value;
+    var console = document.getElementById('console');
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET' , remote + '/subdomain/'+domain , true);
+    xhr.send();
+    xhr.onload = function() {
+        console.innerHTML = '<p>搜索结果: </p>';
+        try {
+            var json = JSON.parse(xhr.responseText);
+            for (var i in json) {
+                (function(i) {
+                    var btn = document.createElement('button');
+                    btn.innerText = json[i];
+                    console.appendChild(btn);
+                    btn.onclick=function() {
+                        window.open('//'+json[i]);
+                    }
+                }) (i)
+            }
+        }catch(e) {
+            showAlert(xhr.responseText , null);
+        }
+    }
+}
+
 function ai_chat() {
     var message = document.getElementById('message').value;
     var xhr = new XMLHttpRequest();

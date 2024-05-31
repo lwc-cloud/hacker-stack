@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="../../js/libui.js"></script>
+        <script src="../../js/system.js"></script>
+        <style>
+            button {
+    width: 100%;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.555);
+    border: 1px solid #00FF00;
+    color: #00FF00;
+    margin-top: 10px;
+    text-align: left;
+}
+    p {
+        color: #00FF00;
+    }
+    a {
+        color: #00FF00;
+    }
+
+button:hover {
+    background-color: #00FF00;
+    color:black;
+}
+        </style>
+    </head>
+    <body style="padding: 50px;background-color: black;" id="body">
+        <h2 style="color: #00FF00;">子域名收集</h2>
+        <input id="domain" placeholder="输入域名，例如 hackerstack.top" style="height: 30px;width: 100%;border: 1px solid #00FF00;background-color: black;outline: none;color: #00FF00;" />
+        <br /><br />
+        <div style="padding: 10px;overflow-y: scroll;width: 100%;height: 400px;resize:vertical;border: 1px solid #00FF00;background-color: black;color: #00FF00;" id="console"></div>
+        <br />
+        <button onclick="subdomain_get()">执行</button>
+        <p>
+            描述:<br />
+            通过子域名词典获取一个网站的子域名以查看是否有攻击选项，事实上有些防火墙只能够防御主站，子域名无法防御，就造成了子域名可能没有任何防护
+        </p>
+    </body>
+</html>
