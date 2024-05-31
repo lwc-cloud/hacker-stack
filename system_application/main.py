@@ -405,7 +405,7 @@ def attack(attack_type,user,pwd):
         u.username = user
 
         url_list[n] = u
-        print(attack_type)
+        print(url_list)
         return n
 
     else:
