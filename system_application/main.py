@@ -66,7 +66,7 @@ def ai_chat(message):
     client_ip = request.remote_addr
     if client_ip in visit_request:
         visit_request[client_ip] = visit_request[client_ip] + 1
-        if visit_request[client_ip] > 2:
+        if visit_request[client_ip] > 10:
             return 'Too many requests, Max: 10'
     else:
         visit_request[client_ip] = 1
@@ -76,6 +76,18 @@ def ai_chat(message):
         {"role": "user", "content": message},
     ],)
     return markdown.markdown(str(response.choices[0].message.content))
+
+@app.route('/subdomain/<path:website>')
+def subdomain_searcher(website):
+    # 限制每个IP对制定api的访问.
+    client_ip = request.remote_addr
+    if client_ip in visit_request:
+        visit_request[client_ip] = visit_request[client_ip] + 1
+        if visit_request[client_ip] > 5:
+            return 'Too many requests, Max: 5'
+    else:
+        visit_request[client_ip] = 1
+    return dns_searcher.get_subdomain(website=website)
 
 @app.route('/get_ip_location/<ip>' , methods=['POST' , 'GET'])
 def get_ip_location(ip):
