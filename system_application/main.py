@@ -89,6 +89,22 @@ def get_random() -> str:
     else:
         return random_string
 
+@app.route("/ok_game/<user>/<pwd>/<level>")
+def ok_game(user , pwd , level):
+    level = int(level)
+    r = requests.post(user_server+'/login' , data=user+"\n"+pwd)
+    if r.text != 'Passwd Or UserName Error!':
+        if (level >= 7):
+            return 'ok'
+        else:
+            j = json.loads(open('./the-matrix/'+user+".json" , 'r').read())
+            j['level'] = level+1
+            with open('./the-matrix/'+user+".json" , 'w') as f:
+                f.write(j.dumps())
+            return 'ok'
+    else:
+        return '登录错误'
+
 @app.route('/game_level_info/<level>')
 def game_level_info(level):
     try:
