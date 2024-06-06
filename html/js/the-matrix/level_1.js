@@ -18,6 +18,8 @@ var chat_content = [
     "接待员瑶瑶: [视频: 男人的天堂]",
     "用户000011: 我想要接待员瑶瑶",
     "接待员瑶瑶: QQ 1145141919",
+    "王五: 我忘记网站网址了",
+    "接待员瑶瑶: www.ac123ff.com",
     "张三: 我还是想要学生妹，现在女大学生不错",
     "用户582432: 我是下北泽艺术学院的女生，这是我的学生证 [图片],等你来玩哦",
     "张三: 价格多少?",
@@ -34,6 +36,9 @@ var chat_content = [
     "接待员瑶瑶: q 1145141919"
 ]
 
+var json = JSON.parse(document.cookie);
+var user = json.user;
+var pwd = json.pwd;
 var put = document.getElementById('chat_content');
 var loop=null;
 var i = 0;
@@ -55,3 +60,63 @@ loop = setInterval(function() {
     put.appendChild(chat_obj);
     i++;
 } , 1000)
+
+function check_renwu(values) {
+    var title = values[0].replaceAll(" ","").replaceAll("\n","");
+    var qq = values[1].replaceAll(" ","").replaceAll("\n","");
+    var kaihu = values[2].replaceAll(" ","").replaceAll("\n","");
+    var users = String(values[3]).replaceAll("，",",").split(',');
+    var website = values[4].replaceAll(" ","").replaceAll("\n","");
+    
+    function check_user_ok(kaihu_list) {
+        var user_list = [
+            "张三",
+            "接待员瑶瑶",
+            "李四",
+            "王五",
+            "赵六",
+            "用户582432",
+            "张一一",
+            "用户000011",
+            "用户1232133",
+            "用户9289289s"
+        ]
+        var ok_number = 0;
+        for (var key in kaihu_list) {
+            var user = kaihu_list[key];
+            if (user_list.includes(user)) {
+                ok_number += 1;
+                continue;
+            } else {
+                showAlert("第四项任务中用户名称中有填写错误" , null)
+                return false;
+            }
+        }
+        return ok_number == 10;
+    }
+
+    var ok = false;
+    console.log(title == "同城狼友交流群(21238)")
+    console.log(qq == "1145141919")
+    console.log(kaihu == search_kaihu("接待员瑶瑶").replaceAll("\n","").replaceAll(" ",""));
+    console.log(check_user_ok(users))
+    console.log(website == 'www.ac123ff.com')
+    if (
+        title == "同城狼友交流群(21238)" &&
+        qq == "1145141919" &&
+        kaihu == search_kaihu("接待员瑶瑶").replaceAll("\n","").replaceAll(" ","") &&
+        check_user_ok(users) &&
+        website == 'www.ac123ff.com'
+    ) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET' , remote + "/ok_game/"+user+"/"+pwd+"/0" , false);
+        xhr.send();
+        showAlert("第一关已过，恭喜你，学会了基础的通过聊天软件收集信息，这些虽然看上去很繁琐或者无聊，但也是渗透中不可或缺的一环。等待 4秒 切换" , null);
+        setTimeout(function() {
+            window.location.href = '';
+        }, 4000);
+    } else {
+        showAlert("任务提交错误，可能是因为没有填写完整或者填写出错" , null)
+    }
+    
+}
