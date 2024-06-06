@@ -13,7 +13,20 @@
     </head>
     <body style="height: 100%;">
         <script>
+            function submit_renwu(){
+
+            }
+
+            function load_js(path) {
+                var script = document.createElement('script');
+                script.src = path;
+                document.head.appendChild(script);
+            }
+
             window.onload=function() {
+                var music = document.getElementById('music');
+                music.pause();
+                music.loop = true;
                 function isMobileDevice() {
                     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
                     // 正则表达式检查是否是移动端设备
@@ -22,13 +35,90 @@
                 if (isMobileDevice()) {
                     window.location.href = './pe_index.html'
                 }
+                var url = window.location.href;
+                var split_url = url.split("?");
+                var map = new Map();
+                for (var i = 0 ; i < split_url.length ;i++) {
+                    try{
+                        var split_value = split_url[i].split("=");
+                        map[split_value[0]] = split_value[1];
+                    }catch(e) {
+                        continue;
+                    }
+                }
+                function get_level_info(level) {
+                    var xhr = new XMLHttpRequest();
+                        xhr.open("GET" , remote+"/game_level_info/"+level, true);
+                        xhr.send();
+                        xhr.onload=function() {
+                            document.getElementById("title").innerText = JSON.parse(xhr.responseText)['title'];
+                            document.getElementById("info").innerText = JSON.parse(xhr.responseText)['info'];
+                            var story_dom = document.getElementById('story');
+                            var story = JSON.parse(xhr.responseText)['story'];
+                            var i = 0;
+                            var length = story.length;
+                            var charset = String(story).split('')
+                            var loop = setInterval(function() {
+                                if (i + 1 == length) {
+                                    story_dom.innerText += charset[i];
+                                    clearInterval(loop);
+                                    return
+                                }
+                                story_dom.innerText += charset[i];
+                                i++;
+                            } , 30)
+                        }
+                }
+
+                try{
+                    var from = map['from'];
+                    if (from == 'game') {
+                        document.getElementById('renwu_btn').style.display = 'block';
+                        document.getElementById('main_page').style.display = 'none';
+
+
+                        var script = document.createElement('script');
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("GET" , remote+"/game_level/"+JSON.parse(document.cookie).user+"/"+JSON.parse(document.cookie).pwd , true);
+                        xhr.send();
+                        xhr.onload=function() {
+                            var level = xhr.responseText;
+                            if (level == 0) {
+                                document.getElementById('log_console').style.display = 'none';
+                                document.getElementById('qq_window').style.display = 'block';
+                            }
+                            get_level_info(level);
+                            music.play();
+                            setTimeout(function(){
+                                document.getElementById('main_page').style.display = 'block';
+                                document.getElementById('load').style.display = 'none';
+                                var real_level = Number(Number(xhr.responseText+1))
+                                load_js('../js/the-matrix/level_'+real_level+'.js');
+                                var renwu_page = document.getElementById('renwu_page');
+                                load_page('../the-matrix/level_'+real_level+".html" , renwu_page);
+                                
+                            }, 1000);
+                        }
+                    }
+                }catch(e) {
+
+                }
+
                 print_log("启动Hacker Stack渗透测试系统，请注意，这并不是一个装逼的界面，而是真实的渗透测试平台")
             }
         </script>
+        <audio src="../audio/HellMarch.mp3" id="music"></audio>
         <iframe src="../bg.html" style="border: none;width: 100%;height: 100%;position: absolute;"></iframe>
-        <div style="padding: 30px;position: absolute;width: 100%;">
+        <div id="load" style="width: 90%;color: rgb(7, 179, 7);display: block;position: absolute;width: 100%;padding: 30px;">
+            <h1 id="title"></h1>
+            <p id="info"></p>
+            <p style="color: red;font-weight: bold;width: 90%;" id="story"></p>
+        </div>
+        <div style="padding: 30px;position: absolute;width: 100%;display: block;" id="main_page">
             <Div style="width: 100%;">
                 <span class="card_1" style="overflow-y: scroll;">
+                    <button onclick="document.getElementById('renwu_menu').style.display='block'" class="btn_2" style="display: none;height: 100px;" id="renwu_btn">任务面板</button>
+                    <button class="btn_2" onclick="document.getElementById('page').src='./user_message/'">开户程序</button>
                     <p style="color: red;font-weight: bold;">功能面板</p>
                     <button class="btn_2" onclick="to_social()">社会工程学</button>
                     <button class="btn_2" onclick="to_xss_attack()">XSS脚本攻击</button>
@@ -50,12 +140,27 @@
                 <iframe id="page" src="./default.html" class="card_2">
                     
                 </iframe>
-                <div src="https://chatnio.net/" class="card_3" id="log_console">
+                <div style="display: block;" class="card_3" id="log_console">
                     <p style="border: 1px solid red;padding-top: 3px;padding-bottom: 3px;color: red;">Hacker Stack渗透测试系统日志系统</p>
                     <button class="btn_2" onclick="to_ai_chat()">与AI交流和学习</button>
                     <br />
                 </div>
+                <div style="display: none;color: black;" class="card_3" id="qq_window">
+                    <div style="width: calc(100% - 20px);height: 30px;padding: 10px;background-color: rgb(228, 228, 228);">同城狼友交流群(21238)</div>
+                    <div id="chat_content" style="overflow-y: scroll;width: calc(100%-10px);padding: 5px;background-color: white;height: 70vh;">
+
+                    </div>
+                </div>
             </Div>
+        </div>
+        <div id="renwu_menu" style="display: none;overflow-y: scroll;color: #00FF00;padding: 20px;position: absolute;left: 50px;top: 50px;max-width: 500px;background-color: black;height: 60vh;border: 1px solid #00FF00;">
+            <h1>任务面板</h1>
+            <button style="color: black;" onclick="document.getElementById('renwu_menu').style.display='none'">关闭任务面板</button>
+            <br />
+            <br />
+            <div id="renwu_page" style="overflow-y: scroll;padding: 10px;width: 90%;height: 40vh;border: 1px solid #00FF00;"></div>
+            <br />
+            <button style="color: black;" onclick="submit_renwu()">提交任务</button>
         </div>
     </body>
 </html>

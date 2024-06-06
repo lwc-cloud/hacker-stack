@@ -1,7 +1,7 @@
 
 
-//var remote = 'http://127.0.0.1:5555';
-var remote = 'http://api.hackerstack.top'
+var remote = 'http://127.0.0.1:5555';
+//var remote = 'http://api.hackerstack.top'
 
 function getTime() {
     var date = new Date();
@@ -11,6 +11,16 @@ function getTime() {
     time += date.getMilliseconds()
 
     return time
+}
+
+function load_page(path , dom) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET' , path , true);
+    xhr.send();
+    xhr.onload = function() {
+        var content = xhr.responseText;
+        dom.innerHTML = (content);
+    }
 }
 
 function to_ai_chat() {
