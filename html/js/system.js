@@ -3,6 +3,60 @@
 var remote = 'http://127.0.0.1:5555';
 //var remote = 'http://api.hackerstack.top'
 
+
+
+
+var game_website_info = {
+    "whois" : {
+        "address":null,
+        "city":"深圳",
+        "country":"CN",
+        "creation_date":"Fri, 10 May 2024 03:25:37 GMT",
+        "dnssec":"unsigned",
+        "domain_name":"ac123ff.com",
+        "emails":"abuse@dnspod.com",
+        "expiration_date":"Sat, 10 May 2025 03:25:37 GMT",
+        "name (网站持有者名字)": "王瑶一",
+        "name_servers":[
+            "madge.dnspod.net",
+            "pistil.dnspod.net"
+        ],
+        "org": [
+            "TencentCloud",
+            "REDACTED FOR PRIVACY"
+        ],
+        "referral_url":null,
+        "registrant_postal_code":null,
+        "registrar":"DNSPod, Inc.",
+        "state":"shen zhen shi",
+        "status":[
+            "ok https://icann.org/epp#OK",
+            "ok https://www.icann.org/epp#ok"
+        ],
+        "updated_date":[
+            "Sun, 19 May 2024 12:27:32 GMT",
+            "Sun, 19 May 2024 20:27:32 GMT"
+        ],
+        "whois_server":"whois.dnspod.com"
+    },
+    "nmap" : `
+Nmap扫描结果:
+Starting Nmap 7.80 ( https://nmap.org ) at 2024-06-07 16:12 CST
+Nmap scan report for 114.514.191.198
+Host is up (0.12s latency).
+Not shown: 998 filtered ports
+PORT    STATE SERVICE
+22/tcp  open  ssh
+80/tcp  open  http
+443/tcp open  https 
+
+Nmap done: 1 IP address (1 host up) scanned in 10.84 seconds`,
+
+    "dns" : "114.514.191.198",
+    "IP" : "经度: 31.1221232 , 维度: 40.123127499"
+}
+
+
 function getTime() {
     var date = new Date();
     var time = '';
@@ -281,6 +335,11 @@ function ip_location() {
 
     var lat = '';
     var lon = '';
+    console.log(ip == '114.514.191.981')
+    if (ip == '114.514.191.981') {
+        ip_info.innerHTML = "<p style='color: green'>"+game_website_info['IP']+"</p>"
+        return;
+    }
 
     var xhr = new XMLHttpRequest();
     xhr.open('GET' , remote+'/get_ip_location/'+ip , true);
@@ -395,12 +454,20 @@ function to_whois() {
 
 function load_whois_info() {
     var website = document.getElementById('website').value;
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET' , remote+"/whois/"+website , true);
-    xhr.send();
-    xhr.onload = function() {
-        var text = xhr.responseText;
-        showAlert('收到信息:<br />' + text , null);        
+    
+    if (website == 'www.ac123ff.com') {
+        setTimeout(function() {
+            showAlert(JSON.stringify(game_website_info['whois']) , null)
+        } , 4000)
+        return
+    } else {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET' , remote+"/whois/"+website , true);
+        xhr.send();
+        xhr.onload = function() {
+            var text = xhr.responseText;
+            showAlert('收到信息:<br />' + text , null);        
+        }
     }
 }
 
@@ -416,12 +483,21 @@ function nmap_attack() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET' , remote+'/nmap/'+check_code+"/"+host , true);
     showAlert('Nmap扫描确实比较慢，请耐心等候扫描结果' , 3000)
-    xhr.send()
-    xhr.onload = function() {
-        var console = document.getElementById('console');
-        console.innerHTML = xhr.responseText.replaceAll('\n' , '<br />');
-        var img = document.getElementById('check_img')
-        img.src="http://user.hackerstack.top/get_check_code"
+    
+    if (host == 'www.ac123ff.com') {
+        setTimeout(function() {
+            var console = document.getElementById('console');
+            console.innerHTML = game_website_info['nmap'].replaceAll('\n' , '<br />');
+        } , 2000)
+        return
+    }else {
+        xhr.send();
+        xhr.onload = function() {
+            var console = document.getElementById('console');
+            console.innerHTML = xhr.responseText.replaceAll('\n' , '<br />');
+            var img = document.getElementById('check_img')
+            img.src="http://user.hackerstack.top/get_check_code"
+        }
     }
 }
 
@@ -461,11 +537,16 @@ function to_dns_search() {
 function dns_search() {
     var host = document.getElementById('host').value;
     var xhr = new XMLHttpRequest();
+    var ip_info = document.getElementById('console');
+    ip_info.innerHTML = ''
+    if (host == 'www.ac123ff.com') {
+        ip_info.innerHTML += '<button class="btn_key">真实IP地址，复制下面的IP地址以写入</button><br /><br />';
+        ip_info.innerHTML += game_website_info['dns'];
+        return
+    }
     xhr.open('GET' , remote+'/dns_search'+"/"+host , true);
     xhr.send()
     xhr.onload = function() {
-        var ip_info = document.getElementById('console');
-        ip_info.innerHTML = ''
         console.log(xhr.responseText)
         var json = JSON.parse(xhr.responseText);
         for (var key in json) {

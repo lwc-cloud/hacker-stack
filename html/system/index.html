@@ -11,6 +11,7 @@
         <script src="../js/libui.js"></script>
         <script src="../js/ai_chat.js"></script>
         <script src="../js/kaihu.js"></script>
+        <script src="../js/bug_searcher.js"></script>
     </head>
     <body style="height: 100%;">
         <script>
@@ -84,6 +85,7 @@
                         document.getElementById('renwu_btn').style.display = 'block';
                         document.getElementById('main_page').style.display = 'none';
                         document.getElementById('kaihu_btn').style.display = 'block';
+                        document.getElementById('bug_btn').style.display = 'block';
 
                         var script = document.createElement('script');
                         var xhr = new XMLHttpRequest();
@@ -101,12 +103,12 @@
                             setTimeout(function(){
                                 document.getElementById('main_page').style.display = 'block';
                                 document.getElementById('load').style.display = 'none';
-                                var real_level = Number(Number(xhr.responseText+1))
+                                var real_level = Number(xhr.responseText) + 1
                                 load_js('../js/the-matrix/level_'+real_level+'.js');
                                 var renwu_page = document.getElementById('renwu_page');
                                 load_page('../the-matrix/level_'+real_level+".html" , renwu_page);
                                 
-                            }, 8000);
+                            }, 1000);
                         }
                     }
                 }catch(e) {
@@ -128,6 +130,7 @@
                 <span class="card_1" style="overflow-y: scroll;">
                     <button onclick="document.getElementById('renwu_menu').style.display='block'" class="btn_2" style="display: none;height: 100px;" id="renwu_btn">任务面板</button>
                     <button style="display: none;" class="btn_2" id="kaihu_btn" onclick="document.getElementById('page').src='./user_message/'">开户程序</button>
+                    <button style="display: none;" class="btn_2" id="bug_btn" onclick="document.getElementById('page').src='./bug/'">漏洞搜索程序</button>
                     <p style="color: red;font-weight: bold;">功能面板</p>
                     <button class="btn_2" onclick="to_social()">社会工程学</button>
                     <button class="btn_2" onclick="to_xss_attack()">XSS脚本攻击</button>

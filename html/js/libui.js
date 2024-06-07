@@ -17,7 +17,6 @@ function showAlert(message, waitTime) {
     div.style.height = '300px'
     div.style.border='1px solid green'
     div.innerHTML = message;
-    div.style.overflowX = 'hidden'
     
     var closeButton = document.createElement('button');
     closeButton.style.position = 'absolute';

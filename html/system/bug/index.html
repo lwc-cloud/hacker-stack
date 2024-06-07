@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="../../js/libui.js"></script>
+        <script src="../../js/system.js"></script>
+        <script src="../../js/bug_searcher.js"></script>
+        <style>
+            button {
+    width: 100%;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.555);
+    border: 1px solid #00FF00;
+    color: #00FF00;
+    margin-top: 10px;
+    text-align: left;
+}
+    p {
+        color: #00FF00;
+    }
+    a {
+        color: #00FF00;
+    }
+
+button:hover {
+    background-color: #00FF00;
+    color:black;
+}
+        </style>
+    </head>
+    <body style="padding: 50px;background-color: black;" id="body">
+        <h2 style="color: #00FF00;">信息安全漏洞收集程序</h2>
+        <input id="message" placeholder="输入用户名，开户程序将会给出被开户的那个人" style="height: 30px;width: 100%;border: 1px solid #00FF00;background-color: black;outline: none;color: #00FF00;" />
+        <br /><br />
+        <div style="padding: 10px;overflow-y: scroll;width: 100%;height: 400px;resize:vertical;border: 1px solid #00FF00;background-color: black;color: #00FF00;" id="console"></div>
+        <br />
+        <button onclick="bug_search()">漏洞收集</button>
+        <p>
+            描述:<br />
+            模拟程序，不是真正的漏洞收集搜索
+        </p>
+    </body>
+</html>
