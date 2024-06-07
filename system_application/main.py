@@ -25,6 +25,7 @@ import NmapScaner as NmapScaner
 import config_loader as config_loader
 import SqlMapScaner as SqlMapScaner
 import dns_searcher as dns_searcher
+import NiktoScaner as NiktoScaner
 
 
 
@@ -84,6 +85,23 @@ def get_random() -> str:
         return get_random()
     else:
         return random_string
+
+@app.route("/bug_search/<check>/<path:website>")
+def bug_search(check , website ):
+    # 限制每个IP对制定api的访问.
+    client_ip = request.remote_addr
+    if client_ip in visit_request:
+        visit_request[client_ip] = visit_request[client_ip] + 1
+        if visit_request[client_ip] > 2:
+            return 'Too many requests, Max: 2'
+    else:
+        visit_request[client_ip] = 1
+
+    r = requests.post(user_server+'/check_ip_check/'+check)
+    if json.loads(r.text)['message'] == 'ok':
+        return NiktoScaner.CommandNikto(website)
+    else:
+        return '验证码错误'
 
 @app.route("/ok_game/<user>/<pwd>/<level>")
 def ok_game(user , pwd , level):
