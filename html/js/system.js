@@ -3,7 +3,9 @@
 var remote = 'http://127.0.0.1:5555';
 //var remote = 'http://api.hackerstack.top'
 
-
+var json = JSON.parse(document.cookie);
+var user = json.user;
+var pwd = json.pwd;
 
 
 var game_website_info = {
@@ -42,7 +44,7 @@ var game_website_info = {
     "nmap" : `
 Nmap扫描结果:
 Starting Nmap 7.80 ( https://nmap.org ) at 2024-06-07 16:12 CST
-Nmap scan report for 114.514.191.198
+Nmap scan report for 114.514.191.981
 Host is up (0.12s latency).
 Not shown: 998 filtered ports
 PORT    STATE SERVICE
@@ -50,10 +52,34 @@ PORT    STATE SERVICE
 80/tcp  open  http
 443/tcp open  https 
 
-Nmap done: 1 IP address (1 host up) scanned in 10.84 seconds`,
+Nmap done: 1 IP address (1 host up) scanned in 10.84 seconds
+`,
 
-    "dns" : "114.514.191.198",
-    "IP" : "经度: 31.1221232 , 维度: 40.123127499"
+    "dns" : "114.514.191.981",
+    "IP" : "经度: 31.1221232 , 维度: 40.123127499",
+    "bug" : `
+    
+Nikto扫描结果:
+- Nikto v2.1.5
+---------------------------------------------------------------------------
++ Target IP: 114.514.191.981
++ Target Hostname: www.ac123ff.com
++ Target Port: 80
++ Start Time: 2024-06-08 07:06:09 (GMT8)
+---------------------------------------------------------------------------
++ Server: nginx/1.18.0 (Ubuntu)
++ Server leaks inodes via ETags, header found with file /, fields: 0x6663644c 0x0
++ The anti-clickjacking X-Frame-Options header is not present.
++ No CGI Directories found (use '-C all' to force check all possible dirs)
++ Multiple index files found: index.html, index.php
++ OSVDB-3092: /.git/index: Git Index file may contain directory listing information.
++ 6544 items checked: 0 error(s) and 4 item(s) reported on remote host
++ End Time: 2024-06-08 07:06:15 (GMT8) (6 seconds)
+---------------------------------------------------------------------------
++ 1 host(s) tested
+
+    `,
+    "subdomain" : "bbs.ac123ff.com , api.ac123ff.com , www.ac123ff.com , admin.ac123ff.com"
 }
 
 
@@ -91,6 +117,14 @@ function subdomain_get() {
     var domain = document.getElementById('domain').value;
     var console = document.getElementById('console');
     var xhr = new XMLHttpRequest();
+
+    if (domain == 'ac123ff.com') {
+        setTimeout(function() {
+            console.innerHTML = game_website_info['subdomain'].replaceAll('\n' , '<br />');
+        }, 2000);
+        return
+    }
+
     xhr.open('GET' , remote + '/subdomain/'+domain , true);
     xhr.send();
     xhr.onload = function() {
@@ -540,8 +574,10 @@ function dns_search() {
     var ip_info = document.getElementById('console');
     ip_info.innerHTML = ''
     if (host == 'www.ac123ff.com') {
-        ip_info.innerHTML += '<button class="btn_key">真实IP地址，复制下面的IP地址以写入</button><br /><br />';
-        ip_info.innerHTML += game_website_info['dns'];
+        setTimeout(function() {
+            ip_info.innerHTML += '<button class="btn_key">真实IP地址，复制下面的IP地址以写入</button><br /><br />';
+            ip_info.innerHTML += game_website_info['dns'];
+        } , 5000)
         return
     }
     xhr.open('GET' , remote+'/dns_search'+"/"+host , true);
@@ -598,9 +634,17 @@ function dns_search() {
 function bug_attack() {
     var check_code = document.getElementById('check_code').value;
     var host = document.getElementById('host').value;
+    showAlert('Nikto扫描确实比较慢，请耐心等候扫描结果，默认 60s' , 3000)
+    if (host == 'www.ac123ff.com') {
+        setTimeout(function() {
+            var console = document.getElementById('console');
+            console.innerHTML = game_website_info['bug'].replaceAll('\n' , '<br />');
+        } , 10000)
+        return
+    }
+    
     var xhr = new XMLHttpRequest();
     xhr.open('GET' , remote+'/bug_search/'+check_code+"/"+host , true);
-    showAlert('Nikto扫描确实比较慢，请耐心等候扫描结果，默认 60s' , 3000)
     xhr.send()
     xhr.onload = function() {
         var console = document.getElementById('console');
