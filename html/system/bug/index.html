@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="../../js/libui.js"></script>
         <script src="../../js/system.js"></script>
-        <script src="../../js/bug_searcher.js"></script>
         <style>
             button {
     width: 100%;
@@ -19,26 +18,39 @@
     p {
         color: #00FF00;
     }
-    a {
-        color: #00FF00;
-    }
 
 button:hover {
     background-color: #00FF00;
     color:black;
 }
         </style>
+        <script>
+            window.onload=function() {
+                var img = document.getElementById('check_img')
+                img.src="http://user.hackerstack.top/get_check_code"
+            }
+        </script>
     </head>
-    <body style="padding: 50px;background-color: black;" id="body">
-        <h2 style="color: #00FF00;">信息安全漏洞收集程序</h2>
-        <input id="message" placeholder="输入网站" style="height: 30px;width: 100%;border: 1px solid #00FF00;background-color: black;outline: none;color: #00FF00;" />
-        <br /><br />
-        <div style="padding: 10px;overflow-y: scroll;width: 100%;height: 400px;resize:vertical;border: 1px solid #00FF00;background-color: black;color: #00FF00;" id="console"></div>
+    <body style="background-color: black;padding: 50px;" id="body">
+        <h2 style="color: #00FF00;">Nikto漏洞扫描</h2>
+        <input id="host" placeholder="扫描的网站网址" style="width: 100%;height: 30px;background-color: black;border: 1px solid #00FF00;color: #00FF00;outline: none;" />
         <br />
-        <button onclick="bug_search()">漏洞收集</button>
+        <br />
+        <div style="width: 320px;">
+            <div style="float: left;">
+                <input id="check_code" placeholder="请输入验证码" style="width: 200px;height: 30px;background-color: black;border: 1px solid #00FF00;color: #00FF00;outline: none;"  />
+            </div>
+            <div style="float: right;">
+                <img id="check_img" style="width: 100px;height: 40px;" />
+            </div>
+        </div>
+        <br />
+        <br />
+        <div style="overflow-y: scroll;width: 100%;height: 400px;border: 1px solid #00FF00;background-color: black;color: #00FF00;" id="console"></div>
+        <button onclick="bug_attack()">扫描</button>
         <p>
             描述:<br />
-            真实程序，使用 Nikto 扫描工具，默认最大扫描 60秒
+            利用Nikto漏洞扫描工具，快速的扫描出一个网站的漏洞，默认时间为 60 秒
         </p>
     </body>
 </html>
