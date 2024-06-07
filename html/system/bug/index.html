@@ -31,14 +31,14 @@ button:hover {
     </head>
     <body style="padding: 50px;background-color: black;" id="body">
         <h2 style="color: #00FF00;">信息安全漏洞收集程序</h2>
-        <input id="message" placeholder="输入用户名，开户程序将会给出被开户的那个人" style="height: 30px;width: 100%;border: 1px solid #00FF00;background-color: black;outline: none;color: #00FF00;" />
+        <input id="message" placeholder="输入网站" style="height: 30px;width: 100%;border: 1px solid #00FF00;background-color: black;outline: none;color: #00FF00;" />
         <br /><br />
         <div style="padding: 10px;overflow-y: scroll;width: 100%;height: 400px;resize:vertical;border: 1px solid #00FF00;background-color: black;color: #00FF00;" id="console"></div>
         <br />
         <button onclick="bug_search()">漏洞收集</button>
         <p>
             描述:<br />
-            模拟程序，不是真正的漏洞收集搜索
+            真实程序，使用 Nikto 扫描工具，默认最大扫描 60秒
         </p>
     </body>
 </html>

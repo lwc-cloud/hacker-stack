@@ -28,6 +28,12 @@ Hacker Stack系统并不是一个界面效果或者是一个用来装逼的工�
     } , 100);
 }
 
+function default_login() {
+    document.cookie = '{"user" : "linux" , "pwd" : "linux"}'
+    showAlert("成功以访客身份登录" , null);
+    window.location.href = ''
+}
+
 window.onload = function() {
     load_index_text()
 }
@@ -108,6 +114,7 @@ function auto_login() {
             }
             exit_login.innerText = '退出登录'
             top.appendChild(exit_login);
+            document.getElementById('default_login').style.display = 'none'
             return true;
         } else {
             return false; 
