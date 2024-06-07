@@ -91,13 +91,13 @@ def ok_game(user , pwd , level):
     r = requests.post(user_server+'/login' , data=user+"\n"+pwd)
     if r.text != 'Passwd Or UserName Error!':
         if (level >= 7):
-            return 'ok'
+            return 'ok 1'
         else:
             j = json.loads(open('./the-matrix/'+user+".json" , 'r').read())
             j['level'] = level+1
             with open('./the-matrix/'+user+".json" , 'w') as f:
-                f.write(j.dumps())
-            return 'ok'
+                f.write(json.dumps(j))
+            return 'ok 2'
     else:
         return '登录错误'
 
