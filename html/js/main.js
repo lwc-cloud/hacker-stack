@@ -30,8 +30,10 @@ Hacker Stack系统并不是一个界面效果或者是一个用来装逼的工�
 
 function default_login() {
     document.cookie = '{"user" : "linux" , "pwd" : "linux"}'
-    showAlert("成功以访客身份登录" , null);
-    window.location.href = ''
+    showAlert("成功以访客身份登录最好注册一个，因为有一些服务是互通的，访客账户账户密码都是开放的，无法保证任何的服务安全" , null);
+    setTimeout(function() {
+        window.location.href = ''
+    }, 5000);
 }
 
 window.onload = function() {
@@ -67,7 +69,7 @@ function login_ok(to_system , showAlert) {
                     to_system()
                     return true;
                 } else {
-                    showAlert(("请先登录" , null))
+                    showAlert("请先登录" , null)
                     return false; 
                 }
             }
