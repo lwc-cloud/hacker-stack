@@ -97,6 +97,10 @@
                                 document.getElementById('log_console').style.display = 'none';
                                 document.getElementById('qq_window').style.display = 'block';
                             }
+                            if (level == 2) {
+                                document.getElementById('log_console').style.display = 'none';
+                                document.getElementById('qq_window_2').style.display = 'block';
+                            }
                             get_level_info(level);
                             music.play();
                             music.volume = 0.2
@@ -162,6 +166,33 @@
                     <div style="width: calc(100% - 20px);height: 30px;padding: 10px;background-color: rgb(228, 228, 228);">同城狼友交流群(21238)</div>
                     <div id="chat_content" style="overflow-y: scroll;width: calc(100%-10px);padding: 5px;background-color: white;height: 70vh;">
 
+                    </div>
+                </div>
+                <div style="display: none;color: black;" class="card_3" id="qq_window_2">
+                    <div style="width: calc(100% - 20px);height: 30px;padding: 10px;background-color: rgb(228, 228, 228);">接待员瑶瑶</div>
+                    <div id="chat_content_2" style="overflow-y: scroll;width: calc(100%-10px);padding: 5px;background-color: white;height: 70vh;">
+
+                    </div>
+                </div>
+                <style>
+                    .a_3 button {
+                        width: 100%;
+                        padding: 5px;
+                        background-color: aliceblue;
+                        margin-top: 3px;
+                        text-align: left;
+                    }
+                </style>
+                <div style="display: none;color: black;" class="card_3" id="qq_window_3">
+                    <div style="width: calc(100% - 20px);height: 30px;padding: 10px;background-color: rgb(228, 228, 228);">迷人瑶瑶</div>
+                    <div class="a_3" id="chat_content_3" style="overflow-y: scroll;width: calc(100%-10px);padding: 5px;background-color: white;height: 70vh;">
+                        <button id="a" onclick="to_game_chat(1)">置顶: 彪哥</button>
+                        <button id="b" onclick="to_game_chat(2)"">置顶: 老胡</button>
+                        <button id="c" onclick="to_game_chat(3)">置顶: 开发小王</button>
+                        <button id="d" onclick="to_game_chat(4)"onclick="to_game_chat(1)">置顶: 老瑶姐</button>
+                        <button id="e" onclick="to_game_chat(5)">张三</button>
+                        <button id="f" onclick="to_game_chat(6)">姐姐好</button>
+                        <button id="g" onclick="to_game_chat(7)">黄昏的小哥哥</button>
                     </div>
                 </div>
             </Div>

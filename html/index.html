@@ -152,12 +152,25 @@
     <a href="https://gitee.com/LinWin-Cloud/hacker-stack/wikis/LinwinSoft%20HackerStack%E8%BD%AF%E4%BB%B6%E4%BD%BF%E7%94%A8%E5%8D%8F%E8%AE%AE">平台协议</a>
     <a id="default_login" onclick="default_login()">访客登录</a>
   </div>  
-  <div class="header fadeIn">
+  <div class="header fadeIn" align="center">
         <h1 style="text-shadow: 0px 0px 10px #00FF00;">Hacker Stack</h1>
         <a style="text-shadow: 0px 0px 10px #00FF00;">在线渗透测试与信安平台</a>
       </div>
       <div align="center">
         <div id="t" style="max-width: 500px;height: 100px;"></div>
+      </div>
+      <div align="center">
+        <script>
+          function to_matrix() {
+            function to_h() {
+              window.location.href = './system/?from=game'
+            }
+            login_ok(to_h , showAlert)
+          }
+        </script>
+        <button onclick="to_matrix()" style="background-color: #222;color: #00FF00;border: 1px solid #00FF00;width: 200px;height: 40px;">
+          《黑客帝国1: 守护者》在线Beta
+        </button>
       </div>
       <div class="main-content" align="center">
         <!-- 主要内容 -->
