@@ -29,7 +29,7 @@ var put = document.getElementById('chat_content_2');
 var loop=null;
 var i = 0;
 
-showAlert("<h3 style='color: red'>信息: </h3>正在利用 AI 模块自动化社会工程学诱导" , 3000)
+showAlert("<h3 style='color: red'>信息: </h3>正在利用 AI 模块自动化社会工程学诱导。本关卡在收集用户名称这块限制世间 40秒" , 3000)
 
 loop = setInterval(function() {
     var chat_obj = document.createElement('div');
@@ -67,7 +67,7 @@ function check_renwu(values) {
     function check_user_ok(kaihu_list) {
         var user_list = [
             "彪哥",
-            "老虎",
+            "老胡",
             "开发小王",
             "老瑶姐"
         ]
@@ -82,7 +82,7 @@ function check_renwu(values) {
                 return false;
             }
         }
-        return ok_number == 10;
+        return ok_number == 4;
     }
 
     var ok = false;
@@ -100,8 +100,10 @@ function check_renwu(values) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET' , remote + "/ok_game/"+user+"/"+pwd+"/2" , false);
         xhr.send();
-        setTimeout(() => {
+        setTimeout(function() {
             window.location.href = '';
         }, 4000);
+    } else {
+        showAlert("任务中有填写错误" , null)
     }
 }
