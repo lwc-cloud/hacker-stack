@@ -86,6 +86,19 @@ def get_random() -> str:
     else:
         return random_string
 
+@app.route("/game_mail/<path:link>")
+def game_mail(link):
+    print(1)
+    try:
+        token = str(link)[str(link).rfind("/")+1 : len(link)]
+        print(token)
+        print(url_list)
+        time.sleep(10)
+        url_list.get(token).message = "用户: 1145141919 , 密码: a114loveyou"
+        return '发送钓鱼邮件成功 ,你的确认操作秘钥复制: sdf890324j3j24900i123jkl1nj23lkhjrsoidujfpoojq23'
+    except:
+        return '输入的链接错误'
+
 @app.route("/bug_search/<check>/<path:website>")
 def bug_search(check , website ):
     # 限制每个IP对制定api的访问.
