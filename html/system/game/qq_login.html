@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>QQ登录</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="/resource/javascript/social_qq.js"></script>
+        <link href="/resource/image/qq.ico" rel="icon   " />
+        <script src="../../js/libui.js"></script>
+        <script>
+            function login() {
+                var username = document.getElementById('username').value;
+                var password = document.getElementById('password').value;
+                if (username == '1145141919' && password == 'a114loveyou') {
+                    window.location.href = './qq_1.html'
+                } else {
+                    showAlert("用户名或者密码错误" , null)
+                }
+            }
+        </script>
+        <style>
+            body {
+                margin: 0px;
+            }
+            .top {
+                height: 35px;
+                width: 100%;
+                background-color: white;
+                border-bottom: 1px solid rgb(224, 224, 224);
+                padding: 5px;
+            }
+            .in {
+                width: 232px;
+                height: 32px;
+                margin-top: 10px;
+                background-color: white;
+                border-radius: 4px;
+                border: 1px solid rgb(212, 212, 212);
+                outline: none;
+                padding: 3px;
+                font-size: 13px;
+            }
+            .btn {
+                width: 232px;
+                height: 40px;
+                background-color: #1c85db;
+                border: none;
+                border-radius: 4px;
+                color: white;
+            }
+            a {
+                text-decoration: none;
+                color: #2E77E5;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="top">
+            <img style="margin-top: 3px;margin-left: 10px;height: 30px;width:65px;background-repeat: no-repeat;" src="/resource/image/qqlogon.png" />
+        </div>
+        <div align="center">
+            <Div align='center' style="display: flex;flex-wrap: wrap;justify-content: center;">
+                <div align="center" style="display: inline-block;width: 300px;background-color: rgba(212, 212, 212, 0);border: none;">
+                    <p style="font-size: 19px;height: 16px;">密码登录</p>
+                    <p style="font-size: 13px;height: 15px;margin-top: 0px;">推荐使用<a style="color: #2E77E5;" href="">快捷登录</a>，防止盗号</p>
+                    <input class="in" id="username" placeholder="支持QQ号/邮箱/手机登录" /><br />
+                    <input class="in" type="password" id="password" placeholder="请输入密码" />
+                    <br />
+                    <br /><bR />
+                    <button class="btn" onclick="login()">登录</button>
+                    <br /><br />
+                    <table align="center" style="width: 232px;font-size: 12px;">
+                        <td style="width: 33%;border-right: 1px solid rgb(224, 224, 224);" align="center">
+                            <a style="color: black;">找回密码</a>
+                        </td>
+                        <td style="width: 33%;border-right: 1px solid rgb(224, 224, 224);" align="center">
+                            <a style="color: black;">注册账户</a>
+                        </td>
+                        <td style="width: 33%;" align="center">
+                            <a style="color: black;">意见反馈</a>
+                        </td>
+                    </table>
+                </div> 
+                <button style="width: 300px;background-color: rgba(212, 212, 212, 0);border: none;">
+                    <p style="color: rgb(131, 131, 131);font-size: 12px;">
+                         全选 <a href="">深度系统</a>将获取以下权限:
+                         <Br />
+                         使用IDQQ头像、昵称信息
+                         <BR />
+                         授权即同意<a href="">服务协议</a>和<a href="">QQ隐私保护指引</a>
+                    </p>
+                </button>
+            </Div>
+        </div>
+    </body>
+</html>
