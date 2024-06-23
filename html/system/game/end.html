@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                background-color: black;
+                margin: 0px;
+                padding: 0px;
+            }
+        </style>
+    </head>
+    <body>
+        <iframe style="width: 100%;position: absolute;top: 0;bottom: 0;border: none;height: 100%;background-color: black;" src="../../bg.html"></iframe>
+        <div id="t" style="padding: 20px;position: absolute;color: #00FF00;"></div>
+        <script>
+    var t = document.getElementById('t');
+    var text_1 = `
+最后，收集完成了所有的犯罪证据，成功摧毁了目标网站。他们的约炮平台也崩塌了，皮条客的QQ群也被封锁了，你们将几个核心犯罪者的证据全部移交给了网络警察进行线下侦破。最后终于发现，中国防火墙的作用真的是太大了，保护了社会，保护了我们，墙外面的真相就是缺乏法律管辖，各种谣言、暴力、色情信息满天飞
+
+墙外面的世界并不美好，没有所谓的自由和民主，这只不过是缺乏管辖的一套所谓说辞罢了。感谢中国防火墙。
+    `
+    var splitText_1 = text_1.split('');
+
+    var run = null;
+    var i = 0;
+    run = setInterval(function() {
+        i++
+        if (i + 1 == text_1.length) {
+            clearInterval(run);
+            return;
+        }
+        if (splitText_1[i] == "\n") {
+            t.innerHTML+= "<br />";
+        }else {
+            t.innerHTML+= "<a style='color:red'>"+splitText_1[i]+"</a>";
+        }
+    } , 100);
+        </script>
+    </body>
+</html>

@@ -1,7 +1,7 @@
 
 
-var remote = 'http://127.0.0.1:5555';
-//var remote = 'http://api.hackerstack.top'
+//var remote = 'http://127.0.0.1:5555';
+var remote = 'http://api.hackerstack.top'
 
 var json = JSON.parse(document.cookie);
 var user = json.user;
@@ -362,6 +362,11 @@ function to_video_attack() {
     print_log('Boot Video Attack Module.')
 }
 
+var game_ip_location = {
+    "154.201.114.114" : "114.12392 , 514.129",
+    "101.114.514.191" : "21.1231222 , 13.12839"
+}
+
 function ip_location() {
     var ip = document.getElementById('ip').value;
     var ip_info = document.getElementById('ip_info');
@@ -372,6 +377,13 @@ function ip_location() {
     console.log(ip == '114.514.191.981')
     if (ip == '114.514.191.981') {
         ip_info.innerHTML = "<p style='color: green'>"+game_website_info['IP']+"</p>"
+        return;
+    }
+    else if (ip == '154.201.114.114') {
+        ip_info.innerHTML = "<p style='color: green'>114.12392 , 514.129</p>";
+        return;
+    }else if (ip == '101.114.514.191') {
+        ip_info.innerHTML = "<p style='color: green'>21.1231222 , 13.12839</p>";
         return;
     }
 
