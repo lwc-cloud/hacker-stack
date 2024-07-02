@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8" />
+        <title>Hacker Stack - 登录/注册</title>
+        <link rel="icon" href="./img/11161619_openlinwin_1672727941.png"/> 
+        <link href="./css/main.css" rel="stylesheet" />
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+        <script src="./js/libui.js"></script>
+        <script src="./js/md5.js"></script> 
+        <script>
+            function login() {
+    var remote = 'http://user.hackerstack.top'
+    var user = document.getElementById("user");
+    var pwd = document.getElementById("pwd");
+
+    var t = document.getElementById("wait");
+    t.style.display = "block"
+    try{
+        var username =  user.value;
+        var password = pwd.value;
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST" , remote+"/login",true);
+        xhr.send(username+"\n"+password);
+        xhr.onload=function() {
+        // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"login successful."}
+        var json_content = xhr.responseText;
+        var json = JSON.parse(json_content);
+        if (String(json.message).toLowerCase().includes("login successful.")) {
+            document.cookie = "{\"user\" : \""+username+"\" , \"pwd\" : \""+password+"\"}";
+            window.location.href = "/system/?from=game";
+            return true;
+        } else {
+            showAlert ("登录错误: 用户名或者密码错误" , 3000);
+            t.style.display='none'
+            return false; 
+        }
+        }
+    } catch(e) {
+        showAlert ("登录错误: "+e , null);
+    }
+}
+        </script>
+    </head>
+    <body>
+        <iframe src="./bg.html" style="width: 100%;height: 100%;position: absolute;bottom: 0;top: 0;border: none;"></iframe>
+        <div align="center" style="font-style: italic;color: rgb(7, 179, 7);width: 100%;;position: absolute;  /* 顶部偏移为父元素高度的一半 */
+        padding: 0px;border-radius: 15px;" >
+            <div class="panel" style="width: 600px;border-radius: 5px;">
+                <div align="left">
+                    <h3>LinwinSoft通行证</h3>
+                </div>
+                <br />
+                <input style="width: 100%;" class="in" placeholder="登录用户" id="user" type="text" />
+                <input style="width: 100%;" class="in" placeholder="登录密码" id="pwd" type="password" />
+            
+                <br />
+                <br />
+                <a style="float: left;margin-left: 20px;" href="./reg.html">没有账户? 注册</a>
+                <br />
+                <br />
+                <button class="btn" onclick="login()">登录</button>
+                <p id="wait" style="display: none;color: red;">等待服务器回复......</p>
+                <p style="color: red;">
+                    The Matrix: 基于真实黑客工具开发的剧情类游戏
+                </p>
+            </div>
+        </div>  
+    </body>
+</html>
