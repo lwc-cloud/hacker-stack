@@ -18,6 +18,8 @@ import json
 import whois
 import markdown
 from zhipuai import ZhipuAI
+import yagmail
+
 
 
 
@@ -98,6 +100,43 @@ def game_mail(link):
         return '发送钓鱼邮件成功 ,你的确认操作秘钥复制: sdf890324j3j24900i123jkl1nj23lkhjrsoidujfpoojq23'
     except:
         return '输入的链接错误'
+
+@app.route("/send_mail/<user>/<pwd>" , methods=['POST'])
+def send_mail(user , pwd):
+    # 限制每个IP对制定api的访问.
+    client_ip = request.remote_addr
+    if client_ip in visit_request:
+        visit_request[client_ip] = visit_request[client_ip] + 1
+        if visit_request[client_ip] > 5:
+            return 'Too many requests, Max: 5'
+    else:
+        visit_request[client_ip] = 1
+
+    r = requests.post(user_server+'/login' , data=user+"\n"+pwd)
+    if r.text != 'Passwd Or UserName Error!':
+        pass
+    else:
+        return '登录错误'
+
+    data = request.get_data().decode('utf-8')
+    print(data)
+    json_obj = json.loads(data)
+
+    # 连接服务器
+    # 用户名、授权码、服务器地址
+    yag_server = yagmail.SMTP(user='linwinsoft@163.com', password='UPBLIZFPDMGGWCRD', host='smtp.163.com')
+
+    # 发送对象列表
+    email_to = [json_obj['send_to']]
+    email_title = json_obj['title']
+    email_content = json_obj['content']
+    # 附件列表
+    email_attachments = []
+    # 发送邮件
+    yag_server.send(email_to, email_title, email_content)
+    # 关闭连接
+    yag_server.close()
+    return "Send Successful!"
 
 @app.route("/bug_search/<check>/<path:website>")
 def bug_search(check , website ):
