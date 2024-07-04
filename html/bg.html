@@ -7,6 +7,48 @@
   </style>
         <canvas id="ad"></canvas>
     <script>
+
+function scrollToBottom() {
+  var selectBox = document.getElementById('code');
+  selectBox.scrollTop = selectBox.scrollHeight;
+
+  var selectBox_1 = document.getElementById('code_1');
+  selectBox_1.scrollTop = selectBox_1.scrollHeight;
+}
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET' , './js/system.js' , true);
+      xhr.send();
+      xhr.onload = function() {
+        var split = xhr.responseText.split('\n');
+        var dom = document.getElementById('code');
+        var i = 0;
+        setInterval(function() {
+          if (i + 1 == split.length) {
+            i = 0;
+          }
+          else {
+            dom.innerText += split[i] + '\n';
+            scrollToBottom();
+            i++;
+          }
+        } , 100)
+
+        setTimeout(function() {
+          setInterval(function() {
+          if (i + 1 == split.length) {
+            i = 0;
+          }
+          else {
+            var dom_1 = document.getElementById('code_1');
+            dom_1.innerText += split[i] + '\n';
+            scrollToBottom();
+            i++;
+          }
+        } , 200)
+        } , 400)
+      }
+
       var ad = document.getElementById("ad");
       var ctx = ad.getContext("2d");
       ad.height = window.innerHeight;
@@ -32,5 +74,8 @@
       }
       setInterval(draw, 70); 
     </script>
-     <div style="width: 100%;bottom: 0;top: 0;position: absolute;opacity: 0.7;;background-image: url(./img/green-back.jpg);background-repeat: no-repeat;background-size: cover;"></div>
+     <div style="overflow-y: scroll;color: #00FF00;font-weight: bold;width: 100%;bottom: 0;top: 0;position: absolute;opacity: 0.4;;background-image: url(./img/green-back.jpg);background-repeat: no-repeat;background-size: cover;">
+      <div id="code" style="padding: 10px;overflow-y: scroll;height: 100vh;width: calc(50% - 20px);float: left;"></div>
+      <div id="code_1" style="padding: 10px;overflow-y: scroll;height: 100vh;width: calc(50% - 20px);float: right;"></div>
+    </div>
 </div>
