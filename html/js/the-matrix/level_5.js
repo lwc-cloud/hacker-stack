@@ -39,7 +39,7 @@ function check_renwu(values) {
         xhr.open('GET' , remote + "/ok_game/"+user+"/"+pwd+"/4" , false);
         xhr.send();
         setTimeout(function() {
-            window.location.href = './';
+            window.location.href = '';
         }, 4000);
     } else {
         showAlert("任务中有选项错误，请重新检查" , null);

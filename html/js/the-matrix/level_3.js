@@ -101,7 +101,7 @@ function check_renwu(values) {
         xhr.open('GET' , remote + "/ok_game/"+user+"/"+pwd+"/2" , false);
         xhr.send();
         setTimeout(function() {
-            window.location.href = './';
+            window.location.href = '';
         }, 4000);
     } else {
         showAlert("任务中有填写错误" , null)
