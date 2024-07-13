@@ -13,7 +13,7 @@
         <script src="../js/kaihu.js"></script>
         <script src="../js/bug_searcher.js"></script>
     </head>
-    <body style="height: 100%;">
+    <body style="height: 100%;padding: 0px;margin: 0px;">
         <script>
             function submit_renwu(){
                 var container = document.getElementById('renwu_content');
@@ -132,38 +132,75 @@
             <p id="info"></p>
             <p style="color: red;font-weight: bold;width: 90%;" id="story"></p>
         </div>
-        <div style="padding: 30px;position: absolute;width: 100%;display: block;" id="main_page">
+        <div style="padding: 0px;margin: 0px;position: absolute;width: 100%;display: block;" id="main_page">
             <Div style="width: 100%;">
-                <span class="card_1" style="overflow-y: scroll;">
+                <span class="card_1" style="overflow-y: scroll;top: 0px;">
                     <button onclick="document.getElementById('renwu_menu').style.display='block'" class="btn_2" style="display: none;height: 100px;" id="renwu_btn">任务面板</button>
                     <button style="display: none;" class="btn_2" id="kaihu_btn" onclick="document.getElementById('page').src='./user_message/'">开户程序</button>
                     <button style="display: none;" class="btn_2" id="bug_btn" onclick="document.getElementById('page').src='./bug/'">漏洞搜索程序</button>
                     <p style="color: red;font-weight: bold;">功能面板</p>
-                    <button class="btn_2" onclick="to_social()">社会工程学</button>
-                    <button class="btn_2" onclick="to_xss_attack()">XSS脚本攻击</button>
-                    <button class="btn_2" onclick="to_web_virus()">浏览器控制木马攻击</button>
-                    <button class="btn_2" onclick="to_ip_location()">IP定位</button>
-                    <button class="btn_2" onclick="to_whois()">Whois查询</button>
-                    <button class="btn_2" onclick="window.open('http://stack.tiaha.cn:60001/')">Google反向代理</button>
-                    <button class="btn_2" onclick="make_qrcode()">二维码生成</button>
-                    <button class="btn_2" onclick="window.open('https://chatnio.net/')">ChatNIO人工智能</button>
-                    <button class="btn_2" onclick="to_cc_attack()">CC攻击</button>
-                    <button class="btn_2" onclick="to_video_attack()">摄像头网页木马(Beta)</button>
-                    <button class="btn_2" onclick="to_VirusInfoGetter()">被动式信息收集木马</button>
-                    <button class="btn_2" onclick="to_Nmap()">Nmap信息收集</button>
-                    <button class="btn_2" onclick="to_sqlmap()">SqlMap数据库注入</button>
-                    <button class="btn_2" onclick="to_js_console()">Js控制台</button>
-                    <button class="btn_2" onclick="to_dns_search()">网站DNS查询(绕防火墙专用)</button>
-                    <button class="btn_2" onclick="to_subdomain()">子域名收集</button>
-                    <button class="btn_2"onclick="document.getElementById('page').src='./bug/'">Nikto漏洞扫描</button>
+                    <div style="border: 1px solid #ffffff;padding: 5px;">
+                        <button class="btn_2" onclick="to_social()">社会工程学</button>
+                        <button class="btn_2" onclick="to_xss_attack()">XSS脚本攻击</button>
+                        <button class="btn_2" onclick="to_web_virus()">浏览器控制木马攻击</button>
+                    </div>
+                    <br />
+                    <div style="border: 1px solid #ffffff;padding: 5px;">
+                        <button class="btn_2" onclick="to_ip_location()">IP定位</button>
+                        <button class="btn_2" onclick="to_whois()">Whois查询</button>
+                        <button class="btn_2" onclick="window.open('http://stack.tiaha.cn:60001/')">Google反向代理</button>
+                        <button class="btn_2" onclick="make_qrcode()">二维码生成</button>
+                        <button class="btn_2" onclick="window.open('https://chatnio.net/')">ChatNIO人工智能</button>
+
+                    </div>
+                    <br />
+                    <div style="border: 1px solid #ffffff;padding: 5px;">
+                        <button class="btn_2" onclick="to_cc_attack()">CC攻击</button>
+                        <button class="btn_2" onclick="to_video_attack()">摄像头网页木马(Beta)</button>
+                        <button class="btn_2" onclick="to_VirusInfoGetter()">被动式信息收集木马</button>
+                        <button class="btn_2" onclick="to_Nmap()">Nmap信息收集</button>
+                        <button class="btn_2" onclick="to_sqlmap()">SqlMap数据库注入</button>
+                        <button class="btn_2" onclick="to_js_console()">Js控制台</button>
+                        <button class="btn_2" onclick="to_dns_search()">网站DNS查询(绕防火墙专用)</button>
+                        <button class="btn_2" onclick="to_subdomain()">子域名收集</button>
+                        <button class="btn_2"onclick="document.getElementById('page').src='./bug/'">Nikto漏洞扫描</button>
+                    </div>
                 </span>
-                <iframe style="color: #00FF00;" id="page" src="./default.html" class="card_2">
+                <iframe style="color: #00FF00;top: 0px;left: calc(15% + 50px);" id="page" src="./default.html" class="card_2">
                     
                 </iframe>
-                <div style="display: block;" class="card_3" id="log_console">
+                <script>
+                    
+                    function scrollToBottom() {
+  var selectBox = document.getElementById("log_console");
+  selectBox.scrollTop = selectBox.scrollHeight;
+
+}
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET' , '../js/system.js' , true);
+      xhr.send();
+      xhr.onload = function() {
+        var split = xhr.responseText.split('\n');
+        var dom = document.getElementById("log_console");
+        var i = 0;
+        setInterval(function() {
+            scrollToBottom();
+          if (i + 1 == split.length) {
+            i = 0;
+          }
+          else {
+            dom.innerText += split[i] + '\n';
+            i++;
+          }
+        } , 200)
+      }
+                </script>
+                <div style="display: block;" class="card_3">
                     <p style="border: 1px solid red;padding-top: 3px;padding-bottom: 3px;color: red;">Hacker Stack渗透测试系统日志系统</p>
-                    <button class="btn_2" onclick="to_ai_chat()">与AI交流和学习</button>
-                    <br />
+                    <div style="overflow-y: scroll;height: calc(85vh);border: 1px solid #00FF00;" id="log_console">
+
+                    </div>
                 </div>
                 <div style="display: none;color: black;" class="card_3" id="qq_window">
                     <div style="width: calc(100% - 20px);height: 30px;padding: 10px;background-color: rgb(228, 228, 228);">同城狼友交流群(21238)</div>

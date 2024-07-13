@@ -74,8 +74,17 @@ function scrollToBottom() {
       }
       setInterval(draw, 70); 
     </script>
-     <div style="overflow-y: scroll;color: #00FF00;font-weight: bold;width: 100%;bottom: 0;top: 0;position: absolute;opacity: 0.4;;background-image: url(./img/green-back.jpg);background-repeat: no-repeat;background-size: cover;">
-      <div id="code" style="padding: 10px;overflow-y: scroll;height: 100vh;width: calc(50% - 20px);float: left;"></div>
-      <div id="code_1" style="padding: 10px;overflow-y: scroll;height: 100vh;width: calc(50% - 20px);float: right;"></div>
+    <style>
+      .a::-webkit-scrollbar {
+          display: none; /* 对于基于WebKit的浏览器 */
+      }
+      .a::-webkit-scrollbar {
+          display: none; /* 对于基于WebKit的浏览器 */
+      }
+      
+    </style>
+     <div class="a" style="overflow-y: auto;color: #00FF00;font-weight: bold;width: 100%;bottom: 0;top: 0;position: absolute;opacity: 0.4;;background-image: url(./img/green-back.jpg);background-repeat: no-repeat;background-size: cover;">
+      <div class="a" id="code" style="padding: 10px;overflow-y: auto;height: 100vh;width: calc(50% - 20px);float: left;"></div>
+      <div class="a" id="code_1" style="padding: 10px;overflow-y: auto;height: 100vh;width: calc(50% - 20px);float: right;"></div>
     </div>
 </div>
