@@ -1,0 +1,76 @@
+API全部采用允许跨域,大部分都是POST请求
+
+# 获取验证码
+你前端只管获取验证码，后端自己会根据IP处理
+> http://user.hackerstack.top/get_check_code
+
+# 验证验证码是否正确
+返回的是Json
+> http://user.hackerstack.top/check_ip_check/验证码的内容
+
+# 注册
+```Javascript
+var username = "test",
+var password = "12345"
+var check_code = "用户输入的验证码";
+
+var xhr = new XMLHttpRequest();
+xhr.open("POST" , "http://user.hackerstack.top/reg",true);
+xhr.send(username+"\n"+password+"\n"+check_code);
+
+xhr.onload = function() {
+	// 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"create successful."}
+	var json_content = xhr.responseText;
+}
+```
+
+# 登录
+```Javascript
+var username = "test",
+var password = "12345"
+
+var xhr = new XMLHttpRequest();
+xhr.open("POST" , "http://user.hackerstack.top/login",true);
+xhr.send(username+"\n"+password);
+
+xhr.onload = function() {
+        // 返回的是 Json字符串，自己去处理,默认的信息是 {"message":"login successful."}
+        var json_content = xhr.responseText;
+}
+```
+
+# 获取用户信息
+```
+var username = "用户名";
+var password = "用户密码";
+
+var remote = "http://user.hackerstack.top/user/"+username+"/"+password;
+var xhr = new XMLHttpRequest();
+xhr.open("POST",remote,true);
+xhr.send();
+
+xhr.onload = function() {
+    // 第一个选项是 用户的配置名称
+    // 第二个选项是 用户的配置内容
+    var json_content = xhr.responseText;
+    console.log(json_content)
+}
+```
+
+# 搜索用户
+```
+var username = "用户名";
+
+var remote = "http://user.hackerstack.top/search_user/"+username;
+var xhr = new XMLHttpRequest();
+xhr.open("POST",remote,true);
+xhr.send();
+
+xhr.onload = function() {
+    // 第一个选项是 用户的配置名称
+    // 第二个选项是 用户的配置内容
+    var json_content = xhr.responseText;
+    console.log(json_content)
+}
+```
+
