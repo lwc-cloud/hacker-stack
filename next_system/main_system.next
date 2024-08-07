@@ -1,0 +1,231 @@
+
+hashmap check_code_map new hashmap()
+
+fn bool login(string user,string pwd) {
+	string path "./db/",user,"-",pwd,".edb"
+	file f new file(path)
+	return bool(f.exists())
+}
+
+fn bool is_uf(string file,string user) {
+    try{
+	#println(file)
+	int fd find(file , "-")
+        string u substr(file, 0 , fd)
+        #println(u," ",user," ",bool(u == user))
+	return bool(u == user)
+    }
+    catch e {
+        println(e)
+	return false
+    }
+}
+
+fn void deal_login(Res res) {
+	res.cors()
+	byte[] body res.body()
+	string body_str bytes_to_str(body,"UTF-8")
+	string[] split split(body_str,"\n")
+	
+	string user split[0]
+	string pwd split[1]
+
+	output out res.output()
+	bool ok login(user,pwd)
+	#println(ok)
+	if ok {
+		res.code(200)
+		string message "{\"message\":\"login successful.\"}"
+		out(out , str_to_bytes(message))	
+	}
+	else {
+		res.code(400)
+		string message "{\"message\":\"login failed.\"}"
+		out(out , str_to_bytes(message))
+	}
+	close_out(out)
+}
+
+fn void deal_reg(Res res) {
+	res.cors()
+	byte[] body res.body()
+ 	string body_str bytes_to_str(body,"UTF-8")
+ 	string[] split split(body_str,"\n")
+ 	output out res.output()
+
+	string user split[0]
+ 	string pwd split[1]
+	string check split[2]
+
+	# 验证账户是否已经注册了
+	# 第一部验证是否存在非法字符
+	bool var1 has(user , "/")
+	bool var2 has(user , ".")
+	bool var3 has(user , "-")
+	bool var4 has(user , "#")
+	bool var5 or_true(var1,var2,var3,var4)
+	bool is_ok true	
+
+	if var5 {
+	    res.code(400)
+	    string message "{\"message\":\"Can not contain Charset '-' or '/' or '.' or '#'\"}"
+            out(out , str_to_bytes(message))
+            close_out(out)
+	    return ""
+	}
+	else{
+        string[] users_list list_dir("./db/")
+       	int i 0
+       	for len(users_list) {
+       		string u users_list[i]
+           	#is_uf(u , user)
+		    if is_uf(u , user) {
+				val is_ok false
+          	}
+       		val i i+1
+      	}
+
+        if is_ok == false {
+	        res.code(400)
+            string message "{\"message\":\"user was exists.\"}"
+            out(out , str_to_bytes(message))
+            close_out(out)
+            return ""
+	    }
+        else {
+	        # 检验验证码是否正确
+            if check_code_map.has(res.IP()) {
+                string true_code check_code_map.get(res.IP())
+                println("create user: ",user," ",res.IP()," ",true_code)
+                check_code_map.rm(res.IP())
+                println(true_code,"  ",check)
+                if true_code != check {
+                    res.code(400)
+                    string message "{\"message\":\"Check Code Error.\"}"
+                    out(out , str_to_bytes(message))
+                    close_out(out)
+                }
+                else {
+                    treemap config new treemap()
+                    config.put("is_vip" , "false")
+                    config.put("user_type","ordinary")
+      		        config.put("about","这个用户很懒，什么都没有写")
+                    config.put("level" , "1")
+
+                    string path "./db/",user,"-",pwd,".edb"
+                    obj_to_file(path , config)
+                    res.code(200)
+                    string message "{\"message\":\"create successful\"}"
+                    out(out , str_to_bytes(message))
+                    close_out(out)
+                }
+            }
+            else {
+                res.code(400)
+                string message "{\"message\":\"Check Code Error.\"}"
+                out(out , str_to_bytes(message))
+                close_out(out)
+            }
+	    }
+	}
+}
+
+fn void get_check_code(Res res) {
+	res.cors()
+	output out res.output()
+	string r system_time(),".png"
+	string number random(10000,100000)
+	make_string_png(number , r)
+	
+	res.code(200)
+	out(out , get_file_bytes(r))
+	rm(r)
+	check_code_map.put(res.IP() , number)	
+	# println(check_code_map.to_str())	
+	close_out(out)
+}
+
+fn void check_ip_check(Res res) {
+    	res.cors()
+    	string[] split_url split(res.URL() , "/")
+	string check split_url[2]
+	output out res.output()
+	
+	if check_code_map.has(res.IP()) {
+        string true_code check_code_map.get(res.IP())
+                
+        check_code_map.rm(res.IP())
+        if true_code != check {
+            res.code(400)
+            string message "{\"message\":\"Check Code Error.\"}"
+            out(out , str_to_bytes(message))
+            close_out(out)
+            return ""
+        }
+        else {
+             res.code(400)
+             string message "{\"message\":\"ok\"}"
+             out(out , str_to_bytes(message))
+             close_out(out)
+             return ""
+        }
+	}
+	else {
+		res.code(400)
+		string message "{\"message\":\"No Check Code.\"}"
+        	out(out , str_to_bytes(message))
+	        check_code_map.put(res.IP() , number)
+        	close_out(out)
+	}
+}
+
+fn void deal_user(Res res) {
+   	res.cors()
+    string[] split_url split(res.URL() , "/")
+	string user split_url[2]
+	string pwd split_url[3]
+	output out res.output()
+
+	string path "./db/",user,"-",pwd,".edb"
+	#println(path)
+	file f new file(path)
+	if f.exists() {
+	    treemap map file_as_obj(f.abs())
+	    string message "{ \n \"message\" : \" ok \" , \n "
+
+        string[] keys map.keys()
+        int i 0
+	println(keys)
+        for len(keys) {
+            string key keys[i]
+            #println(key)
+            string value map.get(key)
+	    #println(key,"=",value)
+            val message message,"\"",key," \":\" ",value,"\",\n"
+            val i i+1
+        }
+        res.code(200)
+        val message message , "\"\" : \"\"}"
+	    	            	out(out , str_to_bytes(message))
+                	        check_code_map.put(res.IP() , number)
+                        	close_out(out)
+	}
+	else {
+	    res.code(400)
+	    string message "{\"message\" : \"username or password error.\"}"
+	            	out(out , str_to_bytes(message))
+        	        check_code_map.put(res.IP() , number)
+                	close_out(out)
+	}
+}
+
+http_service http new http_service("0.0.0.0",11111)
+http.thread(100)
+
+http.URL("/login",deal_login)
+http.URL("/reg",deal_reg)
+http.URL("/get_check_code" , get_check_code)
+http.URL("/check_ip_check" , check_ip_check)
+http.URL("/user" , deal_user)
+
+http.start()
