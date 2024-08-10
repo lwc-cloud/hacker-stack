@@ -155,6 +155,34 @@ def bug_search(check , website ):
     else:
         return '验证码错误'
 
+@app.route("/create_db/<user>/<pwd>")
+def create_db(user , pwd):
+    # 限制每个IP对制定api的访问.
+    client_ip = request.remote_addr
+    if client_ip in visit_request:
+        visit_request[client_ip] = visit_request[client_ip] + 1
+        if visit_request[client_ip] > 5:
+            return 'Too many requests, Max: 5'
+        
+    else:
+        visit_request[client_ip] = 1
+
+    r = requests.post(user_server+'/login' , data=user+"\n"+pwd)
+    if r.text != 'Passwd Or UserName Error!':
+        # 创建目录 /usr/metalite-server/database/<user>/<pwd>
+        if os.path.exists('/usr/metalite-server/database/'+user+'/'+pwd):
+            return 'ok'
+        else:
+            os.makedirs('/usr/metalite-server/database/'+user+'/'+pwd)
+            # 新建文件 /usr/metalite-server/database/<user>/info.jmap
+            # 写入内容 name=root\nmax_size=10485760
+            with open('/usr/metalite-server/database/'+user+'/'+pwd+'/info.jmap' , 'w') as f:
+                f.write('name='+user+'\nmax_size=10485760')
+        return 'ok'
+    else:
+        return '登录错误'
+
+
 @app.route("/ok_game/<user>/<pwd>/<level>")
 def ok_game(user , pwd , level):
     level = int(level)
