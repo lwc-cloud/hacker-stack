@@ -175,9 +175,9 @@ def create_db(user , pwd):
         else:
             os.makedirs('/usr/metalite-server/database/'+user+'/'+pwd)
             # 新建文件 /usr/metalite-server/database/<user>/info.jmap
-            # 写入内容 name=root\nmax_size=10485760
+            # 写入内容 name=root\nmax_size=
             with open('/usr/metalite-server/database/'+user+'/'+pwd+'/info.jmap' , 'w') as f:
-                f.write('name='+user+'\nmax_size=10485760')
+                f.write('name='+user+'\nmax_size=157286400')
         return 'ok'
     else:
         return '登录错误'
