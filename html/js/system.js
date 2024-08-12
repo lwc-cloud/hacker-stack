@@ -542,7 +542,7 @@ function nmap_attack() {
             var console = document.getElementById('console');
             console.innerHTML = xhr.responseText.replaceAll('\n' , '<br />');
             var img = document.getElementById('check_img')
-            img.src="http://user.hackerstack.top/get_check_code"
+            img.src="https://user.hackerstack.top/get_check_code"
         }
     }
 }
@@ -570,7 +570,7 @@ function sqlmap_attack() {
         var console = document.getElementById('console');
         console.innerHTML = xhr.responseText.replaceAll('\n' , '<br />');
         var img = document.getElementById('check_img')
-        img.src="http://user.hackerstack.top/get_check_code"
+        img.src="https://user.hackerstack.top/get_check_code"
     }
 }
 
@@ -662,6 +662,6 @@ function bug_attack() {
         var console = document.getElementById('console');
         console.innerHTML = xhr.responseText.replaceAll('\n' , '<br />');
         var img = document.getElementById('check_img')
-        img.src="http://user.hackerstack.top/get_check_code"
+        img.src="https://user.hackerstack.top/get_check_code"
     }
 }
