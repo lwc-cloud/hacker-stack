@@ -202,7 +202,7 @@ function social_attack(attack_type) {
     var user = JSON.parse(document.cookie).user;
     var pwd = JSON.parse(document.cookie).pwd;
     var xhr = new XMLHttpRequest();
-    xhr.open("GET",remote+"/api/"+attack_type+"/"+user+"/"+pwd,true);
+    xhr.open("GET",remote+"/api/"+attack_type+"/"+user+"/"+pwd+"/",true);
     xhr.send();
     xhr.onload=function()
     {
@@ -241,7 +241,7 @@ function web_clone() {
         var user = JSON.parse(document.cookie).user;
         var pwd = JSON.parse(document.cookie).pwd;
         var xhr = new XMLHttpRequest();
-        xhr.open('GET',remote+"/WebClone/"+url+"/"+user+"/"+pwd , true);
+        xhr.open('GET',remote+"/WebClone/"+url+"/"+user+"/"+pwd+"/" , true);
         xhr.send();
         xhr.onload=function() {
             if (xhr.readyState == 4) {
@@ -297,7 +297,7 @@ function pwd_attack() {
     try 
     {
         var xhr = new XMLHttpRequest();
-        xhr.open('POST' , remote + '/pwd_attack' , true);
+        xhr.open('POST' , remote + '/pwd_attack/' , true);
         xhr.send(url + '\n' + check + '\n' + body);
         xhr.onload = function()
         {
@@ -463,7 +463,7 @@ function VirusInfoGetter() {
     var user = JSON.parse(document.cookie).user;
     var pwd = JSON.parse(document.cookie).pwd;
     var xhr = new XMLHttpRequest();
-    xhr.open("GET",remote+"/api/VirusInfoGetter/"+user+"/"+pwd,true);
+    xhr.open("GET",remote+"/api/VirusInfoGetter/"+user+"/"+pwd+"/",true);
     xhr.send();
     xhr.onload=function()
     {
@@ -474,7 +474,7 @@ function VirusInfoGetter() {
         {
             var get_message = new XMLHttpRequest();
             get_message.open(
-                'GET',remote+"/run/"+response , true
+                'GET',remote+"/run/"+response+"/" , true
             );
             get_message.send();
             get_message.onload = function() 
@@ -508,7 +508,7 @@ function load_whois_info() {
         return
     } else {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET' , remote+"/whois/"+website , true);
+        xhr.open('GET' , remote+"/whois/"+website+"/" , true);
         xhr.send();
         xhr.onload = function() {
             var text = xhr.responseText;
@@ -527,7 +527,7 @@ function nmap_attack() {
     var check_code = document.getElementById('check_code').value;
     var host = document.getElementById('host').value;
     var xhr = new XMLHttpRequest();
-    xhr.open('GET' , remote+'/nmap/'+check_code+"/"+host , true);
+    xhr.open('GET' , remote+'/nmap/'+check_code+"/"+host+"/" , true);
     showAlert('Nmap扫描确实比较慢，请耐心等候扫描结果' , 3000)
     
     if (host == 'www.ac123ff.com') {
@@ -563,7 +563,7 @@ function sqlmap_attack() {
     var check_code = document.getElementById('check_code').value;
     var host = document.getElementById('host').value;
     var xhr = new XMLHttpRequest();
-    xhr.open('GET' , remote+'/sqlmap/'+check_code+"/"+host , true);
+    xhr.open('GET' , remote+'/sqlmap/'+check_code+"/"+host+"/" , true);
     showAlert('SqlMap扫描确实比较慢，请耐心等候扫描结果' , 3000)
     xhr.send()
     xhr.onload = function() {
@@ -592,7 +592,7 @@ function dns_search() {
         } , 5000)
         return
     }
-    xhr.open('GET' , remote+'/dns_search'+"/"+host , true);
+    xhr.open('GET' , remote+'/dns_search'+"/"+host+"/" , true);
     xhr.send()
     xhr.onload = function() {
         console.log(xhr.responseText)
@@ -656,7 +656,7 @@ function bug_attack() {
     }
     
     var xhr = new XMLHttpRequest();
-    xhr.open('GET' , remote+'/bug_search/'+check_code+"/"+host , true);
+    xhr.open('GET' , remote+'/bug_search/'+check_code+"/"+host+"/" , true);
     xhr.send()
     xhr.onload = function() {
         var console = document.getElementById('console');
