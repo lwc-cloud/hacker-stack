@@ -1,5 +1,5 @@
 
-var remote = 'http://user.hackerstack.top'
+var remote = 'https://user.hackerstack.top'
 
 function load_index_text() {
 
