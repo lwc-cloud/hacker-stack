@@ -105,12 +105,12 @@ function load_page(path , dom) {
 
 function to_ai_chat() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/ai_chat'
+    i.src = 'https://www.hackerstack.top/system/ai_chat/'
 }
 
 function to_subdomain() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/subdomain'
+    i.src = 'https://www.hackerstack.top/system/subdomain/'
 }
 
 function subdomain_get() {
@@ -183,19 +183,19 @@ function print_log(log_info) {
 
 function to_social() {
     var i = document.getElementById('page');
-    i.src = "https://www.hackerstack.top/system/socialEngine";
+    i.src = "https://www.hackerstack.top/system/socialEngine/";
     print_log('Boot Social Engine Module.')
 }
 
 function to_web_virus() {
     var i = document.getElementById('page');
-    i.src = "https://www.hackerstack.top/system/virus_attack";
+    i.src = "https://www.hackerstack.top/system/virus_attack/";
     print_log('Boot Web Virus Module.')
 }
 
 function to_attack_pwd() {
     var i = document.getElementById('page');
-    i.src = "https://www.hackerstack.top/system/passwd_attack";
+    i.src = "https://www.hackerstack.top/system/passwd_attack/";
 }
 
 function social_attack(attack_type) {
@@ -314,7 +314,7 @@ function pwd_attack() {
 
 function to_cc_attack() {
     var i = document.getElementById('page');
-    i.src = "https://www.hackerstack.top/system/cc_attack";
+    i.src = "https://www.hackerstack.top/system/cc_attack/";
 }
 
 var put_log_number = 0;
@@ -352,13 +352,13 @@ function cc_attack() {
 
 function to_ip_location() {
     var i = document.getElementById('page');
-    i.src = "https://www.hackerstack.top/system/ip_location";
+    i.src = "https://www.hackerstack.top/system/ip_location/";
     print_log('Boot IP Location Module.')
 }
 
 function to_video_attack() {
     var i = document.getElementById('page');
-    i.src = "https://www.hackerstack.top/system/video_attack";
+    i.src = "https://www.hackerstack.top/system/video_attack/";
     print_log('Boot Video Attack Module.')
 }
 
@@ -440,7 +440,7 @@ function ip_location() {
 }
 function to_xss_attack() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/xss_attack';
+    i.src = 'https://www.hackerstack.top/system/xss_attack/';
     print_log('Boot XSS Module.')
 }
 
@@ -455,7 +455,7 @@ function download_file(path) {
 
 function to_VirusInfoGetter() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/VirusInfoGetter'
+    i.src = 'https://www.hackerstack.top/system/VirusInfoGetter/'
     print_log('Boot Virus Info Getter Module.')
 }
 
@@ -494,7 +494,7 @@ function VirusInfoGetter() {
 
 function to_whois() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/whois'
+    i.src = 'https://www.hackerstack.top/system/whois/'
     print_log('Boot Whois Module.')
 }
 
@@ -519,7 +519,7 @@ function load_whois_info() {
 
 function to_Nmap() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/nmap'
+    i.src = 'https://www.hackerstack.top/system/nmap/'
     print_log('Boot Nmap Module.')
 }
 
@@ -549,13 +549,13 @@ function nmap_attack() {
 
 function to_js_console() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/js_console'
+    i.src = 'https://www.hackerstack.top/system/js_console/'
     print_log('Boot Js Console Module.')
 }
 
 function to_sqlmap() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/sqlmap'
+    i.src = 'https://www.hackerstack.top/system/sqlmap/'
     print_log('Boot SqlMap Attack Module.')
 }
 
@@ -576,7 +576,7 @@ function sqlmap_attack() {
 
 function to_dns_search() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/dns_search'
+    i.src = 'https://www.hackerstack.top/system/dns_search/'
     print_log('Boot SqlMap Attack Module.')
 }
 
