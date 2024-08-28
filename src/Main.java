@@ -19,8 +19,10 @@ import java.io.IOException;
 
 public class Main {
     public static HashMap<String , Integer> IPRequests = new HashMap<>();
-    public static HashMap<String , String> apikey_token = new HashMap<>();
     public static HashMap<String , String> CheckIP = new HashMap<>();
+
+
+
     public static void main(String[] args) throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(1000);
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(11111) , 0);
@@ -29,9 +31,7 @@ public class Main {
         httpServer.createContext("/login" , new Login());
         httpServer.createContext("/search_pdf" , new SearchPDF());
         httpServer.createContext("/writer_update_pdf",new writer_update_pdf());
-        httpServer.createContext("/pdf" , new get_pdf());
         httpServer.createContext("/user", new get_user_config());
-        httpServer.createContext("/recommend" , new recommend());
         httpServer.createContext("/search_user/" , new search_user());
         httpServer.createContext("/get_check_code" , new GetCheckCode());
         httpServer.createContext("/check_ip_check" , new CheckIPCheck());
@@ -72,18 +72,6 @@ public class Main {
         }
     }
 
-    public static boolean isPDFFile(File file) {
-        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
-            byte[] buffer = new byte[1024];
-            int length = randomAccessFile.read(buffer);
-            String header = new String(buffer, 0, Math.min(length, 1024), StandardCharsets.ISO_8859_1);
-            return header.startsWith("%PDF-");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     public static String generateRandomString(int length) {
         // 创建一个包含所有大小写字母的字符串
         String characterLibrary = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -100,6 +88,59 @@ public class Main {
 
         return sb.toString();
     }
+    static class LoginWithToken implements HttpHandler {
+
+        @Override
+        public void handle(HttpExchange httpExchange) throws IOException {
+            System.out.println(httpExchange.getRemoteAddress().getAddress().toString()+" "+this.getClass().getName());
+            String response = "";
+            int static_code = 200;
+            httpExchange.getResponseHeaders().add("Content-Type","application/json");
+            httpExchange.getResponseHeaders().add(
+                    "Access-Control-Allow-Origin",
+                    "*");
+            httpExchange.getResponseHeaders().add(
+                    "Access-Control-Allow-Methods",
+                    "POST");
+            httpExchange.getResponseHeaders().add(
+                    "Access-Control-Allow-Headers",
+                    "*");
+            try {
+                InputStream inputStream = httpExchange.getRequestBody();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder stringBuilder = new StringBuilder();
+                while (true) {
+                    String line = bufferedReader.readLine();
+                    if (line == null) {
+                        break;
+                    }
+                    stringBuilder.append(line);
+                    stringBuilder.append("\n");
+                }
+                inputStream.close();
+                String[] split = stringBuilder.toString().split("\n");
+                String username = split[0];
+                String password = split[1];
+                if (EasyDB.existsDB(username ,password)) {
+                    response = "{\"message\" : \"login successful.\"}";
+                    static_code = 200;
+                } else {
+                    static_code = 400;
+                    response = "{\"message\" : \"login failed.\"}";
+                }
+            }catch (Exception e) {
+                e.printStackTrace();
+                static_code = 500;
+                response = "{\"message\" : \"login failed.\"}";
+            }
+            httpExchange.sendResponseHeaders(static_code , 0);
+            OutputStream outputStream = httpExchange.getResponseBody();
+            outputStream.write(response.getBytes());
+            outputStream.flush();
+            outputStream.close();
+        }
+    }
+
     static class GetUserApiKey implements HttpHandler {
 
         @Override
@@ -202,79 +243,6 @@ public class Main {
                 outputStream.write(response.getBytes());
                 outputStream.flush();
                 outputStream.close();
-            }catch (Exception e) {
-                response = "{\"message\" : \"" + e.getMessage() + "\"}";
-                httpExchange.sendResponseHeaders(static_code , 0);
-                OutputStream outputStream = httpExchange.getResponseBody();
-                outputStream.write(response.getBytes());
-                outputStream.flush();
-                outputStream.close();
-            }
-        }
-    }
-    static class PwdAttack implements HttpHandler {
-
-        @Override
-        public void handle(HttpExchange httpExchange) throws IOException {
-            String response = "";
-            httpExchange.getResponseHeaders().add(
-                    "Access-Control-Allow-Origin",
-                    "*");
-            httpExchange.getResponseHeaders().add(
-                    "Access-Control-Allow-Methods",
-                    "POST");
-            httpExchange.getResponseHeaders().add(
-                    "Access-Control-Allow-Headers",
-                    "*");
-            int static_code = 200;
-            try {
-                InputStream inputStream = new FileInputStream("passwd_dict.txt");
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                ArrayList<String> passwd_list = new ArrayList<>();
-                String url = "";
-                int i = 0;
-                while (true) {
-                    String line = bufferedReader.readLine();
-                    if (line == null) {
-                        break;
-                    }
-                    passwd_list.add(line);
-                }
-                inputStream.close();
-                bufferedReader.close();
-
-                InputStream in = httpExchange.getRequestBody();
-                BufferedReader buf = new BufferedReader(new InputStreamReader(in));
-                StringBuilder stringBuilder = new StringBuilder();
-                while (true) {
-                    String line = buf.readLine();
-                    if (line == null) {
-                        break;
-                    }
-                    if (i == 0) {
-                        url = line;
-                    } else {
-                        stringBuilder.append(line);
-                    }
-                    i++;
-                }
-
-                ExecutorService exe = Executors.newFixedThreadPool(500);
-                for (String passwd : passwd_list) {
-                    String finalUrl = url;
-                    Future<Integer> future = exe.submit(new Callable<Integer>() {
-                        @Override
-                        public Integer call() throws Exception{
-                            URL u = new URL(finalUrl.replace("$pwd" , passwd));
-                            HttpURLConnection httpURLConnection = (HttpURLConnection) u.openConnection();
-                            DataOutputStream wr = new DataOutputStream(httpURLConnection.getOutputStream());
-                            wr.write(stringBuilder.toString().replace("$pwd" , passwd).getBytes());
-                            wr.flush();
-                            wr.close();
-                            return 0;
-                        }
-                    });
-                }
             }catch (Exception e) {
                 response = "{\"message\" : \"" + e.getMessage() + "\"}";
                 httpExchange.sendResponseHeaders(static_code , 0);
@@ -462,55 +430,6 @@ public class Main {
             }
         }
     }
-    static class recommend implements HttpHandler {
-
-        @Override
-        public void handle(HttpExchange httpExchange) throws IOException {
-            httpExchange.getResponseHeaders().add(
-                    "Access-Control-Allow-Origin",
-                    "*");
-            httpExchange.getResponseHeaders().add(
-                    "Access-Control-Allow-Methods",
-                    "POST");
-            httpExchange.getResponseHeaders().add(
-                    "Access-Control-Allow-Headers",
-                    "*");
-            httpExchange.getResponseHeaders().add("Content-Type","application/json");
-            String response = "";
-            int static_code = 200;
-            try {
-                TreeMap<String ,String> treeMap = EasyDB.getTreeMap("PDF","#114514+1919@810");
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("{\n");
-                for (Map.Entry<String, String> entry : treeMap.entrySet()) {
-                    stringBuilder.append("  \"");
-                    stringBuilder.append(entry.getKey());
-                    stringBuilder.append("\":");
-                    stringBuilder.append("\"");
-                    stringBuilder.append(entry.getValue());
-                    stringBuilder.append("\"");
-                    stringBuilder.append(",");
-                    stringBuilder.append("\n");
-                }
-                response = stringBuilder.substring(0 , stringBuilder.toString().length()-2);
-                response += "\n}";
-                httpExchange.sendResponseHeaders(static_code , 0);
-                OutputStream outputStream = httpExchange.getResponseBody();
-                outputStream.write(response.getBytes());
-                outputStream.flush();
-                outputStream.close();
-            }
-            catch (Exception e) {
-                static_code = 400;
-                response = "{\"message\" : \"" + e.getMessage() + "\"}";
-                httpExchange.sendResponseHeaders(static_code , 0);
-                OutputStream outputStream = httpExchange.getResponseBody();
-                outputStream.write(response.getBytes());
-                outputStream.flush();
-                outputStream.close();
-            }
-        }
-    }
     static class get_user_config implements HttpHandler {
 
         @Override
@@ -558,46 +477,6 @@ public class Main {
                 outputStream.close();
             }catch (Exception e) {
                 static_code = 400;
-                response = "{\"message\" : \"" + e.getMessage() + "\"}";
-                httpExchange.sendResponseHeaders(static_code , 0);
-                OutputStream outputStream = httpExchange.getResponseBody();
-                outputStream.write(response.getBytes());
-                outputStream.flush();
-                outputStream.close();
-            }
-        }
-    }
-    static class get_pdf implements HttpHandler {
-
-        @Override
-        public void handle(HttpExchange httpExchange) throws IOException {
-            httpExchange.getResponseHeaders().add(
-                    "Access-Control-Allow-Origin",
-                    "*");
-            httpExchange.getResponseHeaders().add(
-                    "Access-Control-Allow-Methods",
-                    "POST");
-            httpExchange.getResponseHeaders().add(
-                    "Access-Control-Allow-Headers",
-                    "*");
-            int static_code = 200;
-            try {
-                String[] split = java.net.URLDecoder.decode(httpExchange.getRequestURI().toString()).split("/");
-                httpExchange.sendResponseHeaders(static_code , 0);
-                OutputStream outputStream = httpExchange.getResponseBody();
-                InputStream inputStream = new FileInputStream("PDF/" + split[2]+".pdf");
-                int length = -1;
-                byte[] bytes = new byte[1024];
-                while ((length = inputStream.read(bytes)) != -1) {
-                    outputStream.write(bytes , 0, length);
-                    outputStream.flush();
-                }
-                outputStream.close();
-                inputStream.close();
-            }catch (Exception e) {
-                httpExchange.getResponseHeaders().add("Content-Type","application/json");
-                static_code = 400;
-                String response = "";
                 response = "{\"message\" : \"" + e.getMessage() + "\"}";
                 httpExchange.sendResponseHeaders(static_code , 0);
                 OutputStream outputStream = httpExchange.getResponseBody();
@@ -706,77 +585,6 @@ public class Main {
                 outputStream.write(response.getBytes());
                 outputStream.flush();
                 outputStream.close();
-            }catch (Exception e) {
-                static_code = 400;
-                response = "{\"message\" : \"" + e.getMessage() + "\"}";
-                httpExchange.sendResponseHeaders(static_code , 0);
-                OutputStream outputStream = httpExchange.getResponseBody();
-                outputStream.write(response.getBytes());
-                outputStream.flush();
-                outputStream.close();
-            }
-        }
-    }
-    static class UpdatePDF implements HttpHandler {
-
-        @Override
-        public void handle(HttpExchange httpExchange) throws IOException {
-            IPBaned(httpExchange.getRemoteAddress().getAddress().toString() , httpExchange);
-            String response = "";
-            httpExchange.getResponseHeaders().add("Content-Type","application/json");
-            httpExchange.getResponseHeaders().add(
-                    "Access-Control-Allow-Origin",
-                    "*");
-            httpExchange.getResponseHeaders().add(
-                    "Access-Control-Allow-Methods",
-                    "POST");
-            httpExchange.getResponseHeaders().add(
-                    "Access-Control-Allow-Headers",
-                    "*");
-            int static_code = 200;
-            try {
-                String[] split = java.net.URLDecoder.decode(httpExchange.getRequestURI().toString()).split("/");
-                String filename = split[2].toLowerCase();
-                String username = split[3];
-                String password = split[4];
-                if (EasyDB.existsDB(username ,password)) {
-                    String random = String.valueOf(System.currentTimeMillis());
-                    File file = new File("PDF/"+random+".pdf");
-                    FileOutputStream out = new FileOutputStream(file);
-                    InputStream inputStream = httpExchange.getRequestBody();
-                    byte[] bytes = new byte[1024];
-                    int length = 0 ;
-                    int size = 0;
-                    while ((length = inputStream.read(bytes)) != -1) {
-                        out.write(bytes , 0 , length);
-                        out.flush();
-                        size++;
-                        if (size > 1024 * 30) {
-                            throw new Exception("over size. max size 30MB.");
-                        }
-                    }
-                    out.close();
-                    EasyDB.insertDataToDatabase(random , filename , "PDF" , "#114514+1919@810");
-                    EasyDB.insertDataToDatabase(username , random , "PDF_USER" ,"#114514+1919@810");
-                    if (isPDFFile(file)) {
-                        response = "{\"message\" : \"update successful.\"}";
-                    } else {
-                        file.delete();
-                        response = "{\"message\" : \"file isn't a PDF file.\"}";
-                    }
-                    httpExchange.sendResponseHeaders(static_code , 0);
-                    OutputStream outputStream = httpExchange.getResponseBody();
-                    outputStream.write(response.getBytes());
-                    outputStream.flush();
-                    outputStream.close();
-                } else {
-                    static_code = 400;
-                    response = "{\"message\" : \"login failed.\"}";
-                    httpExchange.sendResponseHeaders(static_code , 0);
-                    OutputStream outputStream = httpExchange.getResponseBody();
-                    outputStream.write(response.getBytes());
-                    outputStream.flush();
-                }
             }catch (Exception e) {
                 static_code = 400;
                 response = "{\"message\" : \"" + e.getMessage() + "\"}";
