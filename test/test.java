@@ -1,12 +1,15 @@
 import java.io.File;
+import java.util.TreeMap;
 
 public class test {
     public static void main(String[] args) throws Exception {
-        for(File file : new File("../db").listFiles()) {
-            String name = file.getName().substring(0 , file.getName().lastIndexOf("-"));
-            String pwd = file.getName().substring(file.getName().lastIndexOf("-")+1 , file.getName().lastIndexOf("."));
-            System.out.println(name +" "+pwd);
-            EasyDB.insertDataToDatabase("money","0.0",name,pwd);
+        //System.out.println(JsonObject.getFileString("1.json"));
+        String json  =JsonObject.getFileString("1.json");
+        long start = System.currentTimeMillis();
+        for (int i = 0 ; i < 1000 ;i++) {
+            JsonObject jsonObject = new JsonObject(json);
         }
+        long end = System.currentTimeMillis();
+        System.out.println(end-start);
     }
 }
