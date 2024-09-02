@@ -15,7 +15,7 @@ public class ToolKits {
         Graphics2D g2d = image.createGraphics();
 
         // 设置背景颜色为白色
-        g2d.setColor(Color.GRAY);
+        g2d.setColor(Color.gray);
         g2d.fillRect(0, 0, width, height);
 
         // 设置字体颜色为黑色
@@ -32,7 +32,7 @@ public class ToolKits {
 
         // 绘制文本
         g2d.setColor(Color.darkGray);
-        g2d.drawString("sdlksj",x,y);
+        g2d.drawString("======",x,y);
         g2d.setColor(Color.getColor(""));
         g2d.drawString(text, x, y);
 

@@ -425,12 +425,12 @@ public class JsonObject {
         str = str.replace("\r" , "\\r");
         str = str.replace("\"" , "\\\"");
         str = str.replace("\\\\" , "\\");
+        str = str.replace("\"" , "\\\"");
         return str;
     }
 
     private String ListToJson(ArrayList<Object> arrayList) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("[");
         for (Object dom : arrayList) {
             if (dom instanceof TreeMap<?,?>) {
                 stringBuilder.append(this.TreeMapToJson((TreeMap<Object, Object>) dom));
@@ -453,9 +453,16 @@ public class JsonObject {
             stringBuilder.append(",");
         }
         String s = stringBuilder.toString();
-        s = s.substring(0 , s.length()-1);
-        s += "]";
-        return s;
+        if (s.isEmpty()) {
+            return "[]";
+        }
+        else {
+            s = s.substring(0 , s.length()-1);
+            String NewStr = "[";
+            NewStr += s;
+            NewStr += "]";
+            return NewStr;
+        }
     }
 
     public String TreeMapToJson(TreeMap<Object , Object> treeMap) {

@@ -28,6 +28,7 @@ public class Main {
         DBURL = (String) jsonObject.get("db_url");
         DBUserName = (String) jsonObject.get("db_user");
         DBPassword = (String) jsonObject.get("db_pwd");
+        System.out.println(jsonObject.objectObjectTreeMap.toString());
 
         ExecutorService executorService = Executors.newFixedThreadPool(1000);
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(11111) , 0);
@@ -35,24 +36,24 @@ public class Main {
         httpServer.createContext("/reg" , new Reg());
         httpServer.createContext("/login" , new Login());
         httpServer.createContext("/user", new GetUserConfig());
-        httpServer.createContext("/search_user/" , new search_user());
+        httpServer.createContext("/search_user/" , new SearchUser());
         httpServer.createContext("/get_check_code" , new GetCheckCode());
         httpServer.createContext("/check_ip_check" , new CheckIPCheck());
+        // 以上是老旧的接口，下面是新的接口
+        httpServer.createContext("/api/v2/login" ,new LoginV2());
+        httpServer.createContext("/api/v2/reg" , new RegV2());
+
         System.out.println("[INFO] BOOT USER_SERVER.");
-        Thread requests = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        Thread.sleep(1000 * 60);
-                        IPRequests.clear();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(1000 * 60);
+                    IPRequests.clear();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
             }
-        });
-        requests.start();
+        }).start();
         httpServer.start();
     }
 
@@ -106,49 +107,6 @@ public class Main {
         return sb.toString();
     }
 
-    static class search_user implements HttpHandler {
-
-        @Override
-        public void handle(HttpExchange httpExchange) throws IOException {
-            sendCORS(httpExchange);
-            String response = "";
-            int static_code = 200;
-            try {
-                String[] split = java.net.URLDecoder.decode(httpExchange.getRequestURI().toString()).split("/");
-                String search = split[2].trim();
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("{\n   \"message\" : [\n");
-                File[] files = new File("db").listFiles();
-                for (File f : files) {
-                    try {
-                        String username = f.getName().substring(0 , f.getName().indexOf("-"));
-                        if (username.contains(search)) {
-                            stringBuilder.append("  \"");
-                            stringBuilder.append(username);
-                            stringBuilder.append("\",");
-                        }
-                    }catch (Exception exception) {
-                        continue;
-                    }
-                }
-                response = stringBuilder.substring(0 , stringBuilder.toString().length()-1);
-                response += "]\n}";
-                httpExchange.sendResponseHeaders(static_code , 0);
-                OutputStream outputStream = httpExchange.getResponseBody();
-                outputStream.write(response.getBytes());
-                outputStream.flush();
-                outputStream.close();
-            }catch (Exception e) {
-                static_code = 400;
-                response = "{\"message\" : \"" + e.getMessage() + "\"}";
-                httpExchange.sendResponseHeaders(static_code , 0);
-                OutputStream outputStream = httpExchange.getResponseBody();
-                outputStream.write(response.getBytes());
-                outputStream.flush();
-                outputStream.close();
-            }
-        }
-    }
     public static void sendCORS(HttpExchange httpExchange) {
         httpExchange.getResponseHeaders().add("Content-Type","application/json");
         httpExchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
@@ -177,7 +135,9 @@ public class Main {
                 !str.contains("\\") &&
                 !str.contains("/") &&
                 !str.contains("'") &&
-                !str.contains("\""); // not allowed
+                !str.contains("\"") &&
+                !str.contains("%") &&
+                !str.contains("&"); // not allowed
     }
 
 
