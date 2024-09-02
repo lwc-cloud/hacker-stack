@@ -1,5 +1,4 @@
 
-import com.sun.source.tree.Tree;
 
 import java.io.*;
 import java.util.*;
@@ -55,13 +54,9 @@ public class JsonObject {
         ArrayList<TokenFormatter> formatterArrayList = new ArrayList<>();
 
         StringBuilder TmpStrings = new StringBuilder();
-        boolean isIn_1 = false; // {
-        boolean isIn_2 = false; // }
         boolean isIn_3 = false; // "
-        boolean isIn_4 = false; // [
-        boolean isIn_5 = false; // ]
 
-        int In_1_number = 0;
+        //int In_1_number = 0;
         int In_4_number = 0;
 
         for (int i = 0 ; i < JsonString.length() ; i++) {
@@ -73,15 +68,14 @@ public class JsonObject {
                 continue;
             }
             else if (string == '{' && !isIn_3) {
-                In_1_number += 1;
-                isIn_1 = true;
+                //In_1_number += 1;
                 TokenFormatter tokenFormatter = new TokenFormatter("{" , "{" );
                 formatterArrayList.add(tokenFormatter);
                 TmpStrings = new StringBuilder();
                 continue;
             }
             else if (string == '}' && !isIn_3) {
-                In_1_number -= 1;
+                //In_1_number -= 1;
                 formatterArrayList.add(new TokenFormatter(TmpStrings.toString() , getType(TmpStrings.toString())));
                 TokenFormatter tokenFormatter = new TokenFormatter("}" , "}");
                 formatterArrayList.add(tokenFormatter);
@@ -90,7 +84,6 @@ public class JsonObject {
             }
             else if (string == '[' && !isIn_3) {
                 In_4_number += 1;
-                isIn_5 = true;
                 TokenFormatter tokenFormatter = new TokenFormatter("[" , "[" );
                 formatterArrayList.add(tokenFormatter);
                 TmpStrings = new StringBuilder();
@@ -99,7 +92,6 @@ public class JsonObject {
             else if (string == ']' && !isIn_3) {
                 In_4_number -= 1;
                 if (In_4_number == 0) {
-                    isIn_4 = false;
                     if (!TmpStrings.toString().trim().isEmpty()) {
                         TokenFormatter tokenFormatter = new TokenFormatter(TmpStrings.toString(), getType(
                                 TmpStrings.toString()
@@ -134,9 +126,17 @@ public class JsonObject {
                     }
                     else if (NextChar == '\"') {
                         TmpStrings.append("\"");
+
                     }
                     else {
-                        throw new Exception("Unknown: \\"+NextChar);
+                        if (NextChar == 'u') {
+                            String unicodeString = "\\u"+JsonString.substring(i+2,i+6);
+                            String unicode = unicodeString.substring(2);
+                            char character = (char) Integer.parseInt(unicode, 16);
+                            TmpStrings.append(character);
+                            i += 5;
+                            continue;
+                        }
                     }
                     i++;
                 }
@@ -197,7 +197,7 @@ public class JsonObject {
     }
     private boolean IsNumber(char number) {
         try {
-            Double d = Double.parseDouble(String.valueOf(number));
+            Double.parseDouble(String.valueOf(number));
             return true;
         }catch (Exception e) {
             return false;
@@ -205,7 +205,7 @@ public class JsonObject {
     }
     private boolean IsNumber(String number) {
         try {
-            Double d = Double.parseDouble(number);
+            Double.parseDouble(number);
             return true;
         }catch (Exception e) {
             return false;
@@ -242,7 +242,7 @@ public class JsonObject {
             TokenFormatter token = formatterArrayList.get(i);
             if (
                     token.TokenType.equals("string") ||
-                    token.TokenType.equals("number")
+                            token.TokenType.equals("number")
             ) {
                 list.add(formatterArrayList.get(i).Content);
                 continue;
@@ -424,6 +424,7 @@ public class JsonObject {
         str = str.replace("\t" , "\\t");
         str = str.replace("\r" , "\\r");
         str = str.replace("\"" , "\\\"");
+        str = str.replace("\\\\" , "\\");
         return str;
     }
 
