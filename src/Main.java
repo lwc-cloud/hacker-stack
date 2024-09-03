@@ -42,6 +42,9 @@ public class Main {
         // 以上是老旧的接口，下面是新的接口
         httpServer.createContext("/api/v2/login" ,new LoginV2());
         httpServer.createContext("/api/v2/reg" , new RegV2());
+        httpServer.createContext("/api/v2/change_password" , new ChangePassword());
+        httpServer.createContext("/api/v2/user_reg_page" , new UserRegPage());
+        httpServer.createContext("/static" , new StaticResource());
 
         System.out.println("[INFO] BOOT USER_SERVER.");
         new Thread(() -> {
@@ -108,7 +111,6 @@ public class Main {
     }
 
     public static void sendCORS(HttpExchange httpExchange) {
-        httpExchange.getResponseHeaders().add("Content-Type","application/json");
         httpExchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
         httpExchange.getResponseHeaders().add("Access-Control-Allow-Methods", "POST");
         httpExchange.getResponseHeaders().add("Access-Control-Allow-Headers", "*");

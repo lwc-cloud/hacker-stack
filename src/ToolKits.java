@@ -22,7 +22,7 @@ public class ToolKits {
         g2d.setColor(Color.BLACK);
 
         // 设置字体
-        Font font = new Font("Arial", Font.BOLD, 24);
+        Font font = new Font("Arial", Font.BOLD, 35);
         g2d.setFont(font);
 
         // 计算文本的边界，用于居中显示

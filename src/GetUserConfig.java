@@ -33,8 +33,10 @@ public class GetUserConfig implements HttpHandler {
                 while (rs.next()) {
                     String about = rs.getString("about");
                     String apikey = rs.getString("apikey");
+                    String email = rs.getString("mail");
                     jsonObject.objectObjectTreeMap.put("about" , about);
                     jsonObject.objectObjectTreeMap.put("apikey" , apikey);
+                    jsonObject.objectObjectTreeMap.put(email , email);
                 }
                 response = jsonObject.TreeMapToJson(jsonObject.objectObjectTreeMap);
             } else {

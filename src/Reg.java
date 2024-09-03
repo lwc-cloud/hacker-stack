@@ -40,8 +40,20 @@ public class Reg implements HttpHandler {
             // 建立连接
             Connection conn = DriverManager.getConnection(url, Main.DBUserName, Main.DBPassword);
             Statement stmt = conn.createStatement();
-            String sqlQuery = "INSERT INTO accounts (username,password,about) VALUES ('"+username+"','"+password+"','no data')";
-            ResultSet rs = stmt.executeQuery(sqlQuery);
+
+            // 查看这个IP在以前是否建立过账户，如果有的话那么不允许创建
+            ResultSet resultSet = stmt.executeQuery("SELECT username FROM accounts;");
+            if (resultSet.next()) {
+                throw new Exception("user was existed.");
+            }
+            String ip = httpExchange.getRemoteAddress().getAddress().toString();
+            ResultSet result = stmt.executeQuery("SELECT registered_ip FROM accounts WHERE registered_ip='"+ip+"';");
+            if (result.next()) {
+                throw new Exception("ip was existed.");
+            }
+
+            String sqlQuery = "INSERT INTO accounts (username,password,about,registered_ip) VALUES ('"+username+"','"+password+"','no data','"+ip+"')";
+            stmt.execute(sqlQuery);
 
             response = "{\"message\" : \"create successful\"}";
             httpExchange.sendResponseHeaders(static_code , 0);
@@ -51,7 +63,7 @@ public class Reg implements HttpHandler {
             outputStream.close();
         }catch (Exception e) {
             static_code = 500;
-            response = "{\"message\" : \"" + e.getMessage() + "\"}";
+            response = "{\"message\" : \"account was existed or create error\"}";
             httpExchange.sendResponseHeaders(static_code , 0);
             OutputStream outputStream = httpExchange.getResponseBody();
             outputStream.write(response.getBytes());
