@@ -20,6 +20,11 @@ public class MailLogin implements HttpHandler {
             JsonObject jsonObject = new JsonObject(json);
             String mail = jsonObject.get("mail").toString();
             String checkcode = jsonObject.get("check").toString();
+
+            if (!Main.AllowString(mail)) {
+                throw new Exception("Not Allowed.");
+            }
+
             boolean isIP_OK = Main.CheckMail.containsKey(httpExchange.getRemoteAddress().getAddress().toString());
             if (isIP_OK) {
                 if (!Main.CheckMail.get(httpExchange.getRemoteAddress().getAddress().toString()).equals(checkcode)) {

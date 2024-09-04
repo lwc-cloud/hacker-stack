@@ -48,6 +48,13 @@ public class RegV2 implements HttpHandler {
             // 建立连接
             Connection conn = DriverManager.getConnection(url, Main.DBUserName, Main.DBPassword);
             Statement stmt = conn.createStatement();
+
+            String s1 = "SELECT mail FROM accounts;";
+            ResultSet resultSet = stmt.executeQuery(s1);
+            if (resultSet.next()) {
+                throw new Exception("一个邮箱只能够注册一个账户");
+            }
+
             String sqlQuery = "INSERT INTO accounts (username,password,about,mail) VALUES ('"+username+"','"+password+"','no data','"+mail+"')";
             stmt.execute(sqlQuery);
 
@@ -60,7 +67,7 @@ public class RegV2 implements HttpHandler {
         }catch (Exception e) {
             e.printStackTrace();
             static_code = 500;
-            response = "{\"message\" : \"" + e.getMessage() + "\"}";
+            response = "{\"message\" : \"" + e.getMessage().replace("\"","'") + "\"}";
             httpExchange.sendResponseHeaders(static_code , 0);
             OutputStream outputStream = httpExchange.getResponseBody();
             outputStream.write(response.getBytes());
