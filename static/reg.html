@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>LinwinSoft账户注册</title>
+    <link href="/static/css/main.css" rel="stylesheet" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <script>
+        function showAlert(htmlContent) {
+    // 创建模态框的容器
+    const modal = document.createElement('div');
+    modal.style.position = 'fixed';
+    modal.style.top = '0';
+    modal.style.left = '0';
+    modal.style.width = '100%';
+    modal.style.height = '100%';
+    modal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    modal.style.display = 'flex';
+    modal.style.justifyContent = 'center';
+    modal.style.alignItems = 'center';
+
+    // 创建模态框的内容区域
+    const content = document.createElement('div');
+    content.style.backgroundColor = '#fff';
+    content.style.padding = '20px';
+    content.style.borderRadius = '5px';
+    content.style.width = '50%';
+    content.style.maxWidth = '600px';
+    content.innerHTML = htmlContent+"<br />";
+
+    // 创建关闭按钮
+    const closeButton = document.createElement('button');
+    closeButton.textContent = '关闭';
+    closeButton.style.marginTop = '20px';
+    closeButton.style.padding = '5px 10px';
+    closeButton.style.backgroundColor = '#f44336';
+    closeButton.style.color = '#fff';
+    closeButton.style.border = 'none';
+    closeButton.style.borderRadius = '4px';
+    closeButton.style.cursor = 'pointer';
+
+    // 关闭按钮的点击事件
+    closeButton.addEventListener('click', () => {
+      modal.remove();
+    });
+
+    // 将关闭按钮添加到内容区域
+    content.appendChild(closeButton);
+
+    // 将内容区域添加到模态框
+    modal.appendChild(content);
+
+    // 将模态框添加到页面
+    document.body.appendChild(modal);
+  }
+
+function unicodeToChar(text) {
+  return text.replace(/\\u(\w{4})/g, function(match, p1) {
+    return String.fromCharCode(parseInt(p1, 16));
+  });
+}
+
+
+function send_mail() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST" , "/api/v1/activation",true);
+    var jsonObject = {
+        "send_to": document.getElementById("mail").value
+    }
+    var json = JSON.stringify(jsonObject);
+    console.log(json)
+    xhr.send(json);
+    xhr.onload = function() {
+        showAlert(unicodeToChar(xhr.responseText) , 2000);
+    }
+}
+
+function reg() {
+    var user = document.getElementById("user");
+    var pwd = document.getElementById("pwd");
+    var check_code = document.getElementById("check");
+    var retype = document.getElementById("retype");
+    var mail = document.getElementById("mail");
+
+    var a = pwd.value;
+    var b = retype.value;
+
+    if (a.length < 8) {
+        showAlert("密码不得小于 8 位字符" , null);
+        return false;
+    }
+
+    var t = document.getElementById("wait");
+    t.style.display = "block"
+
+    if (a == b) {
+        try{
+            var username = user.value;
+            var password = pwd.value;
+            var check = check_code.value;
+            var mail = mail.value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST" , "/api/v2/reg",true);
+
+            var jsonObject = {
+                "user": username,
+                "pwd": password,
+                "check": check,
+                "mail": mail
+            }
+
+            xhr.send(JSON.stringify(jsonObject));
+            xhr.onload = function() {
+                if (JSON.parse(xhr.responseText)['message'] == "create successful") {
+                    showAlert("注册成功" , null);
+                    t.style.display = "none"
+                } else {
+                    showAlert("注册失败: "+xhr.responseText , null);
+                    t.style.display = "none"
+                }
+            }
+        }
+        catch (e) {
+            showAlert("注册错误: "+e , null);
+        }
+    }else{
+        showAlert("确认密码和密码不一致" , null)
+        return false
+    }
+}
+    </script>
+</head>
+<body style="width: 100%;height: 100vh;background-image: url(/static/img/background.jpg);">
+<div align="center" style="color: rgb(7, 179, 7);width: 100%;;position: absolute;  /* 顶部偏移为父元素高度的一半 */
+      ;border-radius: 15px;" >
+    <div class="panel" align="center" style="max-width: 500px">
+        <div align="left">
+            <h3>LinwinSoft账户注册</h3>
+        </div>
+        <br />
+
+        <input class="in" placeholder="注册用户" id="user" type="text" />
+        <input class="in" placeholder="注册邮箱" id="mail" type="text" />
+        <input class="in" placeholder="注册密码" id="pwd" type="password" />
+        <input class="in" placeholder="确认密码" id="retype" type="password" />
+        <br />
+        <br />
+        <div style="width: 100%;">
+            <div style="float: left;padding: 0px;margin:0px;width: calc(100% - 100px)">
+                <input placeholder="输入邮箱验证码" id="check" style="width: calc(100% - 20px);border: none;height: 40px;border-radius: 5px;outline: none;background-color: rgba(0, 0, 0, 0.3);color: white;" />
+            </div>
+            <div style="float: right;padding: 0px;">
+                <button onclick="send_mail()" style="background-color: rgb(0,0,0,0.8);width: 90px;color: white;border: none;border-radius: 5px;height: 40px">发送验证码</button>
+            </div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <div class="btn" onclick="reg()">注册</div>
+        <p id="wait" style="display: none;color: red;">等待服务器回复......</p>
+    </div>
+    <div class="panel" align="center" style="max-width: 500px;margin-top: 10px;height: 100px">
+        <p>邮箱可以采用QQ邮箱(你的qq号码@qq.com)，一个邮箱只能够注册一个账号。如果没有收到验证码，请检查垃圾邮件</p>
+    </div>
+</div>
+</body>
+</html>
