@@ -33,7 +33,7 @@ public class LoginV2 implements HttpHandler {
             // 建立连接
             Connection conn = DriverManager.getConnection(url, Main.DBUserName, Main.DBPassword);
             Statement stmt = conn.createStatement();
-            String sqlQuery = "SELECT username,password FROM accounts WHERE username='"+username+"' AND password='"+password+"';";
+            String sqlQuery = "SELECT username,password,mail FROM accounts WHERE (username='"+username+"' OR mail='"+username+"') AND password='"+password+"';";
             ResultSet rs = stmt.executeQuery(sqlQuery);
             if (rs.next()) {
                 response = "{\"message\" : \"login successful.\"}";

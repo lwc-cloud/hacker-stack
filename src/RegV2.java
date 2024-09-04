@@ -17,32 +17,39 @@ public class RegV2 implements HttpHandler {
         int static_code = 200;
         try {
             Main.IPBaned(httpExchange.getRemoteAddress().getAddress().toString() , httpExchange);
-            JsonObject jsonObject = new JsonObject(Main.getHttpBody(httpExchange));
+            String jsonContent = Main.getHttpBody(httpExchange);
+            System.out.println(jsonContent);
+            JsonObject jsonObject = new JsonObject(jsonContent);
             String username = jsonObject.get("user").toString();
             String password = jsonObject.get("pwd").toString();
-            String checkcode= jsonObject.get("check_code").toString();
+            String mail = jsonObject.get("mail").toString();
+            String checkcode= jsonObject.get("check").toString();
 
-            if (username.length() > 20 || password.length() > 20 || checkcode.length() > 15) {
-                throw new Exception("username or password's length mustn't > 15.");
+            if (!Main.AllowString(username) || !Main.AllowString(password) || !Main.AllowString(mail)) {
+                throw new Exception("Not Allowed.");
             }
-            boolean isIP_OK = Main.CheckIP.containsKey(httpExchange.getRemoteAddress().getAddress().toString());
+
+            if (username.length() > 20 || password.length() > 20) {
+                throw new Exception("username or password's length mustn't > 20.");
+            }
+            boolean isIP_OK = Main.CheckMail.containsKey(httpExchange.getRemoteAddress().getAddress().toString());
             if (isIP_OK) {
-                if (!Main.CheckIP.get(httpExchange.getRemoteAddress().getAddress().toString()).equals(checkcode)) {
+                if (!Main.CheckMail.get(httpExchange.getRemoteAddress().getAddress().toString()).equals(checkcode)) {
                     throw new Exception("Check Code Error.");
                 }
             }
             else {
                 throw new Exception("No Check Code.");
             }
-            Main.CheckIP.remove(httpExchange.getRemoteAddress().getAddress().toString());
+            Main.CheckMail.remove(httpExchange.getRemoteAddress().getAddress().toString());
 
             String url = Main.DBURL+"/accounts";
 
             // 建立连接
             Connection conn = DriverManager.getConnection(url, Main.DBUserName, Main.DBPassword);
             Statement stmt = conn.createStatement();
-            String sqlQuery = "INSERT INTO accounts (username,password,about) VALUES ('"+username+"','"+password+"','no data')";
-            ResultSet rs = stmt.executeQuery(sqlQuery);
+            String sqlQuery = "INSERT INTO accounts (username,password,about,mail) VALUES ('"+username+"','"+password+"','no data','"+mail+"')";
+            stmt.execute(sqlQuery);
 
             response = "{\"message\" : \"create successful\"}";
             httpExchange.sendResponseHeaders(static_code , 0);
@@ -51,6 +58,7 @@ public class RegV2 implements HttpHandler {
             outputStream.flush();
             outputStream.close();
         }catch (Exception e) {
+            e.printStackTrace();
             static_code = 500;
             response = "{\"message\" : \"" + e.getMessage() + "\"}";
             httpExchange.sendResponseHeaders(static_code , 0);

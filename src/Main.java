@@ -6,11 +6,6 @@ import java.net.InetSocketAddress;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.sql.*;
 
 public class Main {
@@ -19,6 +14,7 @@ public class Main {
     public static String DBURL = null;
     public static String DBUserName = null;
     public static String DBPassword = null;
+    public static HashMap<String , String> CheckMail = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
         // 加载数据库驱动
@@ -33,7 +29,6 @@ public class Main {
         ExecutorService executorService = Executors.newFixedThreadPool(1000);
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(11111) , 0);
         httpServer.setExecutor(executorService);
-        httpServer.createContext("/reg" , new Reg());
         httpServer.createContext("/login" , new Login());
         httpServer.createContext("/user", new GetUserConfig());
         httpServer.createContext("/search_user/" , new SearchUser());
@@ -44,7 +39,10 @@ public class Main {
         httpServer.createContext("/api/v2/reg" , new RegV2());
         httpServer.createContext("/api/v2/change_password" , new ChangePassword());
         httpServer.createContext("/api/v2/user_reg_page" , new UserRegPage());
+        httpServer.createContext("/api/v1/activation" , new Activation());
         httpServer.createContext("/static" , new StaticResource());
+        httpServer.createContext("/api/v2/bind_mail" , new BindMail());
+        httpServer.createContext("/api/v2/mail_login", new MailLogin());
 
         System.out.println("[INFO] BOOT USER_SERVER.");
         new Thread(() -> {
@@ -132,15 +130,23 @@ public class Main {
         return stringBuilder.toString();
     }
     public static boolean AllowString(String str) {
-        return !str.contains(" ") &&
-                !str.contains("|") &&
-                !str.contains("\\") &&
-                !str.contains("/") &&
-                !str.contains("'") &&
-                !str.contains("\"") &&
-                !str.contains("%") &&
-                !str.contains("&"); // not allowed
+        if (
+                str.contains(" ") ||
+                str.contains("&") ||
+                        str.contains("/") ||
+                        str.contains("\\") ||
+                        str.contains(";") ||
+                        str.contains(",") ||
+                        str.contains("'") ||
+                        str.contains("\"") ||
+                        str.contains("-") ||
+                        str.contains(".") ||
+                        str.contains("*") ||
+                        str.contains("%")
+        )
+        {
+            return false;
+        }
+        return true;
     }
-
-
 }
