@@ -432,7 +432,10 @@ public class JsonObject {
     private String ListToJson(ArrayList<Object> arrayList) {
         StringBuilder stringBuilder = new StringBuilder();
         for (Object dom : arrayList) {
-            if (dom instanceof TreeMap<?,?>) {
+            if (dom == null) {
+                stringBuilder.append("null");
+            }
+            else if (dom instanceof TreeMap<?,?>) {
                 stringBuilder.append(this.TreeMapToJson((TreeMap<Object, Object>) dom));
             }
             else if (dom instanceof ArrayList<?>) {
@@ -476,7 +479,10 @@ public class JsonObject {
             stringBuilder.append(KeyStr);
             stringBuilder.append("\"");
             stringBuilder.append(":");
-            if (value instanceof Map<?,?>) {
+            if (value == null) {
+                stringBuilder.append("null");
+            }
+            else if (value instanceof Map<?,?>) {
                 stringBuilder.append(this.TreeMapToJson((TreeMap<Object, Object>) value));
             }
             else if (value instanceof ArrayList<?>) {

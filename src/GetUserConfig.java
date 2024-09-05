@@ -37,7 +37,7 @@ public class GetUserConfig implements HttpHandler {
                     String eduVIP = rs.getString("edu_vip");
                     jsonObject.objectObjectTreeMap.put("about" , about);
                     jsonObject.objectObjectTreeMap.put("apikey" , apikey);
-                    jsonObject.objectObjectTreeMap.put(email , email);
+                    jsonObject.objectObjectTreeMap.put("mail" , email);
                     jsonObject.objectObjectTreeMap.put("edu_vip",eduVIP);
                 }
                 response = jsonObject.TreeMapToJson(jsonObject.objectObjectTreeMap);

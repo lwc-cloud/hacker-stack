@@ -3,7 +3,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Random;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 public class ToolKits {
     public static void StringToPng(String text, String outputPath) {
@@ -55,5 +59,28 @@ public class ToolKits {
             stringBuilder.append(a.charAt(random.nextInt(a.length())));
         }
         return stringBuilder.toString();
+    }
+    public static long getNextHourAsInt() {
+        // 获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        // 获取下一个小时的时间
+        LocalDateTime nextHour = now.plusHours(1);
+        // 定义日期时间格式
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        // 将下一个小时的时间格式化为字符串
+        String formattedNextHour = nextHour.format(formatter).trim();
+        // 将格式化后的字符串转换为整数
+        return Long.parseLong(formattedNextHour);
+    }
+    public static long getNowAsInt() {
+        // 获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime nextHour = now.plusHours(0);
+        // 定义日期时间格式
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        // 将下一个小时的时间格式化为字符串
+        String formattedNextHour = nextHour.format(formatter).trim();
+        // 将格式化后的字符串转换为整数
+        return Long.parseLong(formattedNextHour);
     }
 }

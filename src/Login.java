@@ -44,15 +44,29 @@ class Login implements HttpHandler {
             // 建立连接
             Connection conn = DriverManager.getConnection(url, Main.DBUserName, Main.DBPassword);
             Statement stmt = conn.createStatement();
-            String sqlQuery = "SELECT username,password FROM accounts WHERE username='"+username+"' AND password='"+password+"';";
+            String sqlQuery = "SELECT username,password,edu_vip,mail FROM accounts WHERE (username='"+username+"' OR mail='"+username+"') AND password='"+password+"';";
             ResultSet rs = stmt.executeQuery(sqlQuery);
             if (rs.next()) {
-                response = "{\"message\" : \"login successful.\"}";
+                String eduVIP = rs.getString("edu_vip");
+                if (eduVIP == null) {
+                    long apiTime = ToolKits.getNextHourAsInt();
+                    stmt.execute("UPDATE accounts SET edu_vip = '"+String.valueOf(apiTime)+"'");
+                    response = "{\"message\" : \"login successful.\" , \"vip_time\":\"" +
+                            String.valueOf(apiTime)+"\",\"server\": " +
+                            String.valueOf(apiTime > ToolKits.getNowAsInt())+"}";
+                }
+                else {
+                    eduVIP = eduVIP.trim();
+                    response = "{\"message\" : \"login successful.\" , \"vip_time\":\"" +
+                            eduVIP+"\",\"server\": " +
+                            String.valueOf(Long.parseLong(eduVIP) > ToolKits.getNowAsInt())+"}";
+                }
             } else {
                 static_code = 400;
                 response = "{\"message\" : \"login failed.\"}";
             }
         }catch (Exception e) {
+            e.printStackTrace();
             static_code = 500;
             response = "{\"message\" : \"login failed.\"}";
         }
