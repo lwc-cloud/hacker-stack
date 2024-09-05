@@ -49,7 +49,7 @@ public class RegV2 implements HttpHandler {
             Connection conn = DriverManager.getConnection(url, Main.DBUserName, Main.DBPassword);
             Statement stmt = conn.createStatement();
 
-            String s1 = "SELECT mail FROM accounts;";
+            String s1 = "SELECT mail FROM accounts WHERE mail != NULL;";
             ResultSet resultSet = stmt.executeQuery(s1);
             if (resultSet.next()) {
                 throw new Exception("一个邮箱只能够注册一个账户");

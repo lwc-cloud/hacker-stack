@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 public class ToolKits {
     public static void StringToPng(String text, String outputPath) {
@@ -46,5 +47,13 @@ public class ToolKits {
         } catch (IOException ignored) {
         }
     }
-
+    public static String getRandomApiKey() {
+        Random random = new Random();
+        String a = "qwertyuiopasdfghjklzxcvbnm1234567890";
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < 20 ;i++) {
+            stringBuilder.append(a.charAt(random.nextInt(a.length())));
+        }
+        return stringBuilder.toString();
+    }
 }
