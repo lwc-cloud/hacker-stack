@@ -140,7 +140,6 @@ public class Main {
                         str.contains("'") ||
                         str.contains("\"") ||
                         str.contains("-") ||
-                        str.contains(".") ||
                         str.contains("*") ||
                         str.contains("%")
         )
