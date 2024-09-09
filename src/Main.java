@@ -3,6 +3,9 @@ import com.sun.net.httpserver.*;
 
 import java.io.*;
 import java.net.InetSocketAddress;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -56,6 +59,26 @@ public class Main {
             }
         }).start();
         httpServer.start();
+    }
+
+    public static long getFileLastFixTimeAsLong(File file) {
+        // 获取文件的最后修改时间
+        long lastModifiedMillis = file.lastModified();
+
+        // 将毫秒时间戳转换为 LocalDateTime
+        LocalDateTime lastModifiedDateTime = LocalDateTime.ofInstant(
+                java.time.Instant.ofEpochMilli(lastModifiedMillis),
+                ZoneId.systemDefault()
+        );
+
+        // 定义日期时间格式
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+        // 将 LocalDateTime 格式化为字符串
+        String formattedDateTime = lastModifiedDateTime.format(formatter);
+
+        // 将格式化后的字符串转换为长整数
+        return Long.parseLong(formattedDateTime);
     }
 
     public static boolean UserLogin(String username , String password) throws Exception {
