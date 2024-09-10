@@ -101,7 +101,7 @@ public class Main {
         if (IPRequests.containsKey(ip)) {
             int re = IPRequests.get(ip) + 1;
             IPRequests.put(ip , re);
-            return !(re > 10);
+            return !(re > 5);
         } else {
             IPRequests.put(ip , 1);
             return true;
@@ -164,7 +164,8 @@ public class Main {
                         str.contains("\"") ||
                         str.contains("-") ||
                         str.contains("*") ||
-                        str.contains("%")
+                        str.contains("%") ||
+                        str.contains("#")
         )
         {
             return false;

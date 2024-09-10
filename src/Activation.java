@@ -41,8 +41,16 @@ public class Activation implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         Main.sendCORS(httpExchange);
-        Main.IPBaned(httpExchange.getRemoteAddress().getAddress().toString(),httpExchange);
         try {
+            String ip = httpExchange.getRemoteAddress().getAddress().toString();
+            // 判断一个IP在规定1分钟时间内是否访问了超过 5 次
+            if (Main.IPRequests.containsKey(ip)) {
+                int re = Main.IPRequests.get(ip) + 1;
+                Main.IPRequests.put(ip , re);
+                throw new Exception("Too many requests");
+            } else {
+                Main.IPRequests.put(ip , 1);
+            }
             String json = Main.getHttpBody(httpExchange);
             System.out.println(json);
             httpExchange.sendResponseHeaders(200,0);
