@@ -16,15 +16,6 @@ mail_list = {}
 
 @app.route('/api/v1/send_mail', methods=['POST','GET'])
 def hello_world():
-    # 限制每个IP对制定api的访问.
-    client_ip = request.remote_addr
-    if client_ip in visit_request:
-        visit_request[client_ip] = visit_request[client_ip] + 1
-        if visit_request[client_ip] > 3:
-            return json.dumps({'status': 'error','message': 'Too many requests'}), 429
-    else:
-        visit_request[client_ip] = 1
-
     try:
         data = request.get_data().decode('utf-8')
         print(data)
