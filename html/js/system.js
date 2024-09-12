@@ -1,86 +1,69 @@
 
 
-//var remote = 'http://127.0.0.1:5555';
-var remote = 'https://api.hackerstack.top'
+var remote = 'http://127.0.0.1:5555';
+//var remote = 'https://api.hackerstack.top'
 
-var json = JSON.parse(document.cookie);
-var user = json.user;
-var pwd = json.pwd;
+function LoadJsonToUI(jsonString, domObject) {
+    // 将JSON字符串解析成对象
+    var jsonObject = JSON.parse(jsonString);
+  
+    // 创建一个表格元素
+    var table = document.createElement('table');
+    table.setAttribute('border', '1'); // 设置边框，可根据需要调整样式
+    table.setAttribute('width', '100%'); // 设置表格宽度
+  
+    // 假设jsonObject是一个数组，其中每个元素都是一个对象
+    // 遍历数组，创建表头
+    var headerRow = document.createElement('tr');
+    for (var key in jsonObject[0]) {
+      var th = document.createElement('th');
+      th.textContent = key;
+      headerRow.appendChild(th);
+    }
+    table.appendChild(headerRow);
+  
+    // 遍历数组，创建数据行
+    for (var key in jsonObject) {
+          var tr = document.createElement('tr');
+          for (var key2 in jsonObject[key]) {
+            var td = document.createElement('td');
+            td.textContent = jsonObject[key][key2];
+            tr.appendChild(td);
+          }
+          table.appendChild(tr);
+    }
+  
+    // 将创建的表格添加到DOM对象中
+    domObject.appendChild(table);
+  }
 
-
-var game_website_info = {
-    "whois" : {
-        "address":null,
-        "city":"深圳",
-        "country":"CN",
-        "creation_date":"Fri, 10 May 2024 03:25:37 GMT",
-        "dnssec":"unsigned",
-        "domain_name":"ac123ff.com",
-        "emails":"abuse@dnspod.com",
-        "expiration_date":"Sat, 10 May 2025 03:25:37 GMT",
-        "name (网站持有者名字)": "王瑶一",
-        "name_servers":[
-            "madge.dnspod.net",
-            "pistil.dnspod.net"
-        ],
-        "org": [
-            "TencentCloud",
-            "REDACTED FOR PRIVACY"
-        ],
-        "referral_url":null,
-        "registrant_postal_code":null,
-        "registrar":"DNSPod, Inc.",
-        "state":"shen zhen shi",
-        "status":[
-            "ok https://icann.org/epp#OK",
-            "ok https://www.icann.org/epp#ok"
-        ],
-        "updated_date":[
-            "Sun, 19 May 2024 12:27:32 GMT",
-            "Sun, 19 May 2024 20:27:32 GMT"
-        ],
-        "whois_server":"whois.dnspod.com"
-    },
-    "nmap" : `
-Nmap扫描结果:
-Starting Nmap 7.80 ( https://nmap.org ) at 2024-06-07 16:12 CST
-Nmap scan report for 114.514.191.981
-Host is up (0.12s latency).
-Not shown: 998 filtered ports
-PORT    STATE SERVICE
-22/tcp  open  ssh
-80/tcp  open  http
-443/tcp open  https 
-
-Nmap done: 1 IP address (1 host up) scanned in 10.84 seconds
-`,
-
-    "dns" : "114.514.191.981",
-    "IP" : "经度: 31.1221232 , 维度: 40.123127499",
-    "bug" : `
-    
-Nikto扫描结果:
-- Nikto v2.1.5
----------------------------------------------------------------------------
-+ Target IP: 114.514.191.981
-+ Target Hostname: www.ac123ff.com
-+ Target Port: 80
-+ Start Time: 2024-06-08 07:06:09 (GMT8)
----------------------------------------------------------------------------
-+ Server: nginx/1.18.0 (Ubuntu)
-+ Server leaks inodes via ETags, header found with file /, fields: 0x6663644c 0x0
-+ The anti-clickjacking X-Frame-Options header is not present.
-+ No CGI Directories found (use '-C all' to force check all possible dirs)
-+ Multiple index files found: index.html, index.php
-+ OSVDB-3092: /.git/index: Git Index file may contain directory listing information.
-+ 6544 items checked: 0 error(s) and 4 item(s) reported on remote host
-+ End Time: 2024-06-08 07:06:15 (GMT8) (6 seconds)
----------------------------------------------------------------------------
-+ 1 host(s) tested
-
-    `,
-    "subdomain" : "bbs.ac123ff.com , api.ac123ff.com , www.ac123ff.com , admin.ac123ff.com"
+// 设置cookie
+function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
+
+// 获取cookie
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+
+
+var user = getCookie('user');
+var pwd = getCookie('pwd');
 
 
 function getTime() {
@@ -102,15 +85,9 @@ function load_page(path , dom) {
         dom.innerHTML = (content);
     }
 }
-
-function to_ai_chat() {
-    var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/ai_chat/'
-}
-
 function to_subdomain() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/subdomain/'
+    i.src = './subdomain/index.html'
 }
 
 function subdomain_get() {
@@ -147,18 +124,8 @@ function subdomain_get() {
     }
 }
 
-function ai_chat() {
-    var message = document.getElementById('message').value;
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET' , remote + '/ai_chat/'+message , true);
-    xhr.send();
-    xhr.onload = function() {
-        var print_message = document.getElementById('print_message');
-        print_message.innerHTML = xhr.responseText;
-    }
-}
 
-function print_log(log_info) {
+function print_log(log_info , isShowRightAlert) {
     log_info = "[ "+getTime()+" ] "+log_info;
     var t = document.getElementById('log_console');
     var text_1 = log_info
@@ -166,6 +133,9 @@ function print_log(log_info) {
 
     var run = null;
     var i = 0;
+    if (isShowRightAlert == undefined) {
+        showRightAlert(log_info , 2000);
+    }
     run = setInterval(function() {
         if (i + 1 == text_1.length) {
             clearInterval(run);
@@ -183,24 +153,22 @@ function print_log(log_info) {
 
 function to_social() {
     var i = document.getElementById('page');
-    i.src = "https://www.hackerstack.top/system/socialEngine/";
+    i.src = "./socialEngine/index.html";
     print_log('Boot Social Engine Module.')
 }
 
 function to_web_virus() {
     var i = document.getElementById('page');
-    i.src = "https://www.hackerstack.top/system/virus_attack/";
+    i.src = "./virus_attack/index.html";
     print_log('Boot Web Virus Module.')
 }
 
 function to_attack_pwd() {
     var i = document.getElementById('page');
-    i.src = "https://www.hackerstack.top/system/passwd_attack/";
+    i.src = "./passwd_attack/index.html";
 }
 
 function social_attack(attack_type) {
-    var user = JSON.parse(document.cookie).user;
-    var pwd = JSON.parse(document.cookie).pwd;
     var xhr = new XMLHttpRequest();
     xhr.open("GET",remote+"/api/"+attack_type+"/"+user+"/"+pwd+"/",true);
     xhr.send();
@@ -214,7 +182,7 @@ function social_attack(attack_type) {
             {
                 var get_message = new XMLHttpRequest();
                 get_message.open(
-                    'GET',remote+"/run/"+response , true
+                    'GET',remote+"/run/"+response+"/" , true
                     );
                 get_message.send();
                 get_message.onload = function() 
@@ -289,32 +257,9 @@ function make_qrcode() {
     }
 }
 
-function pwd_attack() {
-    var url = document.getElementById('url').value;
-    var body = document.getElementById('http_body').value;
-    var check = document.getElementById('check').value;
-
-    try 
-    {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST' , remote + '/pwd_attack/' , true);
-        xhr.send(url + '\n' + check + '\n' + body);
-        xhr.onload = function()
-        {
-            var responseText = xhr.responseText;
-            if (responseText == 'ok') {
-                showAlert('程序正在后台运行，破解的成功与否需要时间的检验，请耐心等候' , null)
-            }
-        }
-    }
-    catch (e) {
-        showAlert('错误: '+e , null)
-    }
-}
-
 function to_cc_attack() {
     var i = document.getElementById('page');
-    i.src = "https://www.hackerstack.top/system/cc_attack/";
+    i.src = "./cc_attack/index.html";
 }
 
 var put_log_number = 0;
@@ -352,20 +297,16 @@ function cc_attack() {
 
 function to_ip_location() {
     var i = document.getElementById('page');
-    i.src = "https://www.hackerstack.top/system/ip_location/";
+    i.src = "./ip_location/index.html";
     print_log('Boot IP Location Module.')
 }
 
 function to_video_attack() {
     var i = document.getElementById('page');
-    i.src = "https://www.hackerstack.top/system/video_attack/";
+    i.src = "./video_attack/index.html";
     print_log('Boot Video Attack Module.')
 }
 
-var game_ip_location = {
-    "154.201.114.114" : "114.12392 , 514.129",
-    "101.114.514.191" : "21.1231222 , 13.12839"
-}
 
 function ip_location() {
     var ip = document.getElementById('ip').value;
@@ -374,19 +315,6 @@ function ip_location() {
 
     var lat = '';
     var lon = '';
-    console.log(ip == '114.514.191.981')
-    if (ip == '114.514.191.981') {
-        ip_info.innerHTML = "<p style='color: green'>"+game_website_info['IP']+"</p>"
-        return;
-    }
-    else if (ip == '154.201.114.114') {
-        ip_info.innerHTML = "<p style='color: green'>114.12392 , 514.129</p>";
-        return;
-    }else if (ip == '101.114.514.191') {
-        ip_info.innerHTML = "<p style='color: green'>21.1231222 , 13.12839</p>";
-        return;
-    }
-
     var xhr = new XMLHttpRequest();
     xhr.open('GET' , remote+'/get_ip_location/'+ip , true);
     xhr.send();
@@ -440,7 +368,7 @@ function ip_location() {
 }
 function to_xss_attack() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/xss_attack/';
+    i.src = './xss_attack/index.html';
     print_log('Boot XSS Module.')
 }
 
@@ -455,13 +383,11 @@ function download_file(path) {
 
 function to_VirusInfoGetter() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/VirusInfoGetter/'
+    i.src = './VirusInfoGetter/index.html'
     print_log('Boot Virus Info Getter Module.')
 }
 
 function VirusInfoGetter() {
-    var user = JSON.parse(document.cookie).user;
-    var pwd = JSON.parse(document.cookie).pwd;
     var xhr = new XMLHttpRequest();
     xhr.open("GET",remote+"/api/VirusInfoGetter/"+user+"/"+pwd+"/",true);
     xhr.send();
@@ -494,32 +420,26 @@ function VirusInfoGetter() {
 
 function to_whois() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/whois/'
+    i.src = './whois/index.html'
     print_log('Boot Whois Module.')
 }
 
 function load_whois_info() {
     var website = document.getElementById('website').value;
     
-    if (website == 'www.ac123ff.com') {
-        setTimeout(function() {
-            showAlert(JSON.stringify(game_website_info['whois']) , null)
-        } , 4000)
-        return
-    } else {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET' , remote+"/whois/"+website+"/" , true);
-        xhr.send();
-        xhr.onload = function() {
-            var text = xhr.responseText;
-            showAlert('收到信息:<br />' + text , null);        
-        }
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST' , remote+"/whois/" , true);
+    xhr.send(JSON.stringify({"website":website}));
+    xhr.onload = function() {
+        var text = xhr.responseText;
+        var console = document.getElementById('console');
+        console.innerHTML = text.replaceAll('\n' , '<br />');
     }
 }
 
 function to_Nmap() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/nmap/'
+    i.src = './nmap/'
     print_log('Boot Nmap Module.')
 }
 
@@ -527,35 +447,27 @@ function nmap_attack() {
     var check_code = document.getElementById('check_code').value;
     var host = document.getElementById('host').value;
     var xhr = new XMLHttpRequest();
-    xhr.open('GET' , remote+'/nmap/'+check_code+"/"+host+"/" , true);
+    xhr.open('POST' , remote+'/nmap/' , true);
     showAlert('Nmap扫描确实比较慢，请耐心等候扫描结果' , 3000)
     
-    if (host == 'www.ac123ff.com') {
-        setTimeout(function() {
-            var console = document.getElementById('console');
-            console.innerHTML = game_website_info['nmap'].replaceAll('\n' , '<br />');
-        } , 2000)
-        return
-    }else {
-        xhr.send();
-        xhr.onload = function() {
-            var console = document.getElementById('console');
-            console.innerHTML = xhr.responseText.replaceAll('\n' , '<br />');
-            var img = document.getElementById('check_img')
-            img.src="https://user.hackerstack.top/get_check_code"
-        }
+    xhr.send(JSON.stringify({"command_values":host,"check":check_code}));
+    xhr.onload = function() {
+        var console = document.getElementById('console');
+        console.innerHTML = JSON.parse(xhr.responseText)['message'].replaceAll('\\n' , '<br />');
+        var img = document.getElementById('check_img')
+        img.src="https://user.hackerstack.top/get_check_code"
     }
 }
 
 function to_js_console() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/js_console/'
+    i.src = './js_console/index.html'
     print_log('Boot Js Console Module.')
 }
 
 function to_sqlmap() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/sqlmap/'
+    i.src = './sqlmap/index.html'
     print_log('Boot SqlMap Attack Module.')
 }
 
@@ -563,12 +475,12 @@ function sqlmap_attack() {
     var check_code = document.getElementById('check_code').value;
     var host = document.getElementById('host').value;
     var xhr = new XMLHttpRequest();
-    xhr.open('GET' , remote+'/sqlmap/'+check_code+"/"+host+"/" , true);
+    xhr.open('POST' , remote+'/sqlmap/' , true);
     showAlert('SqlMap扫描确实比较慢，请耐心等候扫描结果' , 3000)
-    xhr.send()
+    xhr.send(JSON.stringify({"command_values":host,"check":check_code}))
     xhr.onload = function() {
         var console = document.getElementById('console');
-        console.innerHTML = xhr.responseText.replaceAll('\n' , '<br />');
+        console.innerHTML = JSON.parse(xhr.responseText)['message'].replaceAll('\\n' , '<br />');
         var img = document.getElementById('check_img')
         img.src="https://user.hackerstack.top/get_check_code"
     }
@@ -576,7 +488,7 @@ function sqlmap_attack() {
 
 function to_dns_search() {
     var i = document.getElementById('page');
-    i.src = 'https://www.hackerstack.top/system/dns_search/'
+    i.src = './dns_search/index.html'
     print_log('Boot SqlMap Attack Module.')
 }
 
@@ -585,13 +497,6 @@ function dns_search() {
     var xhr = new XMLHttpRequest();
     var ip_info = document.getElementById('console');
     ip_info.innerHTML = ''
-    if (host == 'www.ac123ff.com') {
-        setTimeout(function() {
-            ip_info.innerHTML += '<button class="btn_key">真实IP地址，复制下面的IP地址以写入</button><br /><br />';
-            ip_info.innerHTML += game_website_info['dns'];
-        } , 5000)
-        return
-    }
     xhr.open('GET' , remote+'/dns_search'+"/"+host+"/" , true);
     xhr.send()
     xhr.onload = function() {
