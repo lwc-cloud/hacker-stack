@@ -4,6 +4,8 @@ import subprocess
 def CommandSqlMap(host):
     information: str = ''
     host = str(host)
+    if '|' in host or ';' in host or '&' in host or '$' in host or '`' in host or '>' in host or '<' in host or '*' in host or '?' in host or '[' in host or ']' in host or '{' in host or '}' in host or '!' in host or '@' in host or '#' in host or '%' in host or '^' in host or '~' in host or '|' in host or '\\' in host:
+        return "NULL"
     if str(host).strip() == '':
         return 'NULL CHARSET '
     else:    

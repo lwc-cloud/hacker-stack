@@ -39,9 +39,10 @@ def getNmap(host):
 
 def CommandNmap(host):
     information: str = ''
-    host = str(host)
-    if '&' in host or '>' in host or '<' in host or '<' in host or '?' in host or '=' in host or '#' in host:
-        return 'NULL'
+    host = str(host).strip()
+    # 确保不能被命令行注入
+    if '|' in host or ';' in host or '&' in host or '$' in host or '`' in host or '>' in host or '<' in host or '*' in host or '?' in host or '[' in host or ']' in host or '{' in host or '}' in host or '!' in host or '@' in host or '#' in host or '%' in host or '^' in host or '~' in host or '|' in host or '\\' in host:
+        return "NULL"
     else:    
         # 构造Nmap命令
         nmap_command = ['nmap', host]

