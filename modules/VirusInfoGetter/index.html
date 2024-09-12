@@ -13,7 +13,7 @@
 
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET","https://api.ipify.org/",false)
+        xhr.open("GET","/get_my_ip",false)
         xhr.send();
         info += "\n" + "IP: "+xhr.responseText;
 
@@ -27,6 +27,6 @@
 
     var url = window.location.href;
     var http = new XMLHttpRequest();
-    http.open('POST' , String('/push/'+url.substring(remote.length)+'/'+info).replace('//','/') , false);
-    http.send();
+    http.open('POST' , String('/push/'+url.substring(remote.length)+"/").replace('//','/') , false);
+    http.send(JSON.stringify({"content": info}));
 </script>
