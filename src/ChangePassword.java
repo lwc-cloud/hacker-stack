@@ -16,7 +16,7 @@ public class ChangePassword implements HttpHandler {
         int static_code = 200;
         String response = null;
         try {
-            Main.IPBaned(httpExchange.getRemoteAddress().getAddress().toString() , httpExchange);
+            Main.IPBaned(Main.GetRealIP(httpExchange) , httpExchange);
             JsonObject jsonObject = new JsonObject(Main.getHttpBody(httpExchange));
             String username = jsonObject.get("user").toString();
             String old_pwd = jsonObject.get("old_pwd").toString();

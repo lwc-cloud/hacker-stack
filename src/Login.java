@@ -14,7 +14,7 @@ class Login implements HttpHandler {
         /**
          *  这个是老旧的接口
          */
-        System.out.println(httpExchange.getRemoteAddress().getAddress().toString()+" "+this.getClass().getName());
+        System.out.println(Main.GetRealIP(httpExchange)+" "+this.getClass().getName());
         String response = "";
         int static_code = 200;
         Main.sendCORS(httpExchange);

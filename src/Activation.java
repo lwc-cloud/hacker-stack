@@ -1,6 +1,5 @@
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -42,7 +41,7 @@ public class Activation implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
         Main.sendCORS(httpExchange);
         try {
-            String ip = httpExchange.getRemoteAddress().getAddress().toString();
+            String ip = Main.GetRealIP(httpExchange);
             // 判断一个IP在规定1分钟时间内是否访问了超过 5 次
             if (Main.IPRequests.containsKey(ip)) {
                 int re = Main.IPRequests.get(ip) + 1;
@@ -55,7 +54,7 @@ public class Activation implements HttpHandler {
             System.out.println(json);
             httpExchange.sendResponseHeaders(200,0);
             OutputStream outputStream = httpExchange.getResponseBody();
-            outputStream.write(send_mail(json,httpExchange.getRemoteAddress().getAddress().toString()).getBytes());
+            outputStream.write(send_mail(json, Main.GetRealIP(httpExchange)).getBytes());
             outputStream.flush();
             outputStream.close();
         }

@@ -8,7 +8,7 @@ public class GetCheckCode implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        System.out.println(httpExchange.getRemoteAddress().getAddress().toString()+" "+this.getClass().getName());
+        System.out.println(Main.GetRealIP(httpExchange)+" "+this.getClass().getName());
         String response = "";
         httpExchange.getResponseHeaders().add(
                 "Access-Control-Allow-Origin",
@@ -23,7 +23,7 @@ public class GetCheckCode implements HttpHandler {
         Random random = new Random();
         int randomNumber = 10000 + random.nextInt(65500 - 10000 + 1);
         ToolKits.StringToPng(String.valueOf(randomNumber) , "check_code/"+String.valueOf(randomNumber)+".png");
-        Main.CheckIP.put(httpExchange.getRemoteAddress().getAddress().toString() , String.valueOf(randomNumber));
+        Main.CheckIP.put(Main.GetRealIP(httpExchange) , String.valueOf(randomNumber));
         httpExchange.sendResponseHeaders(static_code , 0);
         OutputStream outputStream = httpExchange.getResponseBody();
         InputStream inputStream = new FileInputStream("check_code/"+String.valueOf(randomNumber)+".png");

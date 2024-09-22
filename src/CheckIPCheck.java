@@ -25,13 +25,13 @@ class CheckIPCheck implements HttpHandler {
             String[] split = java.net.URLDecoder.decode(httpExchange.getRequestURI().toString()).split("/");
             String checkcode = split[2];
             System.out.println(Main.CheckIP);
-            boolean isIPOK = Main.CheckIP.containsKey(httpExchange.getRemoteAddress().getAddress().toString());
+            boolean isIPOK = Main.CheckIP.containsKey(Main.GetRealIP(httpExchange));
             if (isIPOK) {
-                if (!Main.CheckIP.get(httpExchange.getRemoteAddress().getAddress().toString()).equals(checkcode)) {
+                if (!Main.CheckIP.get(Main.GetRealIP(httpExchange)).equals(checkcode)) {
                     throw new Exception("Check Code Error.");
                 }
                 else {
-                    Main.CheckIP.remove(httpExchange.getRemoteAddress().getAddress().toString());
+                    Main.CheckIP.remove(Main.GetRealIP(httpExchange));
                     throw new Exception("ok");
                 }
             }

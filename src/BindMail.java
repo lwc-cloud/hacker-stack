@@ -1,6 +1,5 @@
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Connection;
@@ -10,7 +9,7 @@ import java.sql.Statement;
 public class BindMail implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        Main.IPBaned(httpExchange.getRemoteAddress().getAddress().toString(),httpExchange);
+        Main.IPBaned(Main.GetRealIP(httpExchange),httpExchange);
         try {
             String json = Main.getHttpBody(httpExchange);
             System.out.println(json);
@@ -27,16 +26,16 @@ public class BindMail implements HttpHandler {
                 throw new Exception("username or password error.");
             }
 
-            boolean isIP_OK = Main.CheckMail.containsKey(httpExchange.getRemoteAddress().getAddress().toString());
+            boolean isIP_OK = Main.CheckMail.containsKey(Main.GetRealIP(httpExchange));
             if (isIP_OK) {
-                if (!Main.CheckMail.get(httpExchange.getRemoteAddress().getAddress().toString()).equals(check)) {
+                if (!Main.CheckMail.get(Main.GetRealIP(httpExchange)).equals(check)) {
                     throw new Exception("Check Code Error.");
                 }
             }
             else {
                 throw new Exception("No Check Code.");
             }
-            Main.CheckMail.remove(httpExchange.getRemoteAddress().getAddress().toString());
+            Main.CheckMail.remove(Main.GetRealIP(httpExchange));
 
             String url = Main.DBURL+"/accounts";
             Connection conn = DriverManager.getConnection(url, Main.DBUserName, Main.DBPassword);

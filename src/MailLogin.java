@@ -15,7 +15,7 @@ public class MailLogin implements HttpHandler {
         String response = "";
         int static_code = 200;
         try {
-            Main.IPBaned(httpExchange.getRemoteAddress().getAddress().toString(),httpExchange);
+            Main.IPBaned(Main.GetRealIP(httpExchange),httpExchange);
             String json = Main.getHttpBody(httpExchange);
             JsonObject jsonObject = new JsonObject(json);
             String mail = jsonObject.get("mail").toString();
@@ -25,16 +25,16 @@ public class MailLogin implements HttpHandler {
                 throw new Exception("Not Allowed.");
             }
 
-            boolean isIP_OK = Main.CheckMail.containsKey(httpExchange.getRemoteAddress().getAddress().toString());
+            boolean isIP_OK = Main.CheckMail.containsKey(Main.GetRealIP(httpExchange));
             if (isIP_OK) {
-                if (!Main.CheckMail.get(httpExchange.getRemoteAddress().getAddress().toString()).equals(checkcode)) {
+                if (!Main.CheckMail.get(Main.GetRealIP(httpExchange)).equals(checkcode)) {
                     throw new Exception("Check Code Error.");
                 }
             }
             else {
                 throw new Exception("No Check Code.");
             }
-            Main.CheckMail.remove(httpExchange.getRemoteAddress().getAddress().toString());
+            Main.CheckMail.remove(Main.GetRealIP(httpExchange));
             // 返回用户名和密码给前端.
 
             String url = Main.DBURL+"/accounts";

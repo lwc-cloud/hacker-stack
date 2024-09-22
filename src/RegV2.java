@@ -11,12 +11,12 @@ import java.sql.Statement;
 public class RegV2 implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        System.out.println(httpExchange.getRemoteAddress().getAddress().toString()+" "+this.getClass().getName());
+        System.out.println(Main.GetRealIP(httpExchange)+" "+this.getClass().getName());
         String response = "";
         Main.sendCORS(httpExchange);
         int static_code = 200;
         try {
-            Main.IPBaned(httpExchange.getRemoteAddress().getAddress().toString() , httpExchange);
+            Main.IPBaned(Main.GetRealIP(httpExchange) , httpExchange);
             String jsonContent = Main.getHttpBody(httpExchange);
             System.out.println(jsonContent);
             JsonObject jsonObject = new JsonObject(jsonContent);
@@ -32,16 +32,16 @@ public class RegV2 implements HttpHandler {
             if (username.length() > 20 || password.length() > 20) {
                 throw new Exception("username or password's length mustn't > 20.");
             }
-            boolean isIP_OK = Main.CheckMail.containsKey(httpExchange.getRemoteAddress().getAddress().toString());
+            boolean isIP_OK = Main.CheckMail.containsKey(Main.GetRealIP(httpExchange));
             if (isIP_OK) {
-                if (!Main.CheckMail.get(httpExchange.getRemoteAddress().getAddress().toString()).equals(checkcode)) {
+                if (!Main.CheckMail.get(Main.GetRealIP(httpExchange)).equals(checkcode)) {
                     throw new Exception("Check Code Error.");
                 }
             }
             else {
                 throw new Exception("No Check Code.");
             }
-            Main.CheckMail.remove(httpExchange.getRemoteAddress().getAddress().toString());
+            Main.CheckMail.remove(Main.GetRealIP(httpExchange));
 
             String url = Main.DBURL+"/accounts";
 

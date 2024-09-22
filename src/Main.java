@@ -1,15 +1,13 @@
 import com.sun.net.httpserver.*;
-
-
 import java.io.*;
 import java.net.InetSocketAddress;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.sql.*;
 
 public class Main {
     public static HashMap<String , Integer> IPRequests = new HashMap<>();
@@ -171,5 +169,12 @@ public class Main {
             return false;
         }
         return true;
+    }
+    public static String GetRealIP(HttpExchange httpExchange) {
+        String ip = httpExchange.getRequestHeaders().getFirst("X-Forwarded-For");
+        if (ip == null) {
+            ip = httpExchange.getRemoteAddress().getAddress().getHostAddress();
+        }
+        return ip;
     }
 }
